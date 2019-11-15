@@ -1,0 +1,51 @@
+.logo {
+    max-width: 100px;
+    min-width: 50px;
+    width: 5%;
+}
+
+.img {
+    position: relative;
+    display: block;
+    max-width: 1000px;
+    width: 80%;
+
+    border-radius: 5px;
+    box-shadow: 0px 2px 7px #313131;
+
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.center {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.button {
+    border-radius: 25px;
+    background-color: rgb(27, 27, 27);
+    color: white;
+    box-shadow: 0px 1px 5px #313131;
+    border-color: rgb(27, 27, 27);
+}
+
+.button:hover,
+.button:focus,
+.open>.dropdown-toggle.button {
+    border-radius: 25px;
+    background-color: #800000;
+    color: white;
+    box-shadow: 0px 1px 5px #313131;
+    border-color: #800000;
+}
+
+.index-text {
+    color: rgb(51, 51, 51);
+    font-size: 18px;
+}
+
+.index {
+    margin-top: 50px
+}

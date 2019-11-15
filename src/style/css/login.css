@@ -1,0 +1,79 @@
+.main {
+    display: inline-block;
+    position: fixed;
+    text-align: left;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 35%;
+    max-width: 350px;
+    height: 400px;
+    margin: auto;
+    box-shadow: 0px 2px 5px #3131313f;
+    padding-left: 25px;
+    padding-right: 25px;
+    background: whitesmoke;
+}
+
+.form-simple .font-small {
+    font-size: 0.8rem;
+}
+
+.form-simple .header {
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+}
+
+.form-simple input[type="text"]:focus:not([readonly]) {
+    border-bottom: 1px solid #ff3547;
+    -webkit-box-shadow: 0 1px 0 0 #ff3547;
+    box-shadow: 0 1px 0 0 #ff3547;
+}
+
+.form-simple input[type="text"]:focus:not([readonly])+label {
+    color: #4f4f4f;
+}
+
+.form-simple input[type="password"]:focus:not([readonly]) {
+    border-bottom: 1px solid #ff3547;
+    -webkit-box-shadow: 0 1px 0 0 #ff3547;
+    box-shadow: 0 1px 0 0 #ff3547;
+}
+
+.form-simple input[type="password"]:focus:not([readonly])+label {
+    color: #4f4f4f;
+}
+
+.bg {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url('/img/bg01.jpg');
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    z-index: -1;
+
+}
+
+.button {
+    border-radius: 25px;
+    background-color: rgb(27, 27, 27);
+    color: white;
+    box-shadow: 0px 1px 5px #313131;
+}
+
+.button:hover,
+.button:focus,
+.open>.dropdown-toggle.button {
+    border-radius: 25px;
+    background-color: #800000;
+    color: white;
+    box-shadow: 0px 1px 5px #313131;
+}
+.bg{
+    background-image: url('/bg/loginBG.jpg');
+}

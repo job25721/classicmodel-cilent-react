@@ -1,0 +1,42 @@
+.img {
+    display: block;
+    width: 100%;
+    height: auto;
+
+}
+
+@font-face {
+    font-family: Ekkamai-new;
+    src: url(/fonts/th_fonts/EkkamaiNew-Regular.ttf);
+}
+
+h1,
+h2 {
+    font-family: Ekkamai-new;
+    color: black;
+    /* text-shadow: 2px 2px 4px #000000; */
+}
+
+hr.new2 {
+    border-top: 3px dashed white;
+    /* text-shadow: 2px 2px 4px #000000; */
+}
+
+.name {
+    font-family: Ekkamai-new;
+    font-size: 18px;
+    color: black;
+    /* text-shadow: 2px 2px 5px #000000; */
+}
+.bg {
+    /* The image used */
+    background-image: url('/bg/bg2.jpg');
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size:cover;
+}
