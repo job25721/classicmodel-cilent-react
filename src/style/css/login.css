@@ -74,6 +74,12 @@
     color: white;
     box-shadow: 0px 1px 5px #313131;
 }
-.bg{
+img{
+    
     background-image: url('/bg/loginBG.jpg');
+    height: 100%;
+    width: auto;
+    position: relative;
+    background-repeat: no-repeat;
+    
 }

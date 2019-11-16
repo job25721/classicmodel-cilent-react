@@ -58,7 +58,6 @@ export default class Login extends Component {
             $('#myAlert').hide('fade')
         })
     } else {
-
         alert("you've logged in by employeenumber : " + this.state.employeeNumber)
         setTimeout("location.href = '/admin';", 100);
     }

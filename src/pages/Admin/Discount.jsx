@@ -86,11 +86,7 @@ export default class Discount extends Component {
       total : this.state.Used,
       exp : this.state.Date
     }
-    api.post('/api/admin/discount/addDiscount',{discountQuery}).then(res=>{
-      console.log(res);
-      
-      // this.shouldComponentUpdate()
-    })
+    api.post('/api/admin/discount/addDiscount',{discountQuery})
 
     
   }
