@@ -5,16 +5,23 @@ import { Helmet } from "react-helmet";
 import api from "../../../api/api";
 import $ from "jquery";
 import { Cart_modal, ProductDetail_modal } from "../../../components/Modal";
-import { log } from "util";
 
 class Instock extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      products : []
+    }
+    this.changepage = this.changepage.bind(this)
   }
 
   componentDidMount() {
+    var button = ''
+    button += '<td><input type="number" class="form-control" /></td>'
+    button += `<td class="align-middle"><button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
+    button += `<td class="align-middle"><button id="delete" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>`;
     api.get("/api/admin/product/instockItem").then(res => {
+      this.setState( {products:res.data})
       var amount = 15
       var dom = "";
       var i, x;
@@ -32,7 +39,7 @@ class Instock extends Component {
           dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
           dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
           dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
-          dom += `<td class="align-middle"><button id="delete" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>`;
+          dom += button;
           dom += `</tr>`;
         }
         $("#instockData").html(dom);
@@ -57,12 +64,12 @@ class Instock extends Component {
           dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
           dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
           dom += `<td class="align-middle">$${res.data[i].buyPrice}</td>`;
-          dom += `<td class="align-middle"><button id="delete" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-          dom += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"></i></button></td>`;
+          dom += button;
           dom += `</tr>`;
         }
         $("#instockData").html(dom);
         $(document).on("click", "#delete", this.deleteProduct);
+        $(document).on("click", "#addCart", this.addCartItem);
       }
     });
     $(document).on("click", ".product-click", this.productDetail);
@@ -70,12 +77,8 @@ class Instock extends Component {
 
   productDetail(event) {
     var procuctCode = this.id;
-    console.log(this.id);
-
     api.get(`/api/admin/product/fetchInstockitem/${procuctCode}`).then(res => {
-      var html = "";
-      console.log(res);
-
+      var html = ""
       var query = res.data[0];
       $("#pop-name").html(query.productName);
       $("#pop-code").html(query.productCode);
@@ -89,42 +92,56 @@ class Instock extends Component {
       $("#pop-msrp").html(query.MSRP);
     });
   }
-
+  
   changepage(event) {
+    var button = ''
+    button += '<td><input type="number" class="form-control w-25" /></td>'
+    button += `<td class="align-middle"><button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
+    button += `<td class="align-middle"><button id="delete" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>`;
+    var current = event.currentTarget
+    console.log(event.currentTarget.className);
+    
     var pr = document.getElementsByClassName('fbg-active')
     pr[0].className = pr[0].className.replace(' fbg-active', '')
-    this.className += ' fbg-active'
-
+    current.className += ' fbg-active'
     var amount = 15
     $("instockData").html("")
-    api.get("/api/admin/product/instockItem").then(res => {
+    var data = this.state.products
       var i
-      var init = this.value * amount
-      var dest = (parseInt(this.value) + 1) * amount
-      if (dest > res.data.length) dest = res.data.length
+      var init = current.value * amount
+      var dest = (parseInt(current.value) + 1) * amount
+      if (dest > data.length) dest = data.length
       var dom = ""
-
       for (i = init; i < dest; i++) {
         dom += `<tr>`;
-        dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
+        dom += `<td class="align-middle"><a id="${data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
-          class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${res.data[i].imgSrc}"> 
+          class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${data[i].imgSrc}"> 
           <i class="fas fa-search fa-sm responsive-icon-search"></i></a></td>`;
-        dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
-        dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
-        dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
-        dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
-        dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
-        dom += `<td class="align-middle"><button id="delete" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>`;
+        dom += `<td class="align-middle responsive-table-name">${data[i].productName}</td>`;
+        dom += `<td class="align-middle">${data[i].productScale}</td>`;
+        dom += `<td class="align-middle responsive-table-vendor">${data[i].productVendor}</td>`;
+        dom += `<td class="align-middle">${data[i].quantityInStock}</td>`;
+        dom += `<td class="align-middle">${data[i].buyPrice}</td>`;
+        dom += button;
         dom += `</tr>`;
       }
       $("#instockData").html(dom);
       // $(document).on("click", ".product-click", this.productDetail);
-    });
   }
 
   deleteProduct(event) {
     alert("ลุงตูบรู้สึกไม่พอใคุณมากๆ");
+  }
+
+  loadCartItem(event) {
+
+  }
+
+  addCartItem(event) { 
+    event.preventDefault();
+    // api.post('/api/admin/product/addCart')
+
   }
 
   render() {
