@@ -4,7 +4,7 @@ import api from "../api/api";
 
 class Sidebar extends Component {
   componentDidMount() {
-    $("#sidebarToggle, #sidebarToggleTop").on("click", function(e) {
+    $("#sidebarToggle, #sidebarToggleTop").on("click", function (e) {
       $("body").toggleClass("sidebar-toggled");
       $(".sidebar").toggleClass("toggled");
       if ($(".sidebar").hasClass("toggled")) {
@@ -13,14 +13,14 @@ class Sidebar extends Component {
     });
 
     // Close any open menu accordions when window is resized below 768px
-    $(window).resize(function() {
+    $(window).resize(function () {
       if ($(window).width() < 768) {
         $(".sidebar .collapse").collapse("hide");
       }
     });
 
     // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
-    $("body.fixed-nav .sidebar").on("mousewheel DOMMouseScroll wheel", function(
+    $("body.fixed-nav .sidebar").on("mousewheel DOMMouseScroll wheel", function (
       e
     ) {
       if ($(window).width() > 768) {
@@ -32,7 +32,7 @@ class Sidebar extends Component {
     });
 
     // Scroll to top button appear
-    $(document).on("scroll", function() {
+    $(document).on("scroll", function () {
       var scrollDistance = $(this).scrollTop();
       if (scrollDistance > 100) {
         $(".scroll-to-top").fadeIn();
@@ -42,7 +42,7 @@ class Sidebar extends Component {
     });
 
     // Smooth scrolling using jQuery easing
-    $(document).on("click", "a.scroll-to-top", function(e) {
+    $(document).on("click", "a.scroll-to-top", function (e) {
       var $anchor = $(this);
       $("html, body")
         .stop()
@@ -157,9 +157,9 @@ class Sidebar extends Component {
 
         <hr className="sidebar-divider d-none d-md-block" />
         <li className="nav-item">
-            <a href="/catalog" className="nav-link">
-              <i className="fas fa-cat"></i>
-            </a>
+          <a href="/catalog" className="nav-link">
+            <i className="fas fa-cat"></i>
+          </a>
         </li>
       </ul>
     );
@@ -177,22 +177,22 @@ class Navbar extends Component {
     };
   }
 
-  logout(event){
-      api.get('/api/logout').then(
-        setTimeout("location.href = '/login';", 100)
-      )
-    
+  logout(event) {
+    api.get('/api/logout').then(
+      setTimeout("location.href = '/login';", 100)
+    )
+
   }
 
   componentDidMount() {
     //fetchDetals
     api.get("/api/user").then(res => {
       console.log(res.data);
-      
-      if(res.data != ''){
+
+      if (res.data != '') {
         this.setState({ name: res.data[0].firstName });
-        this.setState({lastName: res.data[0].lastName});
-        this.setState({job : res.data[0].jobTitle})
+        this.setState({ lastName: res.data[0].lastName });
+        this.setState({ job: res.data[0].jobTitle })
       }
     });
   }
@@ -206,59 +206,8 @@ class Navbar extends Component {
           <i className="fa fa-bars"></i>
         </button>
 
-        <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control bg-light border-0 small"
-              placeholder="Search for..."
-              aria-label="Search"
-              aria-describedby="basic-addon2"
-            />
-            <div className="input-group-append">
-              <button className="btn btn-primary" type="button">
-                <i className="fas fa-search fa-sm"></i>
-              </button>
-            </div>
-          </div>
-        </form>
 
         <ul className="navbar-nav ml-auto">
-          <li className="nav-item dropdown no-arrow d-sm-none">
-            <a
-              className="nav-link dropdown-toggle"
-              href="#"
-              id="searchDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <i className="fas fa-search fa-fw"></i>
-            </a>
-
-            <div
-              className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-              aria-labelledby="searchDropdown"
-            >
-              <form className="form-inline mr-auto w-100 navbar-search">
-                <div className="input-group">
-                  <input
-                    type="text"
-                    className="form-control bg-light border-0 small"
-                    placeholder="Search for..."
-                    aria-label="Search"
-                    aria-describedby="basic-addon2"
-                  />
-                  <div className="input-group-append">
-                    <button className="btn btn-primary" type="button">
-                      <i className="fas fa-search fa-sm"></i>
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </li>
           <div className="topbar-divider d-none d-sm-block"></div>
           <div className="mr-2 d-flex justify-content align-items-center">
             <ul>
@@ -296,16 +245,8 @@ class Navbar extends Component {
                 <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                 Profile
               </a>
-              <a className="dropdown-item" href="#">
-                <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                Settings
-              </a>
-              <a className="dropdown-item" href="#">
-                <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                Activity Log
-              </a>
               <div className="dropdown-divider"></div>
-              <a className="dropdown-item" onClick={this.logout}>
+              <a className="dropdown-item" style={{ cursor: "pointer" }} onClick={this.logout}>
                 <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout
               </a>
@@ -314,6 +255,249 @@ class Navbar extends Component {
         </ul>
       </nav>
     );
+  }
+}
+
+class InstockNav extends Component {
+  constructor() {
+    super();
+    this.state = {
+      user: [],
+      name: "",
+      lastName: "",
+      job: ""
+    };
+  }
+
+  logout(event) {
+    api.get('/api/logout').then(
+      setTimeout("location.href = '/login';", 100)
+    )
+
+  }
+
+  componentDidMount() {
+    //fetchDetals
+    api.get("/api/user").then(res => {
+      console.log(res.data);
+
+      if (res.data != '') {
+        this.setState({ name: res.data[0].firstName });
+        this.setState({ lastName: res.data[0].lastName });
+        this.setState({ job: res.data[0].jobTitle })
+      }
+    });
+  }
+  render() {
+    return (
+      <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <button
+          id="sidebarToggleTop"
+          className="btn btn-link rounded-circle mr-3"
+        >
+          <i className="fa fa-bars"></i>
+        </button>
+        <div className="d-flex align-items-center justify-content-end w-100 h-100" style={{color: "#4e73df"}}>
+          <a data-toggle="modal" data-target="#cartModal" title="Product detail"
+            className="quick-view modal-view detail-link" href="#">
+            <i className="fas fa-shopping-cart"></i>
+            <span className="dot align-middle"><span id="piece-product"></span></span>
+          </a>
+
+        </div>
+
+        <ul className="navbar-nav ml-auto">
+          <div className="topbar-divider d-none d-sm-block"></div>
+          <div className="mr-2 d-flex justify-content align-items-center">
+            <ul>
+              <li>
+                <span className=" text-gray-600 small" id="empName">
+                  {this.state.name} {this.state.lastName}
+                </span>
+              </li>
+              <li>
+                <span className=" text-gray-600 small" id="empRole">
+                  {this.state.job}
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <li className="nav-item dropdown no-arrow">
+            <a
+              className="nav-link dropdown-toggle"
+              href="#"
+              id="userDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <img className="img-profile rounded-circle" src="/img/pm.jpg" />
+            </a>
+
+            <div
+              className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+              aria-labelledby="userDropdown"
+            >
+              <a className="dropdown-item" href="#">
+                <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                Profile
+              </a>
+              <div className="dropdown-divider"></div>
+              <a className="dropdown-item" style={{ cursor: "pointer" }} onClick={this.logout}>
+                <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    );
+  }
+}
+
+class Carousel extends Component {
+  render() {
+    return (
+      <div className="container-fluid m-0 p-0">
+        <div
+          id="carouselExampleIndicators"
+          className="carousel slide"
+          style={{ width: "100%" }}
+          data-ride="carousel"
+        >
+          <ol className="carousel-indicators">
+            <li
+              data-target="#carouselExampleIndicators"
+              data-slide-to="0"
+              className="active"
+            ></li>
+            <li
+              data-target="#carouselExampleIndicators"
+              data-slide-to="1"
+            ></li>
+            <li
+              data-target="#carouselExampleIndicators"
+              data-slide-to="2"
+            ></li>
+          </ol>
+          <div className="carousel-inner" role="listbox">
+            <div className="carousel-item active">
+              <img
+                className="d-block img-fluid"
+                src="/img/test01.jpg"
+                style={{ width: "100%" }}
+                alt="First slide"
+              />
+            </div>
+            <div className="carousel-item">
+              <img
+                className="d-block img-fluid"
+                src="/img/test02.jpg"
+                style={{ width: "100%" }}
+                alt="Second slide"
+              />
+            </div>
+            <div className="carousel-item">
+              <img
+                className="d-block img-fluid"
+                src="/img/test03.jpg"
+                style={{ width: "100%" }}
+                alt="Third slide"
+              />
+            </div>
+          </div>
+          <a
+            className="carousel-control-prev"
+            href="#carouselExampleIndicators"
+            role="button"
+            data-slide="prev"
+          >
+            <span
+              className="carousel-control-prev-icon"
+              aria-hidden="true"
+            ></span>
+            <span className="sr-only">Previous</span>
+          </a>
+          <a
+            className="carousel-control-next"
+            href="#carouselExampleIndicators"
+            role="button"
+            data-slide="next"
+          >
+            <span
+              className="carousel-control-next-icon"
+              aria-hidden="true"
+            ></span>
+            <span className="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+
+    )
+  }
+}
+
+class ProductFilter extends Component {
+  render() {
+    return (
+      <div className="col-xl-3 col-lg-4 col-md-5">
+        <div className="sidebar-filter mt-0">
+          <div className="top-filter-head sfmono">
+            Product Filters
+                      </div>
+          <form action="/catalog" method="GET">
+            <div className="common-filter">
+              <div className="head">Scale</div>
+              <ul id="scalefilter"></ul>
+            </div>
+
+            <div className="common-filter ">
+              <div className="head">Vendor</div>
+              <ul id="vendorfilter"></ul>
+            </div>
+          </form>
+
+          <div className="mx-5 my-2"></div>
+        </div>
+      </div>
+
+    )
+  }
+}
+
+class CatalogNav extends Component {
+  render() {
+    return (
+      <nav className="navbar navbar-expand navbar-light bg-white topbar static-top shadow fixed-top">
+        <div className="container">
+          <a
+            className="sidebar-brand d-flex align-items-center justify-content-center text-decoration-none"
+            href="/catalog?scale=All&vendor=All"
+          >
+            <div className="sidebar-brand-icon rotate-n-15">
+              <i className="fas fa-helicopter fa-lg"></i>
+            </div>
+            <div className="sidebar-brand-text">
+              Classsic Model<sup>Shop</sup>
+            </div>
+          </a>
+
+          <div>
+            <a
+              className="d-flex justify-content-center align-items-center"
+              href="/login"
+            >
+              <div className="d-flex align-items-start">
+                <i className="fas fa-user"></i>
+              </div>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+    )
   }
 }
 
@@ -331,4 +515,4 @@ class Footer extends Component {
   }
 }
 
-export { Sidebar, Navbar, Footer };
+export { Sidebar, Navbar, InstockNav, CatalogNav, Carousel, ProductFilter, Footer };
