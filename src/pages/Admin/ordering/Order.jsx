@@ -234,7 +234,9 @@ class Pre_order extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <InstockNav />
-              <div className="container-fluid"></div>
+              <div className="container-fluid">
+                <h1>This is order pages</h1>
+              </div>
             </div>
           </div>
         </div>

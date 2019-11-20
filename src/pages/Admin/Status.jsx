@@ -27,7 +27,7 @@ export default class template extends Component {
           <div id="content">
             <Navbar />
             <div className="container-fluid">
-                
+                <h1>This is status pages</h1>
             </div>
           </div>
         </div>
