@@ -798,7 +798,7 @@ h3.widget-title-modal {
     opacity: 0.3;
 }
 
-@media (max-width: 950px) {
+@media (max-width: 960px) {
     .responsive-table {
         font-size: 0.8rem;
     }
@@ -853,6 +853,29 @@ h3.widget-title-modal {
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.flat-btn-input-t {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+    line-height: 1.5;
+    border-radius: 0.35rem 0.35rem 0 0;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.flat-btn-input-b {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+    line-height: 1.5;
+    width: 42px;
+    border-radius: 0 0 0.35rem 0.35rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
 .flat-blue {
     color: #fff;
     background: #4e73df;
@@ -873,9 +896,19 @@ h3.widget-title-modal {
     background: #be4f4f;
 }
 
+.flat-edit {
+    color: #fff;
+    background: #dfbd4e;
+}
+
+.flat-edit:hover {
+    color: #fff;
+    background: #bebd4f;
+}
+
 .flat-btn-gray {
     border: none;
-    background: #5a5c69;
+    background: #4e73df;
     width: 30px;
     height: 30px;
     font-size: 1rem;
@@ -936,6 +969,47 @@ h3.widget-title-modal {
 
 .input-update button i,
 .input-update button span {
+    font-size: 14px;
+    color: #999999
+}
+
+.input-add-cart {
+    border: 1px solid #eee;
+    font-size: 14px;
+    color: #999999;
+    height: 32px;
+    width: 42px;
+    margin-bottom: 2px 0;
+    text-align: center;
+}
+
+.input-add-cart input {
+    border: 1px solid #eee;
+    font-size: 14px;
+    color: #999999;
+    height: 38px;
+    padding-left: 15px
+}
+
+.input-add-cart input:focus {
+    outline: 0;
+    box-shadow: none
+}
+
+.input-add-cart input::placeholder {
+    color: #999999
+}
+
+.input-add-cart button {
+    background: transparent;
+    border: 1px solid #eee;
+    background: #fff;
+    border-left: 0;
+    padding-right: 15px
+}
+
+.input-add-cart button i,
+.input-add-cart button span {
     font-size: 14px;
     color: #999999
 }

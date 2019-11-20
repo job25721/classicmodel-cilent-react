@@ -5,73 +5,62 @@ import { Helmet } from "react-helmet";
 import api from "../../../api/api";
 import $ from "jquery";
 import { Cart_modal, ProductDetail_modal } from "../../../components/Modal";
+import { log } from "util";
 
 class Instock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      products : []
+      products: []
     }
-    this.changepage = this.changepage.bind(this)
   }
 
   componentDidMount() {
     var button = ''
-    button += '<td><input type="number" class="form-control" /></td>'
-    button += `<td class="align-middle"><button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-    button += `<td class="align-middle"><button id="delete" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>`;
-    api.get("/api/admin/product/instockItem").then(res => {
-      this.setState( {products:res.data})
-      var amount = 15
-      var dom = "";
-      var i, x;
-      var n = parseInt(res.data.length / amount)
-      n % amount == 1 ? x = n - 1 : x = n
-      if (res.data.length <= amount) {
-        for (i = 0; i < res.data.length; i++) {
-          dom += `<tr>`;
-          dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
-          data-target="#productModal" title="Product detail"
-          class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${res.data[i].imgSrc}"> 
-          <i class="fas fa-search fa-sm responsive-icon-search"></i></a></td>`;
-          dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
-          dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
-          dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
-          dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
-          dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
-          dom += button;
-          dom += `</tr>`;
-        }
-        $("#instockData").html(dom);
-        $(document).on("click", "#delete", this.deleteProduct);
-      } else {
+    button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
+    button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
+    button += `<td class="align-middle"><button id="delete" class="flat-btn flat-edit"><i class="fas fa-edit"/></button></td>`;
+    button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
+
+
+    api.get('/api/admin/product/count').then(res => {
+      console.log(res.data[0].count);
+
+      if (res.data[0].count > 15) {
+        var i, x
+        var n = parseInt(res.data[0].count / 15)
+        n % 15 == 1 ? x = n - 1 : x = n
         var pagebutton = ""
         for (i = 0; i <= x; i++) {
           if (i == 0) pagebutton += `<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`
           else pagebutton += `<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i + 1}</span></button>`
-
         }
         $('#pagebutton').html(pagebutton)
         $(document).on('click', '#currentpage', this.changepage)
-        for (i = 0; i < amount; i++) {
-          dom += `<tr>`;
-          dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
+      }
+    })
+
+    var i
+    $("instockData").html("")
+    api.get(`/api/admin/product/changepage/0`).then(res => {
+      var dom = ""
+      for (i = 0; i < res.data.length; i++) {
+        dom += `<tr>`;
+        dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
           class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${res.data[i].imgSrc}"> 
           <i class="fas fa-search fa-sm responsive-icon-search"></i></a></td>`;
-          dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
-          dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
-          dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
-          dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
-          dom += `<td class="align-middle">$${res.data[i].buyPrice}</td>`;
-          dom += button;
-          dom += `</tr>`;
-        }
-        $("#instockData").html(dom);
-        $(document).on("click", "#delete", this.deleteProduct);
-        $(document).on("click", "#addCart", this.addCartItem);
+        dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
+        dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
+        dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
+        dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
+        dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
+        dom += button;
+        dom += `</tr>`;
       }
-    });
+      $("#instockData").html(dom);
+      // $(document).on("click", ".product-click", this.productDetail);
+    })
     $(document).on("click", ".product-click", this.productDetail);
   }
 
@@ -92,42 +81,40 @@ class Instock extends Component {
       $("#pop-msrp").html(query.MSRP);
     });
   }
-  
+
   changepage(event) {
-    var button = ''
-    button += '<td><input type="number" class="form-control w-25" /></td>'
-    button += `<td class="align-middle"><button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-    button += `<td class="align-middle"><button id="delete" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>`;
     var current = event.currentTarget
-    console.log(event.currentTarget.className);
-    
+    var button = ''
+    button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
+    button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
+    button += `<td class="align-middle"><button id="delete" class="flat-btn flat-edit"><i class="fas fa-edit"/></button></td>`;
+    button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
+
     var pr = document.getElementsByClassName('fbg-active')
     pr[0].className = pr[0].className.replace(' fbg-active', '')
     current.className += ' fbg-active'
-    var amount = 15
+    var init = current.value * 15
+    var i
     $("instockData").html("")
-    var data = this.state.products
-      var i
-      var init = current.value * amount
-      var dest = (parseInt(current.value) + 1) * amount
-      if (dest > data.length) dest = data.length
+    api.get(`/api/admin/product/changepage/${init}`).then(res => {
       var dom = ""
-      for (i = init; i < dest; i++) {
+      for (i = 0; i < res.data.length; i++) {
         dom += `<tr>`;
-        dom += `<td class="align-middle"><a id="${data[i].productCode}" data-toggle="modal"
+        dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
-          class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${data[i].imgSrc}"> 
+          class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${res.data[i].imgSrc}"> 
           <i class="fas fa-search fa-sm responsive-icon-search"></i></a></td>`;
-        dom += `<td class="align-middle responsive-table-name">${data[i].productName}</td>`;
-        dom += `<td class="align-middle">${data[i].productScale}</td>`;
-        dom += `<td class="align-middle responsive-table-vendor">${data[i].productVendor}</td>`;
-        dom += `<td class="align-middle">${data[i].quantityInStock}</td>`;
-        dom += `<td class="align-middle">${data[i].buyPrice}</td>`;
+        dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
+        dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
+        dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
+        dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
+        dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
         dom += button;
         dom += `</tr>`;
       }
       $("#instockData").html(dom);
       // $(document).on("click", ".product-click", this.productDetail);
+    })
   }
 
   deleteProduct(event) {
@@ -138,7 +125,12 @@ class Instock extends Component {
 
   }
 
-  addCartItem(event) { 
+  testfunc(event) {
+    console.log(event);
+
+  }
+
+  addCartItem(event) {
     event.preventDefault();
     // api.post('/api/admin/product/addCart')
 
@@ -200,7 +192,7 @@ class Instock extends Component {
                       <th className="responsive-table-vendor">ProductVendor</th>
                       <th>QuantityInStock</th>
                       <th>BuyPrice</th>
-                      <th></th><th></th>
+                      <th></th><th></th><th></th>
                     </tr>
                   </thead>
                   <tbody className="w-100" id="instockData"></tbody>
