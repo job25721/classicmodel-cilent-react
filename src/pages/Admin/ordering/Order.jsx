@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 
 import api from "../../../api/api";
 import $ from "jquery";
-import { Cart_modal, ProductDetail_modal } from "../../../components/Modal";
+import { Cart_modal, ProductDetail_modal, ProductEdit_modal } from "../../../components/Modal";
 import { log } from "util";
 
 class Instock extends Component {
@@ -29,7 +29,7 @@ class Instock extends Component {
       if (res.data[0].count > 15) {
         var i, x
         var n = parseInt(res.data[0].count / 15)
-        n % 15 == 1 ? x = n - 1 : x = n
+        res.data[0].count % 15 == 0 ? x = n - 1 : x = n
         var pagebutton = ""
         for (i = 0; i <= x; i++) {
           if (i == 0) pagebutton += `<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`
@@ -150,6 +150,14 @@ class Instock extends Component {
               <div className="container-fluid">
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
                   <h1 className="h3 mb-0 text-gray-800 sfmono">In stock product</h1>
+                  <div className="d-flex justify-content-end ">
+                    <a class="flat-btn flat-blue align-middle" style={{margin:"2px 0",color:"#fff"}}
+                      data-toggle="modal" data-target="#editProduct" title="Add new Product">
+                      <i className="fas fa-plus"></i>
+                    </a>
+
+
+                  </div>
                 </div>
                 <div style={{ fontSize: "40px" }} id="demo"></div>
                 {/* <div style={{ fontSize: "25px" }} className="txt-heading">
@@ -203,6 +211,7 @@ class Instock extends Component {
         </div >
         <Cart_modal />
         <ProductDetail_modal />
+        <ProductEdit_modal />
       </div>
     );
   }
