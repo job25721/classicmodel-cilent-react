@@ -298,7 +298,7 @@ class InstockNav extends Component {
           <i className="fa fa-bars"></i>
         </button>
         <div className="d-flex align-items-center justify-content-end w-100 h-100" style={{color: "#4e73df"}}>
-          <a data-toggle="modal" data-target="#cartModal" title="Product detail"
+          <a id="cartIcon" data-toggle="modal" data-target="#cartModal" title="Product detail"
             className="quick-view modal-view detail-link" href="#">
             <i className="fas fa-shopping-cart"></i>
             <span className="dot align-middle"><span id="piece-product"></span></span>

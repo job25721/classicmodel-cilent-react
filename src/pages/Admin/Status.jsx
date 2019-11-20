@@ -13,7 +13,44 @@ export default class template extends Component {
         }
     }
     componentDidMount(){
-        
+        api.get('/api/admin/product/orderStatus').then(res=>{
+          let j = 1
+          var dom = "";
+          res.data.forEach(each=>{
+            console.log(each.orderDate);
+            
+            var statusArr = ["In Process","Shipped","Disputed","On Hold","Cancelled","Resolved"]
+            dom += '<tr>'
+            dom += `<td>${j}</td>`
+            dom += `<td>${each.orderNumber}</td>`
+            dom += `<td>${each.orderDate}</td>`
+            dom += `<td>${each.requiredDate}</td>`
+            dom += `<td>${each.	shippedDate}</td>`
+            let i = 0;
+            let targetIndex;
+            statusArr.forEach(arr=>{
+              if(each.status === arr){
+                targetIndex = i
+              }
+              i++;
+            })
+            dom += `<td><select class="form-control w-75"><option>${statusArr[targetIndex]}</option>`
+            statusArr.splice(targetIndex,1)
+
+            
+            statusArr.forEach(arr=>{
+              dom += `<option>${arr}</option>`
+            })         
+            dom += '</select></td>'
+            dom += `<td>${each.	customerNumber}</td>`
+            dom += '</tr>'
+            j++
+          })
+          $('#statusResult').html(dom);
+          
+          
+          
+        })
     }
 
   render() {
@@ -27,7 +64,22 @@ export default class template extends Component {
           <div id="content">
             <Navbar />
             <div className="container-fluid">
-                <h1>This is status pages</h1>
+                <h1>Order status</h1>
+                <br />
+                <table className="table table-striped rsponsive-table">
+                  <thead className="thead-dark">
+                    <tr>
+                      <th>No.</th>
+                      <th>orderNumber</th>
+                      <th>orderDate</th>
+                      <th>requiredDate</th>
+                      <th>shippedDate</th>
+                      <th>Status</th>
+                      <th>CustomerNumber</th>
+                    </tr>
+                  </thead>
+                  <tbody id="statusResult"></tbody>
+                </table>
             </div>
           </div>
         </div>

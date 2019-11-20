@@ -141,8 +141,11 @@ class Cart_modal extends Component {
                   aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body">
+              <h1>Cart Item : </h1>
                 <div className="modal-product">
+                 
                   <table className="table text-center table-striped responsive-table" id="dataTable" width="100%" cellspacing="0">
+                  
                     <thead>
                       <tr>
                         <th>Image</th>
@@ -156,8 +159,11 @@ class Cart_modal extends Component {
                     <tbody id="cart">
 
                     </tbody>
+                    
                   </table>
+                  
                 </div>
+                <div id="details"></div>
               </div>
             </div>
           </div>

@@ -5,24 +5,29 @@ import { Helmet } from "react-helmet";
 import api from "../../../api/api";
 import $ from "jquery";
 import { Cart_modal, ProductDetail_modal } from "../../../components/Modal";
-import { log } from "util";
+
 
 class Instock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      products: []
+      products: [],
+      totalCart : 0
+
     }
+    this.addCartItem = this.addCartItem.bind(this);
+    this.removeCart = this.removeCart.bind(this);
   }
 
   componentDidMount() {
+    api.get('/api/admin/product/getCartItem').then(res=>{
+      $('#piece-product').html(res.data.total)
+    })
     var button = ''
-    button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
+    button += '<td class="align-middle"><input type="number" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
     button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
     button += `<td class="align-middle"><button id="delete" class="flat-btn flat-edit"><i class="fas fa-edit"/></button></td>`;
     button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
-
-
     api.get('/api/admin/product/count').then(res => {
       console.log(res.data[0].count);
 
@@ -40,11 +45,9 @@ class Instock extends Component {
       }
     })
 
-    var i
-    $("instockData").html("")
     api.get(`/api/admin/product/changepage/0`).then(res => {
       var dom = ""
-      for (i = 0; i < res.data.length; i++) {
+      for (let i = 0; i < res.data.length; i++) {
         dom += `<tr>`;
         dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
@@ -59,9 +62,14 @@ class Instock extends Component {
         dom += `</tr>`;
       }
       $("#instockData").html(dom);
-      // $(document).on("click", ".product-click", this.productDetail);
     })
+    
     $(document).on("click", ".product-click", this.productDetail);
+    $(document).on("click", "#addCart", this.addCartItem);
+    $(document).on("click", "#delete", this.deleteProduct);
+    $(document).on("click", "#cartIcon", this.loadCartItem);
+    $(document).on("click", "#removeCart", this.removeCart);
+
   }
 
   productDetail(event) {
@@ -94,11 +102,10 @@ class Instock extends Component {
     pr[0].className = pr[0].className.replace(' fbg-active', '')
     current.className += ' fbg-active'
     var init = current.value * 15
-    var i
     $("instockData").html("")
     api.get(`/api/admin/product/changepage/${init}`).then(res => {
       var dom = ""
-      for (i = 0; i < res.data.length; i++) {
+      for (let i = 0; i < res.data.length; i++) {
         dom += `<tr>`;
         dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
@@ -112,8 +119,7 @@ class Instock extends Component {
         dom += button;
         dom += `</tr>`;
       }
-      $("#instockData").html(dom);
-      // $(document).on("click", ".product-click", this.productDetail);
+      $("#instockData").html(dom);;
     })
   }
 
@@ -122,17 +128,55 @@ class Instock extends Component {
   }
 
   loadCartItem(event) {
-
+    //event.preventDefault()
+    var dom = ''
+    var details = ''
+    let TotalPrice = 0;
+    api.get('/api/admin/product/getCartItem').then(res=>{
+      console.log(res.data);
+      
+      var length = res.data.cartItem.length;
+      console.log(length);
+      if(length <= 0){
+        alert('no such item in cart')
+      }else{
+        for(let i=0;i<length;i++){
+          dom += '<tr>'
+          dom += `<td><img style="width:50px;height:50px" src='/img/${res.data.cartItem[i].image}' /></td>'>`
+          dom += `<td>${res.data.cartItem[i].Name}</td>`
+          dom += `<td>${res.data.cartItem[i].Quantity}</td>`
+          dom += `<td>${res.data.cartItem[i].Price}</td>`
+          dom += `<td>${res.data.cartItem[i].Total}</td>`
+          dom += `<td><button id="removeCart" class="btn btn-link" style="color:red">Remove</button></td>`
+          dom += '</tr>'
+          TotalPrice += res.data.cartItem[i].Total
+        }
+         
+        }
+        details += `<p>TotalPrice : ${TotalPrice}</p>`
+        details += `<p>TotalQuantity : ${res.data.total}</p>`
+        $('#cart').html(dom)
+        $('#details').html(details)      
+    })
   }
 
+  removeCart(event) {
+    $(event.currentTarget.parentElement.parentElement).remove()
+    this.loadCartItem()
+
+  }
   testfunc(event) {
     console.log(event);
 
   }
 
   addCartItem(event) {
-    event.preventDefault();
-    // api.post('/api/admin/product/addCart')
+    event.preventDefault(); 
+    api.post('/api/admin/product/addCart',{quantity : event.currentTarget.parentElement.children[0].value,
+      code : event.currentTarget.parentElement.parentElement.children[0].children[0].id}).then(res=>{ 
+        $('#piece-product').html(res.data)
+        
+    })
 
   }
 
@@ -152,7 +196,7 @@ class Instock extends Component {
                   <h1 className="h3 mb-0 text-gray-800 sfmono">In stock product</h1>
                 </div>
                 <div style={{ fontSize: "40px" }} id="demo"></div>
-                {/* <div style={{ fontSize: "25px" }} className="txt-heading">
+                {/* { <div style={{ fontSize: "25px" }} className="txt-heading">
                 Your Cart have{" "}
                 <div
                   style={{ display: "inline", fontSize: "30px" }}
@@ -167,8 +211,8 @@ class Instock extends Component {
                 >
                   {" "}
                 </div>{" "}
-                pieces{" "}
-              </div> */}
+              
+              </div>} */}
                 {/* <div style={{ fontSize: "25px" }}>
                 <a id="btnCheckout" href="/admin/instock/cartitem">
                   See Your Cart
