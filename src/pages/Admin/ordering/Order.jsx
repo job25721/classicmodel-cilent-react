@@ -68,7 +68,7 @@ class Instock extends Component {
     $(document).on("click", "#addCart", this.addCartItem);
     $(document).on("click", "#delete", this.deleteProduct);
     $(document).on("click", "#cartIcon", this.loadCartItem);
-    $(document).on("click", "#removeCart", this.removeCart);
+    $(document).on("click", ".removeCart", this.removeCart);
 
   }
 
@@ -128,17 +128,13 @@ class Instock extends Component {
   }
 
   loadCartItem(event) {
-    //event.preventDefault()
     var dom = ''
     var details = ''
     let TotalPrice = 0;
     api.get('/api/admin/product/getCartItem').then(res=>{
-      console.log(res.data);
-      
       var length = res.data.cartItem.length;
-      console.log(length);
       if(length <= 0){
-        alert('no such item in cart')
+        
       }else{
         for(let i=0;i<length;i++){
           dom += '<tr>'
@@ -147,22 +143,47 @@ class Instock extends Component {
           dom += `<td>${res.data.cartItem[i].Quantity}</td>`
           dom += `<td>${res.data.cartItem[i].Price}</td>`
           dom += `<td>${res.data.cartItem[i].Total}</td>`
-          dom += `<td><button id="removeCart" class="btn btn-link" style="color:red">Remove</button></td>`
+          dom += `<td><button id="${res.data.cartItem[i].code}" class="btn btn-link removeCart" style="color:red">Remove</button></td>`
           dom += '</tr>'
           TotalPrice += res.data.cartItem[i].Total
         }
          
         }
+        if(TotalPrice === 0) {
+          $('#cartLebel').hide('fast')
+          $('#cartTable').hide('fast')
+          $('#details').hide('fast')   
+          $('#blank').show('fast')
+        }
+        else {
+          $('#blank').hide('fast')
+          $('#cartLebel').show('fast')
+          $('#details').show('fast') 
+          $('#cartTable').show('fast')
+        }
         details += `<p>TotalPrice : ${TotalPrice}</p>`
         details += `<p>TotalQuantity : ${res.data.total}</p>`
+        details += `<p>Available Discout</p>`
+        details += `<form class="form" action="#">`
+        details += `<select class="form-control w-25"><option>-</option></select><hr />`
+        details += `<button class="btn btn-outline-success">CheckOut</button>`
+        details += `</form>`
         $('#cart').html(dom)
         $('#details').html(details)      
     })
   }
 
   removeCart(event) {
+    // alert('clicked')
+    
     $(event.currentTarget.parentElement.parentElement).remove()
-    this.loadCartItem()
+    var code = event.currentTarget.id;
+    api.delete(`/api/admin/product/removeCartItem/${code}`).then(res=>{
+      $('#piece-product').html(res.data.update)
+      this.loadCartItem()
+    })
+    
+    
 
   }
   testfunc(event) {
