@@ -1091,3 +1091,18 @@ h3.widget-title-modal {
 .text-simple {
     color: #4e73df;
 }
+
+.status-selected {
+    background: transparent;
+    border: 1px solid #eee;
+    background: #fff;
+    color: #858796;
+    font-size: 1rem;
+    height: 1.6em;
+    width: 6.2em;
+}
+
+.status-selected:focus {
+    outline: 0;
+    box-shadow: none;
+}
