@@ -48,7 +48,7 @@ export default class template extends Component {
           '<td class="align-middle">' + '<select id="order-'+ res.data[i].orderNumber  +'" class="status-selected" id="sel1">' +
           '<option value="Cancelled">Cancelled</option>' +
           '<option value="Disputed">Disputed</option>' +
-          '<option value=""In Process">In process</option>' +
+          '<option value="In Process">In Process</option>' +
           '<option value="On Hold">On hold</option>' +
           '<option value="Resolved">Resolved</option>' +
           '<option value="Shipped">Shipped</option>' +
@@ -93,7 +93,7 @@ export default class template extends Component {
           '<td class="align-middle">' + '<select id="order-'+ res.data[i].orderNumber  +'" class="status-selected" id="sel1">' +
           '<option value="Cancelled">Cancelled</option>' +
           '<option value="Disputed">Disputed</option>' +
-          '<option value=""In Process">In process</option>' +
+          '<option value="In Process">In Process</option>' +
           '<option value="On Hold">On hold</option>' +
           '<option value="Resolved">Resolved</option>' +
           '<option value="Shipped">Shipped</option>' +
@@ -112,7 +112,7 @@ export default class template extends Component {
   update(event){
     var value = $(this).val()
     var orderNumber = event.currentTarget.id.split("-")[1]
-    console.log(orderNumber);
+    console.log(value);
       api.get(`/api/admin/order/update/${value}/${orderNumber}`).then(res=>{
 
       })
