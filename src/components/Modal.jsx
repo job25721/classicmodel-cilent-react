@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { cpus } from 'os';
+import api from "../api/api";
+import $ from "jquery";
 
 class Employee_modal extends Component {
   render() {
@@ -141,8 +143,16 @@ class Cart_modal extends Component {
                   aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body">
+                <div id="blank" className="collapse">
+                  <h1>ทรงพระเจริญ</h1>
+                  <img src="/Contribubutor/lift.png" alt="" className="" />
+                </div>
+
+                <h1 id="cartLebel">Cart Item : </h1>
                 <div className="modal-product">
-                  <table className="table text-center table-striped responsive-table" id="dataTable" width="100%" cellspacing="0">
+
+                  <table className="table text-center table-striped responsive-table" id="cartTable" width="100%" cellspacing="0">
+
                     <thead>
                       <tr>
                         <th>Image</th>
@@ -156,8 +166,11 @@ class Cart_modal extends Component {
                     <tbody id="cart">
 
                     </tbody>
+
                   </table>
+
                 </div>
+                <div id="details"></div>
               </div>
             </div>
           </div>
@@ -199,7 +212,7 @@ class Catalog_modal extends Component {
                         src="/img/test10.jpg"
                         style={{
                           width: "100%",
-                          height:"auto",
+                          height: "auto",
                           transition: "all 0.3s ease-out 0s",
                           marginBottom: "0"
                         }}
@@ -343,7 +356,7 @@ class ProductDetail_modal extends Component {
                         src="/img/test10.jpg"
                         style={{
                           width: "100%",
-                          height:"auto",
+                          height: "auto",
                           transition: "all 0.3s ease-out 0s",
                           marginBottom: "0"
                         }}
@@ -393,7 +406,7 @@ class ProductAdd_modal extends Component {
       <div id="quickview-wrapper">
         <div
           className="modal fade"
-          id="editProduct"
+          id="addProduct"
           tabIndex="-1"
           role="dialog"
         >
@@ -419,7 +432,7 @@ class ProductAdd_modal extends Component {
                         src="/img/test10.jpg"
                         style={{
                           width: "100%",
-                          height:"auto",
+                          height: "auto",
                           transition: "all 0.3s ease-out 0s",
                           marginBottom: "0"
                         }}
@@ -538,7 +551,7 @@ class ProductEdit_modal extends Component {
                         src="/img/test10.jpg"
                         style={{
                           width: "100%",
-                          height:"auto",
+                          height: "auto",
                           transition: "all 0.3s ease-out 0s",
                           marginBottom: "0"
                         }}
@@ -625,5 +638,55 @@ class ProductEdit_modal extends Component {
   }
 }
 
+class OrderDetail_modal extends Component {
+  render() {
+    return (
+      <div id="quickview-wrapper">
+        <div className="modal fade" id="orderDatilModal" tabindex="-1" role="dialog">
+          <div className="modal-dialog modal__container" role="document">
+            <div className="modal-content">
+              <div className="modal-header modal__header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              </div>
+              <div className="modal-body">
+                {/* <div id="blank" className="collapse">
+                  <h1>ทรงพระเจริญ</h1>
+                  <img src="/Contribubutor/lift.png" alt="" className="" />
+                </div> */}
+                  <h4 className="sfmono" id="order-number-head">Order Number</h4>
+                  <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
+                <div className="modal-product">
 
-export { Employee_modal, Cart_modal, Catalog_modal, ProductDetail_modal, ProductEdit_modal ,ProductAdd_modal}
+                  <table className="table text-center table-striped responsive-table" id="cartTable" width="100%" cellspacing="0">
+
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>orderNumber</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="order-detail">
+                    </tbody>
+
+                  </table>
+                </div>
+
+                <p id="order-date-detail">orderDate</p>
+                <p id="required-date-detail">requiredDate</p>
+                <p id="shipped-date-detail">shippedDate</p>
+                <p id="status-detail">status</p>
+                <p id="comment-detail">comment</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export { Employee_modal, Cart_modal, Catalog_modal, ProductDetail_modal, ProductEdit_modal, ProductAdd_modal, OrderDetail_modal }

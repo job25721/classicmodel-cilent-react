@@ -4,25 +4,25 @@ import { Helmet } from "react-helmet";
 
 import api from "../../../api/api";
 import $ from "jquery";
-import { Cart_modal, ProductDetail_modal, ProductAdd_modal } from "../../../components/Modal";
+import { Cart_modal, ProductDetail_modal, ProductAdd_modal ,ProductEdit_modal} from "../../../components/Modal";
 import { log } from "util";
 
 class Instock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      products: []
+      products: [],
+      totalCart : 0
+
     }
+    this.addCartItem = this.addCartItem.bind(this);
+    this.removeCart = this.removeCart.bind(this);
   }
 
   componentDidMount() {
-    var button = ''
-    button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
-    button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-    button += `<td class="align-middle"><button id="delete" class="flat-btn flat-edit"><i class="fas fa-edit"/></button></td>`;
-    button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
-
-
+    api.get('/api/admin/product/getCartItem').then(res=>{
+      $('#piece-product').html(res.data.total)
+    })
     api.get('/api/admin/product/count').then(res => {
       console.log(res.data[0].count);
 
@@ -40,11 +40,15 @@ class Instock extends Component {
       }
     })
 
-    var i
-    $("instockData").html("")
     api.get(`/api/admin/product/changepage/0`).then(res => {
       var dom = ""
-      for (i = 0; i < res.data.length; i++) {
+      var button =''
+      for (let i = 0; i < res.data.length; i++) {
+        button = ''
+        button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
+        button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
+        button += `<td class="align-middle"><button id="${res.data[i].procuctCode}" class="flat-btn flat-edit align-middle edit-product" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
+        button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
         dom += `<tr>`;
         dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
@@ -59,9 +63,15 @@ class Instock extends Component {
         dom += `</tr>`;
       }
       $("#instockData").html(dom);
-      // $(document).on("click", ".product-click", this.productDetail);
     })
+    
     $(document).on("click", ".product-click", this.productDetail);
+    $(document).on("click", "#addCart", this.addCartItem);
+    $(document).on("click", "#delete", this.deleteProduct);
+    $(document).on("click", "#cartIcon", this.loadCartItem);
+    $(document).on("click", ".removeCart", this.removeCart);
+    $(document).on('click','.edit-product',this.editProduct)
+
   }
 
   productDetail(event) {
@@ -84,21 +94,20 @@ class Instock extends Component {
 
   changepage(event) {
     var current = event.currentTarget
-    var button = ''
-    button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
-    button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-    button += `<td class="align-middle"><button id="delete" class="flat-btn flat-edit"><i class="fas fa-edit"/></button></td>`;
-    button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
-
     var pr = document.getElementsByClassName('fbg-active')
     pr[0].className = pr[0].className.replace(' fbg-active', '')
     current.className += ' fbg-active'
     var init = current.value * 15
-    var i
     $("instockData").html("")
     api.get(`/api/admin/product/changepage/${init}`).then(res => {
       var dom = ""
-      for (i = 0; i < res.data.length; i++) {
+      var button = ''
+      for (let i = 0; i < res.data.length; i++) {
+        button = ''
+        button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
+        button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
+        button += `<td class="align-middle"><button id="${res.data[i].procuctCode}" class="flat-btn flat-edit align-middle" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
+        button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
         dom += `<tr>`;
         dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
@@ -112,8 +121,7 @@ class Instock extends Component {
         dom += button;
         dom += `</tr>`;
       }
-      $("#instockData").html(dom);
-      // $(document).on("click", ".product-click", this.productDetail);
+      $("#instockData").html(dom);;
     })
   }
 
@@ -122,17 +130,91 @@ class Instock extends Component {
   }
 
   loadCartItem(event) {
-
+    var dom = ''
+    var details = ''
+    let TotalPrice = 0;
+    api.get('/api/admin/product/getCartItem').then(res=>{
+      var length = res.data.cartItem.length;
+      if(length <= 0){
+        
+      }else{
+        for(let i=0;i<length;i++){
+          dom += '<tr>'
+          dom += `<td><img style="width:50px;height:50px" src='/img/${res.data.cartItem[i].image}' /></td>'>`
+          dom += `<td>${res.data.cartItem[i].Name}</td>`
+          dom += `<td>${res.data.cartItem[i].Quantity}</td>`
+          dom += `<td>${res.data.cartItem[i].Price}</td>`
+          dom += `<td>${res.data.cartItem[i].Total}</td>`
+          dom += `<td><button id="${res.data.cartItem[i].code}" class="btn btn-link removeCart" style="color:red">Remove</button></td>`
+          dom += '</tr>'
+          TotalPrice += res.data.cartItem[i].Total
+        }
+         
+        }
+        if(TotalPrice === 0) {
+          $('#cartLebel').hide('fast')
+          $('#cartTable').hide('fast')
+          $('#details').hide('fast')   
+          $('#blank').show('fast')
+        }
+        else {
+          $('#blank').hide('fast')
+          $('#cartLebel').show('fast')
+          $('#details').show('fast') 
+          $('#cartTable').show('fast')
+        }
+        details += `<p>TotalPrice : ${TotalPrice}</p>`
+        details += `<p>TotalQuantity : ${res.data.total}</p>`
+        details += `<p>Available Discout</p>`
+        details += `<form class="form" action="#">`
+        details += `<select class="form-control w-25"><option>-</option></select><hr />`
+        details += `<button class="btn btn-outline-success">CheckOut</button>`
+        details += `</form>`
+        $('#cart').html(dom)
+        $('#details').html(details)      
+    })
   }
 
-  testfunc(event) {
-    console.log(event);
+  removeCart(event) {
+    // alert('clicked')
+    
+    $(event.currentTarget.parentElement.parentElement).remove()
+    var code = event.currentTarget.id;
+    api.delete(`/api/admin/product/removeCartItem/${code}`).then(res=>{
+      $('#piece-product').html(res.data.update)
+      this.loadCartItem()
+    })
+    
+    
 
+  }
+  editProduct(e){
+
+    // var productCode = this.id;
+    
+    // api.get(`/api/admin/product/fetchInstockitem/${productCode}`).then(res => {
+    //   var html = ""
+    //   var query = res.data[0];
+    //   $("#pop-name").html(query.productName);
+    //   $("#pop-code").html(query.productCode);
+    //   $("#pop-desc").html(query.productDescription);
+    //   $("#pop-price").html(query.buyPrice);
+    //   $("#pop-scale").html(query.productScale);
+    //   $("#pop-vendor").html(query.productVendor);
+    //   $("#pop-quantity").html(query.quantityInStock);
+    //   $("#pop-img").attr('src', '/img/' + query.imgSrc)
+    //   $("#pop-productline").html(query.productLine);
+    //   $("#pop-msrp").html(query.MSRP);
+    // });
   }
 
   addCartItem(event) {
-    event.preventDefault();
-    // api.post('/api/admin/product/addCart')
+    event.preventDefault(); 
+    api.post('/api/admin/product/addCart',{quantity : event.currentTarget.parentElement.children[0].value,
+      code : event.currentTarget.parentElement.parentElement.children[0].children[0].id}).then(res=>{ 
+        $('#piece-product').html(res.data)
+        
+    })
 
   }
 
@@ -160,7 +242,7 @@ class Instock extends Component {
                   </div>
                 </div>
                 <div style={{ fontSize: "40px" }} id="demo"></div>
-                {/* <div style={{ fontSize: "25px" }} className="txt-heading">
+                {/* { <div style={{ fontSize: "25px" }} className="txt-heading">
                 Your Cart have{" "}
                 <div
                   style={{ display: "inline", fontSize: "30px" }}
@@ -175,8 +257,8 @@ class Instock extends Component {
                 >
                   {" "}
                 </div>{" "}
-                pieces{" "}
-              </div> */}
+              
+              </div>} */}
                 {/* <div style={{ fontSize: "25px" }}>
                 <a id="btnCheckout" href="/admin/instock/cartitem">
                   See Your Cart
@@ -212,6 +294,7 @@ class Instock extends Component {
         <Cart_modal />
         <ProductDetail_modal />
         <ProductAdd_modal />
+        <ProductEdit_modal/>
       </div>
     );
   }
@@ -235,7 +318,9 @@ class Pre_order extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <InstockNav />
-              <div className="container-fluid"></div>
+              <div className="container-fluid">
+                <h1>This is order pages</h1>
+              </div>
             </div>
           </div>
         </div>
