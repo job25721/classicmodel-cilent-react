@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 
 import api from "../../../api/api";
 import $ from "jquery";
-import { Cart_modal, ProductDetail_modal, ProductEdit_modal } from "../../../components/Modal";
+import { Cart_modal, ProductDetail_modal, ProductAdd_modal } from "../../../components/Modal";
 import { log } from "util";
 
 class Instock extends Component {
@@ -211,7 +211,7 @@ class Instock extends Component {
         </div >
         <Cart_modal />
         <ProductDetail_modal />
-        <ProductEdit_modal />
+        <ProductAdd_modal />
       </div>
     );
   }
