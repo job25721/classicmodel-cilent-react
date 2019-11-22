@@ -922,6 +922,18 @@ h3.widget-title-modal {
     background: #16a571;
 }
 
+.flat-add {
+    color: #5a5c69;
+    background: transparent;
+    border: 1px solid #5a5c69;
+}
+
+.flat-add:hover {
+    color: rgb(255, 255, 255);
+    background: #8f8f8f;
+    border: 1px solid #8f8f8f
+}
+
 .flat-btn-gray {
     border: none;
     background: #4e73df;

@@ -14,7 +14,7 @@ export default class template extends Component {
     }
   }
   componentDidMount() {
-    api.get(`/api/admin/order/orderdetail`).then(res => {
+    api.get(`/api/admin/order/fetch`).then(res => {
       console.log(res);
 
       if (res.data.length > 15) {

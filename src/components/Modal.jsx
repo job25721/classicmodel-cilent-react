@@ -654,8 +654,8 @@ class OrderDetail_modal extends Component {
                   <h1>ทรงพระเจริญ</h1>
                   <img src="/Contribubutor/lift.png" alt="" className="" />
                 </div> */}
-                  <h4 className="sfmono" id="order-number-head">Order Number</h4>
-                  <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
+                <h4 className="sfmono" id="order-number-head">Order Number</h4>
+                <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
                 <div className="modal-product">
 
                   <table className="table text-center table-striped responsive-table" id="cartTable" width="100%" cellspacing="0">
@@ -689,4 +689,33 @@ class OrderDetail_modal extends Component {
   }
 }
 
-export { Employee_modal, Cart_modal, Catalog_modal, ProductDetail_modal, ProductEdit_modal, ProductAdd_modal, OrderDetail_modal }
+class CustomerDetail_modal extends Component {
+  render() {
+    return (
+      <div id="quickview-wrapper">
+        <div className="modal fade" id="customerDetailModal" tabindex="-1" role="dialog">
+          <div className="modal-dialog modal__container" role="document">
+            <div className="modal-content">
+              <div className="modal-header modal__header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              </div>
+              <div className="modal-body">
+                <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
+                <h5 className="sfmono" id="customer-name-head">customName</h5><br/>
+                <p id="contact-name-detail" className="mb-1">contactName</p>
+                <p id="phone-detail" className="mb-1">phone</p>
+                <p id="address-detail" className="mb-1">address</p>
+                <p id="sale-rep-detail" className="mb-1">salesRepEmplyeeNumber</p>
+                <p id="credit-limit-detail" className="mb-1">creditLimit</p>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export { Employee_modal, Cart_modal, Catalog_modal, ProductDetail_modal, ProductEdit_modal, ProductAdd_modal, OrderDetail_modal, CustomerDetail_modal }
