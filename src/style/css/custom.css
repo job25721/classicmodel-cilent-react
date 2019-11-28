@@ -906,6 +906,16 @@ h3.widget-title-modal {
     background: #bebd4f;
 }
 
+.flat-save {
+    color: #fff;
+    background: #1cc88a;
+}
+
+.flat-save:hover {
+    color: #fff;
+    background: #16a571;
+}
+
 .flat-btn-gray {
     border: none;
     background: #4e73df;
@@ -958,13 +968,17 @@ h3.widget-title-modal {
     text-align: right;
 }
 
+.placehold-left input::placeholder {
+    text-align: left;
+}
+
 .input-update button {
     background: transparent;
     border: 1px solid #eee;
     background: #fff;
     color: rgb(61, 61, 61);
-    border-left: 0;
-    padding-right: 15px
+    padding-right: 15px;
+    height: 32px;
 }
 
 .input-update button i,
@@ -1072,4 +1086,23 @@ h3.widget-title-modal {
 .input-discount button span {
     font-size: 14px;
     color: #999999
+}
+
+.text-simple {
+    color: #4e73df;
+}
+
+.status-selected {
+    background: transparent;
+    border: 1px solid #eee;
+    background: #fff;
+    color: #858796;
+    font-size: 1rem;
+    height: 1.6em;
+    width: 6.2em;
+}
+
+.status-selected:focus {
+    outline: 0;
+    box-shadow: none;
 }

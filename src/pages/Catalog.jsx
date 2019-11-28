@@ -71,49 +71,10 @@ export default class Catalog extends Component {
       }
       $(document).on("click", ".card-img", this.productDetail)
     })
-
-
-
-
-    // api.get("catalog/getData?scale=" + scale + "&vendor=" + vendor).then(res => {
-    //   $("#product-row").empty();
-    //   for (var i = 0; i < res.data.result.length; i++) {
-    //     $("#product-row").append(
-    //       '<div class="col-md-6 col-lg-4"><div class="text-center card-product"><div class="card-product__img" ><a data-toggle="modal" data-target="#productModal" title="Product detail" class="quick-view modal-view detail-link" href="#"><img class="card-img" src="/img/' +
-    //       JSON.parse(JSON.stringify(res.data.result[i].imgSrc)) +
-    //       '"  id=' +
-    //       res.data.result[i].productCode +
-    //       '></a></div><div class="card-body"><p>Scale' +
-    //       JSON.parse(JSON.stringify(res.data.result[i].productScale)) +
-    //       '</p><h4 class="card-product__title sfmono">' +
-    //       JSON.parse(JSON.stringify(res.data.result[i].productName)) +
-    //       '</h4><p class="price">$' +
-    //       JSON.parse(JSON.stringify(res.data.result[i].buyPrice)) +
-    //       " </p><p>Vendor: " +
-    //       JSON.parse(JSON.stringify(res.data.result[i].productVendor)) +
-    //       "</p></div></div></div>"
-    //     );
-    //   }
-    // $("#myInput").on("keyup", function () {
-    //   var value = $(this).val().toLowerCase();
-    //   $("#product-row div ").filter(function () {
-    //     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    //   });
-    //   if ($('.card-product__img').css('display') == 'none') {
-    //     $('.card-product__img').css('display', "");
-    //   }
-    //   var num = $('.col-md-6:not([style*="display: none"])').length;
-    //   if (num == 0) $('#number-row').html('Product is not found')
-    //   else if (num == 1) $('#number-row').html('Found ' + num + ' product ');
-    //   else $('#number-row').html('Found ' + num + ' products ')
-
-    // })
-
-      // var num = $('.col-md-6:not([style*="display: none"])').length;
-      // if (num == 0) $('#number-row').html('Product is not found')
-      // else if (num == 1) $('#number-row').html('Found ' + num + ' product ');
-      // else $('#number-row').html('Found ' + num + ' products ')
-    
+    // var num = $('.col-md-6:not([style*="display: none"])').length;
+    // if (num == 0) $('#number-row').html('Product is not found')
+    // else if (num == 1) $('#number-row').html('Found ' + num + ' product ');
+    // else $('#number-row').html('Found ' + num + ' products ')
 
   }
 
@@ -146,7 +107,7 @@ export default class Catalog extends Component {
           if (i == 0) $('#pagebutton').append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`)
           else $('#pagebutton').append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i + 1}</span></button>`)
         }
-      }else row = res.data.row
+      } else row = res.data.row
 
       $("#product-row").empty();
       for (var i = 0; i < row; i++) {
@@ -192,6 +153,7 @@ export default class Catalog extends Component {
     })
   }
 
+  
 
   productsearch(event) {
     console.log(event.target);
@@ -223,7 +185,9 @@ export default class Catalog extends Component {
                   <ProductFilter />
                   <div className="col-xl-9 col-lg-8 col-md-7">
                     <div className="filter-bar d-flex flex-wrap align-items-center">
-                      <div className="sorting mr-auto"></div>
+                      <div className="sorting">
+                      </div>
+                      <div className="sorting mr-auto">                     </div>
                       <div>
                         <div className="input-group filter-bar-search">
                           <input
