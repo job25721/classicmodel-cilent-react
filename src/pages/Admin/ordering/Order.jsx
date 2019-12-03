@@ -319,7 +319,7 @@ class Pre_order extends Component {
             <div id="content">
               <InstockNav />
               <div className="container-fluid">
-                <h1>This is order pages</h1>
+                <h1 className="h3 mb-0 text-gray-800 sfmono">This is order pages</h1>
               </div>
             </div>
           </div>

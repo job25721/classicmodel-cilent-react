@@ -27,8 +27,8 @@ export default class Catalog extends Component {
           obj.productScale + '"  ><label for="' + obj.productScale + '">' + obj
             .productScale + '</label></li>');
       })
-      $(document).on("click", ".pixel-radio", this.productfilter)
     })
+    
     api.get("/catalog/vendorFilter").then(res => { //creat product filter type vendor
       $("#vendorfilter").append(
         '<li class="filter-list"><input class="pixel-radio" type="radio" name="vendor"  id="V-All" checked="checked" value="All"><label for="V-All">All</label></li>'
@@ -39,9 +39,7 @@ export default class Catalog extends Component {
           obj.productVendor + '" value="' + obj.productVendor + '"><label for="' +
           obj.productVendor + '">' + obj.productVendor + '</label></li>');
       });
-      $(document).on("click", ".pixel-radio", this.productfilter)
     });
-
 
     api.get(`catalog/allproduct`).then(res => { //fetch product
       console.log(res);
@@ -55,7 +53,6 @@ export default class Catalog extends Component {
           if (i == 0) $('#pagebutton').append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`)
           else $('#pagebutton').append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i + 1}</span></button>`)
         }
-        $(document).on('click', '#currentpage', this.changepage)
       }
       $("#product-row").empty();
       for (var i = 0; i < 18; i++) {
@@ -69,13 +66,14 @@ export default class Catalog extends Component {
           "<p>Vendor: " + res.data.result[i].productVendor + "</p></div></div></div>"
         )
       }
-      $(document).on("click", ".card-img", this.productDetail)
     })
-    // var num = $('.col-md-6:not([style*="display: none"])').length;
-    // if (num == 0) $('#number-row').html('Product is not found')
-    // else if (num == 1) $('#number-row').html('Found ' + num + ' product ');
-    // else $('#number-row').html('Found ' + num + ' products ')
-
+    $(document).on("click", ".pixel-radio", this.productfilter)
+    $(document).on('click', '#currentpage', this.changepage)
+    $(document).on("click", ".pixel-radio", this.productfilter)
+    $(document).on("click", ".card-img", this.productDetail)
+    $('#myInput').on('keypress',function(e){
+      if(e.which == 13) $("#search-btn").click()
+    })
   }
 
   productDetail(event) {
@@ -95,7 +93,11 @@ export default class Catalog extends Component {
   productfilter(event) {
     var scale = $("[name=scale]:checked").val();
     var vendor = $("[name=vendor]:checked").val();
-    api.get(`catalog/product/${scale}/${vendor}/undefined`).then(res => {
+    var search = $("#myInput").val()
+    if (search.length == 0) search = "All"
+
+
+    api.get(`catalog/product/${scale}/${vendor}/${search}`).then(res => {
       $('#number-row').html('Found ' + res.data.row + ' product ');
       $('#pagebutton').empty()
       var row = 18
@@ -153,12 +155,40 @@ export default class Catalog extends Component {
     })
   }
 
-  
-
   productsearch(event) {
-    console.log(event.target);
-    var name = $("#myInput").val().toLowerCase
-    console.log(name.length);
+    var scale = $("[name=scale]:checked").val();
+    var vendor = $("[name=vendor]:checked").val();
+    var search = $("#myInput").val()
+    if (search.length == 0) search = "All"
+
+    api.get(`catalog/product/${scale}/${vendor}/${search}`).then(res => {
+      $('#number-row').html('Found ' + res.data.row + ' product ');
+      $('#pagebutton').empty()
+      var row = 18
+      if (res.data.row > 18) {
+        var i, x
+        var n = parseInt(res.data.row / 18)
+        n % 18 == 0 ? x = n - 1 : x = n
+        for (i = 0; i <= x; i++) {
+          if (i == 0) $('#pagebutton').append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`)
+          else $('#pagebutton').append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i + 1}</span></button>`)
+        }
+      } else row = res.data.row
+
+      $("#product-row").empty();
+      for (var i = 0; i < row; i++) {
+
+        $('#product-row').append(
+          '<div class="col-md-6 col-lg-4"><div class="text-center card-product"><div class="card-product__img" ><a data-toggle="modal" data-target="#productModal" title="Product detail" class="quick-view modal-view detail-link" href="#"><img class="card-img" src="/img/' +
+          res.data.result[i].imgSrc +
+          '"  id=' + res.data.result[i].productCode + '></a></div>' +
+          '<div class="card-body"><p>Scale' + res.data.result[i].productScale +
+          '</p><h4 class="card-product__title sfmono">' + res.data.result[i].productName + '</h4>' +
+          '<p class="price">$' + res.data.result[i].buyPrice + " </p>" +
+          "<p>Vendor: " + res.data.result[i].productVendor + "</p></div></div></div>"
+        )
+      }
+    })
   }
 
   render() {
