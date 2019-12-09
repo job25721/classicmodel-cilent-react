@@ -242,32 +242,6 @@ class Instock extends Component {
                   </div>
                 </div>
                 <div style={{ fontSize: "40px" }} id="demo"></div>
-                {/* { <div style={{ fontSize: "25px" }} className="txt-heading">
-                Your Cart have{" "}
-                <div
-                  style={{ display: "inline", fontSize: "30px" }}
-                  id="quantity-product"
-                >
-                  {" "}
-                </div>
-                products{" "}
-                <div
-                  style={{ display: "inline", fontSize: "30px" }}
-                  id="piece-product"
-                >
-                  {" "}
-                </div>{" "}
-              
-              </div>} */}
-                {/* <div style={{ fontSize: "25px" }}>
-                <a id="btnCheckout" href="/admin/instock/cartitem">
-                  See Your Cart
-                </a>{" "}
-                <br />
-                <a id="btnEmpty" href="emptycart">
-                  Empty Cart
-                </a>
-              </div> */}
                 <div className="d-flex justify-content-end mb-2" id="pagebutton"></div>
                 <table
                   className="table text-center table-striped responsive-table "
