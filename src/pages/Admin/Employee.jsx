@@ -1,17 +1,21 @@
 import React, { Component } from "react";
 
 import { Sidebar, Navbar } from "../../components/Menubar";
-import { Employee_modal } from "../../components/Modal";
 import { Helmet } from "react-helmet";
 import api from "../../api/api";
 import $ from "jquery";
 
 export default class Employee extends Component {
   componentDidMount() {
+    this.loadEmployees()
+    $(document).on('click', '#promote', this.Promote)
+    $(document).on('click', '#demote', this.Demote)
+  }
+
+  loadEmployees(event){
     api.get("/api/admin/employee/employeeData").then(res => {
       var append = "";
       let count = 0;
-      
       
       $.each(res.data, function(index, each) {
         append += "<tr>";
@@ -23,9 +27,10 @@ export default class Employee extends Component {
         append += "<td>";
         // append += '<form action = "#" method ="POST">'
         append +=
-          '<button type="submit" class="btn btn-primary quick-view modal-view detail-link" data-toggle="modal" data-target="#productModal" id="edit" name="emp" value="' +
+          '<button class="btn btn-primary quick-view modal-view detail-link m-1" id="promote" value="' +
           each.employeeNumber +
-          '"> Edit </button>';
+          '"> Promote </button>';
+          append += `<button class="btn btn-danger" id="demote" value="${each.employeeNumber}"> Demote </button>`;
         // append += '</form>'
         append += "</td>";
         append += "</tr>";
@@ -44,29 +49,25 @@ export default class Employee extends Component {
         );
       }
     });
-    $(document).on("click", "#edit", function() {
-      var employeeNumber = this.value;
-      console.log(this.value);
-      api.get(`/api/admin/employee/edit/${employeeNumber}`).then(res => {
-        var html = "";
-        var query = res.data[0];
-        html = `<input class="form-control" id="disabledTextInput" type="text"value="${query.employeeNumber}"/>`;
-        $("#empNum").html(html);
-        html = `<input class="form-control" type="text" value="${query.firstName}"/>`;
-        $("#fname").html(html);
-        html = `<input class="form-control" type="text" value="${query.lastName}"/>`;
-        $("#lname").html(html);
-        html = `<input class="form-control" type="text" value="${query.email}"/>`;
-        $("#email").html(html);
-        html = `<input class="form-control" type="text" value="${query.officeCode}"/>`;
-        $("#officeCode").html(html);
-        html = `<input class="form-control" type="text" value="${query.extension}"/>`;
-        $("#extension").html(html);
-        html = `<input class="form-control" type="text" value="${query.reportsToด}"/>`;
-        $("#reportsTo").html(html);
-      });
-    });
   }
+  
+  Promote(event){
+    const employeeNumber = event.currentTarget.value
+    api.post(`/api/admin/employee/promote/${employeeNumber}`).then(res=>{
+      alert(res.data)
+      setTimeout("location.href = '/admin/employee';", 100);
+    })
+  }
+
+  Demote(event){
+    //alert('ss')
+    const employeeNumber = event.currentTarget.value
+    api.post(`/api/admin/employee/demote/${employeeNumber}`).then(res=>{
+      alert(res.data)
+      setTimeout("location.href = '/admin/employee';", 100);
+    })
+  }
+
   render() {
     return (
       <React-DocumentFragment>
@@ -102,7 +103,6 @@ export default class Employee extends Component {
             </div>
           </div>
         </div>
-        <Employee_modal />
       </React-DocumentFragment>
     );
   }

@@ -180,21 +180,12 @@ class Instock extends Component {
       $('#piece-product').html(res.data.update)
       this.loadCartItem()
     })
-    
-    
-
   }
-  testfunc(event) {
-    console.log(event);
-
-  }
-
   addCartItem(event) {
     event.preventDefault(); 
     api.post('/api/admin/product/addCart',{quantity : event.currentTarget.parentElement.children[0].value,
       code : event.currentTarget.parentElement.parentElement.children[0].children[0].id}).then(res=>{ 
         $('#piece-product').html(res.data)
-        
     })
 
   }

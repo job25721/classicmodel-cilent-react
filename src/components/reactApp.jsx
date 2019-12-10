@@ -8,25 +8,29 @@ class App extends Component {
     super();
     this.state = {
       users: [],
+      pass : "",
       input: "",
       msg: "pending.."
     };
   }
  
-  hadleChange = event => {
+  hadleChangeUser = event => {
     this.setState({ input: event.target.value });
   };
+  hadleChangePass = event => {
+    this.setState({ pass: event.target.value });
+  };
   addUser = event => {
-    event.preventDefault()
     const user = {
-      input: this.state.input
+      input: this.state.input,
+      pass : this.state.pass
     };
   
     api.post("/testAPI/add", { user })
     .then(res=>{
-        if(res.data.status == true ) alert('added')
-        else if(res.data.status == false) alert('fk constaint error')
-      
+        if(res.data.exist === true && res.data.can === false ) alert('this user data has alredy have in database')
+        else if(res.data.exist === false && res.data.can === false ) alert('no such employee in database')
+        else if(res.data.exist === false && res.data.can === true ) alert('added !!')
     }).catch(err =>{
       console.log(err);
       
@@ -58,7 +62,9 @@ class App extends Component {
         <form onSubmit={this.addUser}>
           <label>
             username :
-            <input type="number" name="input" onChange={this.hadleChange} />
+            <input type="number" name="input" onChange={this.hadleChangeUser} />
+            password :
+            <input type="number" name="input" onChange={this.hadleChangePass} />
           </label>
           <button type="submit" >Add</button>
         </form>
