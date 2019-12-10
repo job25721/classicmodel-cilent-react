@@ -157,13 +157,6 @@ export default class Customer extends Component {
       
     })
 
-    // <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
-    //             <h5 className="sfmono" id="customer-name-head">customName</h5><br/>
-    //             <p id="contact-name-detail">contactName</p>
-    //             <p id="phone-detail">phone</p>
-    //             <p id="address-detail">address</p>
-    //             <p id="sale-rep-detail">salesRepEmplyeeNumber</p>
-    //             <p id="credit-limit-detail">creditLimit</p>
   }
 
   showAddForm = event => {
