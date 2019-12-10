@@ -65,10 +65,10 @@ class Home extends Component {
           <title>ทรงพระเจริญ</title>
         </Helmet>
         <div className="index">
-          <img src="/img/index.jpg" alt="Safty First" className="img" />
+          <img src="/img/index.jpg" alt="Safty First" className="img-index" />
           <div className="center">
             <a href="/catalog">
-                <button className="btn btn-dark button"> Enter Site </button>
+                <button className="btn btn-dark button-index"> Enter Site </button>
             </a>
           </div>
           <div className="center ">

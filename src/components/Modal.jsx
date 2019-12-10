@@ -16,12 +16,12 @@ class Cart_modal extends Component {
                 <h1>ทรงพระเจริญ</h1>
               <img src="/img/pm.jpg" alt="" className=""/>
                 </div>
-                
-              <h1 id="cartLebel">Cart Item : </h1>
+
+                <h1 id="cartLebel">Cart Item : </h1>
                 <div className="modal-product">
-                 
+
                   <table className="table text-center table-striped responsive-table" id="cartTable" width="100%" cellspacing="0">
-                  
+
                     <thead>
                       <tr>
                         <th>Image</th>
@@ -35,9 +35,9 @@ class Cart_modal extends Component {
                     <tbody id="cart">
 
                     </tbody>
-                    
+
                   </table>
-                  
+
                 </div>
                 <div id="details"></div>
               </div>
@@ -81,7 +81,7 @@ class Catalog_modal extends Component {
                         src="/img/test10.jpg"
                         style={{
                           width: "100%",
-                          height:"auto",
+                          height: "auto",
                           transition: "all 0.3s ease-out 0s",
                           marginBottom: "0"
                         }}
@@ -225,7 +225,7 @@ class ProductDetail_modal extends Component {
                         src="/img/test10.jpg"
                         style={{
                           width: "100%",
-                          height:"auto",
+                          height: "auto",
                           transition: "all 0.3s ease-out 0s",
                           marginBottom: "0"
                         }}
@@ -269,13 +269,13 @@ class ProductDetail_modal extends Component {
   }
 }
 
-class ProductEdit_modal extends Component {
+class ProductAdd_modal extends Component {
   render() {
     return (
       <div id="quickview-wrapper">
         <div
           className="modal fade"
-          id="editProduct"
+          id="addProduct"
           tabIndex="-1"
           role="dialog"
         >
@@ -301,7 +301,7 @@ class ProductEdit_modal extends Component {
                         src="/img/test10.jpg"
                         style={{
                           width: "100%",
-                          height:"auto",
+                          height: "auto",
                           transition: "all 0.3s ease-out 0s",
                           marginBottom: "0"
                         }}
@@ -388,5 +388,203 @@ class ProductEdit_modal extends Component {
   }
 }
 
+class ProductEdit_modal extends Component {
+  render() {
+    return (
+      <div id="quickview-wrapper">
+        <div
+          className="modal fade"
+          id="editProduct"
+          tabIndex="-1"
+          role="dialog"
+        >
+          <div className="modal-dialog modal__container" role="document">
+            <div className="modal-content">
+              <div className="modal-header modal__header">
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div className="modal-product">
+                  <div className="product-images">
+                    <div className="main-image images">
+                      <img
+                        alt="big images"
+                        id="pop-img"
+                        src="/img/test10.jpg"
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          transition: "all 0.3s ease-out 0s",
+                          marginBottom: "0"
+                        }}
+                      />
+                    </div>
+                  </div>
 
-export { Cart_modal, Catalog_modal, ProductDetail_modal, ProductEdit_modal }
+                  <div className="product-info">
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">productCode</h2>
+                      <div className="input-group input-update">
+                        <input type="text" placeholder="Product Code" id="product-code-input" />
+                      </div>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">productName</h2>
+                      <div className="input-group input-update">
+                        <input type="text" placeholder="Product Name" id="product-name-input" />
+                      </div>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">productDescription</h2>
+                    </div>
+                    <div class="input-group input-update">
+                      <textarea class="form-textarea-control mb-2" placeholder="Product Description"
+                        id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">productLine</h2>
+                      <div className="input-group input-update">
+                        <input type="text" placeholder="Product Line" id="product-line-input" />
+                      </div>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">productScale</h2>
+                      <div className="input-group input-update">
+                        <input type="text" placeholder="Product Scale" id="product-scale-input" />
+                      </div>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">productVendor</h2>
+                      <div className="input-group input-update">
+                        <input type="text" placeholder="Product Vendor" id="product-vendor-input" />
+                      </div>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">quantityInStock</h2>
+                      <div className="input-group input-update">
+                        <input type="text" placeholder="Quantity In Stock" id="product-quan-input" />
+                      </div>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">buyPrice</h2>
+                      <div className="input-group input-update">
+                        <input type="text" placeholder="Buy Price" id="buy-price-input" />
+                      </div>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">MSRP</h2>
+                      <div className="input-group input-update">
+                        <input type="text" placeholder="MSRP" id="msrp-input" />
+                      </div>
+                    </div>
+                    <div className="product-detail">
+                      <h2 className="mb-0 mr-1">Image</h2>
+                      <div className="input-group input-update ">
+                        <input type="file" class="custom-file-input" id="validatedCustomFile" required />
+                        <input type="text" className="position-absolute" placeholder="Choose File..." id="msrp-input" />
+                        <button className="mb-0 position-absolute d-flex justify-content-right" for="validatedCustomFile">Browse</button>
+                      </div>
+                    </div>
+                    <div className="d-flex justify-content-end">
+                      <button className="flat-btn flat-save">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    )
+  }
+}
+
+class OrderDetail_modal extends Component {
+  render() {
+    return (
+      <div id="quickview-wrapper">
+        <div className="modal fade" id="orderDatilModal" tabindex="-1" role="dialog">
+          <div className="modal-dialog modal__container" role="document">
+            <div className="modal-content">
+              <div className="modal-header modal__header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              </div>
+              <div className="modal-body">
+                {/* <div id="blank" className="collapse">
+                  <h1>ทรงพระเจริญ</h1>
+                  <img src="/Contribubutor/lift.png" alt="" className="" />
+                </div> */}
+                <h4 className="sfmono" id="order-number-head">Order Number</h4>
+                <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
+                <div className="modal-product">
+
+                  <table className="table text-center table-striped responsive-table" id="cartTable" width="100%" cellspacing="0">
+
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>orderNumber</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody id="order-detail">
+                    </tbody>
+
+                  </table>
+                </div>
+
+                <p id="order-date-detail">orderDate</p>
+                <p id="required-date-detail">requiredDate</p>
+                <p id="shipped-date-detail">shippedDate</p>
+                <p id="status-detail">status</p>
+                <p id="comment-detail">comment</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+class CustomerDetail_modal extends Component {
+  render() {
+    return (
+      <div id="quickview-wrapper">
+        <div className="modal fade" id="customerDetailModal" tabindex="-1" role="dialog">
+          <div className="modal-dialog modal__container" role="document">
+            <div className="modal-content">
+              <div className="modal-header modal__header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span></button>
+              </div>
+              <div className="modal-body">
+                <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
+                <h5 className="sfmono" id="customer-name-head">customName</h5><br/>
+                <p id="contact-name-detail" className="mb-1">contactName</p>
+                <p id="phone-detail" className="mb-1">phone</p>
+                <p id="address-detail" className="mb-1">address</p>
+                <p id="sale-rep-detail" className="mb-1">salesRepEmplyeeNumber</p>
+                <p id="credit-limit-detail" className="mb-1">creditLimit</p>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export { Cart_modal, Catalog_modal, ProductDetail_modal, ProductEdit_modal ,OrderDetail_modal,CustomerDetail_modal }

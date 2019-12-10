@@ -4,7 +4,7 @@
     width: 5%;
 }
 
-.img {
+.img-index {
     position: relative;
     display: block;
     max-width: 1000px;
@@ -21,22 +21,22 @@
     margin-top: 30px;
 }
 
-.button {
+.button-index {
     border-radius: 25px;
     background-color: rgb(27, 27, 27);
     color: white;
     box-shadow: 0px 1px 5px #313131;
-    border-color: rgb(27, 27, 27);
+    border-color: none;
 }
 
-.button:hover,
-.button:focus,
-.open>.dropdown-toggle.button {
+.button-index:hover,
+.button-index:focus,
+.open>.dropdown-toggle.button-index {
     border-radius: 25px;
     background-color: #800000;
     color: white;
     box-shadow: 0px 1px 5px #313131;
-    border-color: #800000;
+    border-color: none;
 }
 
 .index-text {
