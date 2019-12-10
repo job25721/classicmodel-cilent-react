@@ -139,4 +139,15 @@ class Cart_modal extends Component{
     }
 }
 
-export {Employee_modal,Cart_modal}
+class Customer_modal extends Component{
+  render(){
+    return(
+      <React-DocumentFragment>
+        <h1>Hello world</h1>
+      <h2>I'm customer modal</h2>
+      </React-DocumentFragment>
+      
+    )
+  }
+}
+export {Employee_modal,Cart_modal,Customer_modal}
