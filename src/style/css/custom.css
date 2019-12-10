@@ -350,6 +350,10 @@
     margin: 45px 0
 }
 
+#responsive-payment {
+    width: 500px
+}
+
 @media (min-width: 980px) {
     .section-margin {
         margin: 70px 0
@@ -463,6 +467,12 @@
         -ms-flex: 0 0 25%;
         flex: 0 0 25%;
         max-width: 25%;
+    }
+}
+
+@media (max-width: 530px) {
+    #responsive-payment {
+        width: 400px
     }
 }
 
@@ -1001,6 +1011,46 @@ h3.widget-title-modal {
 
 .input-update button i,
 .input-update button span {
+    font-size: 14px;
+    color: #999999
+}
+
+.input-update-payment input {
+    display: block;
+    width: 100%;
+    border: 1px solid #eee;
+    font-size: 14px;
+    color: #999999;
+    height: 32px;
+    padding-left: 15px;
+    padding-right: 15px
+}
+
+.input-update-payment input:focus {
+    outline: 0;
+    box-shadow: none
+}
+
+.input-update-payment input::placeholder {
+    color: #999999;
+    text-align: left;
+}
+
+.placehold-left input::placeholder {
+    text-align: left;
+}
+
+.input-update-payment button {
+    background: transparent;
+    border: 1px solid #eee;
+    background: #fff;
+    color: rgb(61, 61, 61);
+    padding-right: 15px;
+    height: 32px;
+}
+
+.input-update-payment button i,
+.input-update-payment button span {
     font-size: 14px;
     color: #999999
 }

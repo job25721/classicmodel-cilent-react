@@ -32,7 +32,7 @@ export default class template extends Component {
         $('#customer-data').append(
           `<tr>
           <td class="align-middle"><a id="${res.data[i].customerNumber}" data-toggle="modal" data-target="#customerDetailModal" title="Product detail"
-        class="customer-detail-click quick-view modal-view detail-link" href="#">${res.data[i].customerNumber}<i class="fas fa-search fa-sm responsive-icon-search-status"></i></td>
+        class="customer-detail-click quick-view modal-view detail-link" href="#">${res.data[i].customerNumber}<i class="fas fa-search fa-sm responsive-icon-search-status"></i></a></td>
             <td>${res.data[i].customerName}</td>
             <td>${res.data[i].contactLastName}  ${res.data[n].contactFirstName}</td>
             <td>${res.data[i].phone}</td>
@@ -59,7 +59,8 @@ export default class template extends Component {
       for (let i in res.data) {
         $('#customer-data').append(
           `<tr>
-            <td>${res.data[i].customerNumber}</td>
+            <td><a id="${res.data[i].customerNumber}" data-toggle="modal" data-target="#customerDetailModal" title="Product detail"
+            class="customer-detail-click quick-view modal-view detail-link" href="#">${res.data[i].customerNumber}<i class="fas fa-search fa-sm responsive-icon-search-status"></i></a></td>
             <td>${res.data[i].customerName}</td>
             <td>${res.data[i].contactLastName}  ${res.data[i].contactFirstName}</td>
             <td>${res.data[i].phone}</td>
@@ -93,13 +94,6 @@ export default class template extends Component {
       $('#credit-limit-detail').html('Credit limit : ' + customer.creditLimit)
     })
 
-    // <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
-    //             <h5 className="sfmono" id="customer-name-head">customName</h5><br/>
-    //             <p id="contact-name-detail">contactName</p>
-    //             <p id="phone-detail">phone</p>
-    //             <p id="address-detail">address</p>
-    //             <p id="sale-rep-detail">salesRepEmplyeeNumber</p>
-    //             <p id="credit-limit-detail">creditLimit</p>
   }
 
   render() {

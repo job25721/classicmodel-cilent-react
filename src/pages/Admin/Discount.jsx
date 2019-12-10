@@ -53,7 +53,7 @@ export default class Discount extends Component {
             <td>${obj.Expire}</td>
             <td>  
               <form id='del' action=''>
-              <button name='discountID' class='flat-btn flat-trash' Value='obj.discountNo'>
+              <button name='discountID' class='flat-btn flat-trash' Value='${obj.discountNo}'>
               <i class='fas fa-trash'/></button>  
               </form>
             </td>
@@ -120,7 +120,7 @@ export default class Discount extends Component {
                     <input
                       type="text"
                       name="code"
-                      id="code1"
+                      id="code"
                       placeholder="Enter Code"
                       size="15"
                       className="form-control w-25 col-sm-2 m-1"

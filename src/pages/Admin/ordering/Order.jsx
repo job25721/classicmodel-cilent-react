@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 
 import api from "../../../api/api";
 import $ from "jquery";
-import { Cart_modal, ProductDetail_modal, ProductAdd_modal ,ProductEdit_modal} from "../../../components/Modal";
+import { Cart_modal, ProductDetail_modal, ProductAdd_modal, ProductEdit_modal, Payment_modal } from "../../../components/Modal";
 import { log } from "util";
 
 class Instock extends Component {
@@ -12,7 +12,7 @@ class Instock extends Component {
     super(props);
     this.state = {
       products: [],
-      totalCart : 0
+      totalCart: 0
 
     }
     this.addCartItem = this.addCartItem.bind(this);
@@ -20,7 +20,7 @@ class Instock extends Component {
   }
 
   componentDidMount() {
-    api.get('/api/admin/product/getCartItem').then(res=>{
+    api.get('/api/admin/product/getCartItem').then(res => {
       $('#piece-product').html(res.data.total)
     })
     api.get('/api/admin/product/count').then(res => {
@@ -42,13 +42,13 @@ class Instock extends Component {
 
     api.get(`/api/admin/product/changepage/0`).then(res => {
       var dom = ""
-      var button =''
+      var button = ''
       for (let i = 0; i < res.data.length; i++) {
         button = ''
         button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
         button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-        button += `<td class="align-middle"><button id="${res.data[i].procuctCode}" class="flat-btn flat-edit align-middle edit-product" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
-        button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
+        button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-edit align-middle edit-product" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
+        button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-trash deleteproduct"><i class="fas fa-trash"/></button></td>`;
         dom += `<tr>`;
         dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
@@ -64,19 +64,56 @@ class Instock extends Component {
       }
       $("#instockData").html(dom);
     })
-    
+
+
     $(document).on("click", ".product-click", this.productDetail);
     $(document).on("click", "#addCart", this.addCartItem);
-    $(document).on("click", "#delete", this.deleteProduct);
+    $(document).on("click", ".deleteproduct", this.deleteProduct);
     $(document).on("click", "#cartIcon", this.loadCartItem);
     $(document).on("click", ".removeCart", this.removeCart);
-    $(document).on('click','.edit-product',this.editProduct)
+    $(document).on('click', '.edit-product', this.editProduct);
+    $(document).on('click', '#buyProducts', this.buyProduct);
+    $(document).on('click', '#saveAdd', function () {
+      $('#closemodal').click()
+    })
+    $(document).on('click', '#addproduct', this.addproduct)
+    $(document).on('click', '#saveEditproduct', this.saveEditproduct)
+    $(document).on('change','#useddiscount',this.usediscount)
+    $(document).on('click','#accept-payment',this.acceptpayment)
 
   }
 
+  acceptpayment(event){
+    var amount = $('#payment-amount').text()
+    var cno = $('#custumer-no-input').val()
+    var ceque = $('#ceque-input').val()
+    var reqdate = $('#require-date').val()
+    console.log(reqdate);
+    
+    api.get(`/api/admin/order/checkout/${amount}/${cno}/${ceque}/${reqdate}`).then(res=>{
+
+    })
+  }
+
+  usediscount(event){
+     
+    api.get('api/admin/discount/getDiscount').then(res=>{
+    var x = $('#useddiscount option:selected').text();  
+    res.data.forEach(e=>{
+        if(x == e.Code){
+          $('#discountvalue').html(`-${e.Discount}`)
+        }else if(x == "Select Discount"){
+          $('#discountvalue').empty();
+        }
+      })
+    })
+    
+    
+  }
+
   productDetail(event) {
-    var procuctCode = this.id;
-    api.get(`/api/admin/product/fetchInstockitem/${procuctCode}`).then(res => {
+    var productCode = this.id;
+    api.get(`/api/admin/product/fetchInstockitem/${productCode}`).then(res => {
       var html = ""
       var query = res.data[0];
       $("#pop-name").html(query.productName);
@@ -106,8 +143,8 @@ class Instock extends Component {
         button = ''
         button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
         button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-        button += `<td class="align-middle"><button id="${res.data[i].procuctCode}" class="flat-btn flat-edit align-middle" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
-        button += `<td class="align-middle"><button id="delete" class="flat-btn flat-trash"><i class="fas fa-trash"/></button></td>`;
+        button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-edit align-middle" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
+        button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-trash deleteproduct"><i class="fas fa-trash"/></button></td>`;
         dom += `<tr>`;
         dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
           data-target="#productModal" title="Product detail"
@@ -126,96 +163,142 @@ class Instock extends Component {
   }
 
   deleteProduct(event) {
-    alert("ลุงตูบรู้สึกไม่พอใคุณมากๆ");
+    var pcode = event.currentTarget.id;
+    console.log(pcode)
+    api.get(`/api/admin/order/delete/${pcode}`).then(res => {
+    })
   }
 
   loadCartItem(event) {
     var dom = ''
     var details = ''
     let TotalPrice = 0;
-    api.get('/api/admin/product/getCartItem').then(res=>{
-      var length = res.data.cartItem.length;
-      if(length <= 0){
-        
-      }else{
-        for(let i=0;i<length;i++){
-          dom += '<tr>'
-          dom += `<td><img style="width:50px;height:50px" src='/img/${res.data.cartItem[i].image}' /></td>'>`
-          dom += `<td>${res.data.cartItem[i].Name}</td>`
-          dom += `<td>${res.data.cartItem[i].Quantity}</td>`
-          dom += `<td>${res.data.cartItem[i].Price}</td>`
-          dom += `<td>${res.data.cartItem[i].Total}</td>`
-          dom += `<td><button id="${res.data.cartItem[i].code}" class="btn btn-link removeCart" style="color:red">Remove</button></td>`
-          dom += '</tr>'
-          TotalPrice += res.data.cartItem[i].Total
+    var option = ''
+    
+    api.get(`/api/admin/discount/getDiscount`).then(res =>{
+      res.data.forEach(e=>{
+        option += `<option value="${e.Code}">${e.Code}</option>`
+      })
+      api.get('/api/admin/product/getCartItem').then(res => {
+        var length = res.data.cartItem.length;
+        if (length <= 0) {
+  
+        } else {
+          for (let i = 0; i < length; i++) {
+            dom += `<tr>`
+            dom += `<td><img style="width:50px;height:50px" src='/img/${res.data.cartItem[i].image}' /></td>'>`
+            dom += `<td>${res.data.cartItem[i].Name}</td>`
+            dom += `<td>${res.data.cartItem[i].Quantity}</td>`
+            dom += `<td>${res.data.cartItem[i].Price}</td>`
+            dom += `<td>${res.data.cartItem[i].Total}</td>`
+            dom += `<td><button id="${res.data.cartItem[i].code}" class="btn btn-link removeCart" style="color:red">Remove</button></td>`
+            dom += '</tr>'
+            TotalPrice += res.data.cartItem[i].Total
+          }
+  
         }
-         
-        }
-        if(TotalPrice === 0) {
-          $('#cartLebel').hide('fast')
-          $('#cartTable').hide('fast')
-          $('#details').hide('fast')   
-          $('#blank').show('fast')
-        }
-        else {
-          $('#blank').hide('fast')
-          $('#cartLebel').show('fast')
-          $('#details').show('fast') 
-          $('#cartTable').show('fast')
-        }
-        details += `<p>TotalPrice : ${TotalPrice}</p>`
+        details += `<p>TotalPrice : <span id="total-price">$${TotalPrice}</span><span id="discountvalue" style="color:red"></span></p>`
         details += `<p>TotalQuantity : ${res.data.total}</p>`
-        details += `<p>Available Discout</p>`
-        details += `<form class="form" action="#">`
-        details += `<select class="form-control w-25"><option>-</option></select><hr />`
-        details += `<button class="btn btn-outline-success">CheckOut</button>`
+        details += '<span>Available Discount</span>'
+        details += `<select class="form-control w-25" id="useddiscount"><option>Select Discount</option>`
+        details += option
+        details += `</select><hr /><button class="btn btn-outline-success" id="buyProducts">CheckOut</button>`
         details += `</form>`
         $('#cart').html(dom)
-        $('#details').html(details)      
+        $('#details').html(details)
+      })
     })
+    
   }
 
   removeCart(event) {
     // alert('clicked')
-    
+
     $(event.currentTarget.parentElement.parentElement).remove()
     var code = event.currentTarget.id;
-    api.delete(`/api/admin/product/removeCartItem/${code}`).then(res=>{
+    api.delete(`/api/admin/product/removeCartItem/${code}`).then(res => {
       $('#piece-product').html(res.data.update)
       this.loadCartItem()
     })
-    
-    
+
+
 
   }
-  editProduct(e){
 
-    // var productCode = this.id;
-    
-    // api.get(`/api/admin/product/fetchInstockitem/${productCode}`).then(res => {
-    //   var html = ""
-    //   var query = res.data[0];
-    //   $("#pop-name").html(query.productName);
-    //   $("#pop-code").html(query.productCode);
-    //   $("#pop-desc").html(query.productDescription);
-    //   $("#pop-price").html(query.buyPrice);
-    //   $("#pop-scale").html(query.productScale);
-    //   $("#pop-vendor").html(query.productVendor);
-    //   $("#pop-quantity").html(query.quantityInStock);
-    //   $("#pop-img").attr('src', '/img/' + query.imgSrc)
-    //   $("#pop-productline").html(query.productLine);
-    //   $("#pop-msrp").html(query.MSRP);
-    // });
+  editProduct(e) {
+    var productCode = e.currentTarget.id;
+
+    api.get(`/api/admin/product/fetchInstockitem/${productCode}`).then(res => {
+      var html = ""
+      var query = res.data[0];
+      $("#product-name-edit").val(query.productName);
+      $("#product-code-edit").val(query.productCode);
+      $("#product-desc-edit").val(query.productDescription);
+      $("#product-buyprice-edit").val(query.buyPrice);
+      $("#product-scale-edit").val(query.productScale);
+      $("#product-vendor-edit").val(query.productVendor);
+      $("#product-quan-edit").val(query.quantityInStock);
+      $("#product-code-edit").attr('src', '/img/' + query.imgSrc)
+      $("#product-line-edit").val(query.productLine);
+      $("#product-msrp-edit").val(query.MSRP);
+    });
   }
 
   addCartItem(event) {
-    event.preventDefault(); 
-    api.post('/api/admin/product/addCart',{quantity : event.currentTarget.parentElement.children[0].value,
-      code : event.currentTarget.parentElement.parentElement.children[0].children[0].id}).then(res=>{ 
-        $('#piece-product').html(res.data)
-        
+    event.preventDefault();
+    api.post('/api/admin/product/addCart', {
+      quantity: event.currentTarget.parentElement.children[0].value,
+      code: event.currentTarget.parentElement.parentElement.children[0].children[0].id
+    }).then(res => {
+      $('#piece-product').html(res.data)
+
     })
 
+  }
+
+  buyProduct(event) {
+    api.get('/api/admin/product/getCartItem').then(res => {
+      var price = $('#total-price')[0].innerHTML.split('$')[1]
+      var discount = $('#discountvalue')[0].innerHTML.split('-')[1]
+      if (res.data.total != 0) {
+        $("#closemodal").click();
+        $("#paymentModal").modal('show');
+        $("#payment-amount").html(price-discount);
+
+      }
+    })
+
+  }
+
+  addproduct(event) {
+    var pcode = $('#product-code-add').val();
+    var pname = $('#product-name-add').val();
+    var pdesc = $('#product-desc-add').val()
+    var pline = $('#product-line-add').val()
+    var pscale = $('#product-scale-add').val()
+    var pvendor = $('#product-vendor-add').val()
+    var pquan = $('#product-quan-add').val()
+    var pbuyprice = $('#product-buyprice-add').val()
+    var pmsrp = $('#product-msrp-add').val()
+
+    api.get(`api/admin/order/addproduct/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
+
+    })
+  }
+
+  saveEditproduct(event) {
+    var pcode = $('#product-code-edit').val();
+    var pname = $('#product-name-edit').val();
+    var pdesc = $('#product-desc-edit').val()
+    var pline = $('#product-line-edit').val()
+    var pscale = $('#product-scale-edit').val()
+    var pvendor = $('#product-vendor-edit').val()
+    var pquan = $('#product-quan-edit').val()
+    var pbuyprice = $('#product-buyprice-edit').val()
+    var pmsrp = $('#product-msrp-edit').val()
+    api.get(`api/admin/order/update/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
+
+    })
   }
 
   render() {
@@ -233,8 +316,8 @@ class Instock extends Component {
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
                   <h1 className="h3 mb-0 text-gray-800 sfmono">In stock product</h1>
                   <div className="d-flex justify-content-end ">
-                    <a class="flat-btn flat-blue align-middle" style={{margin:"2px 0",color:"#fff"}}
-                      data-toggle="modal" data-target="#editProduct" title="Add new Product">
+                    <a class="flat-btn flat-blue align-middle" style={{ margin: "2px 0", color: "#fff" }}
+                      data-toggle="modal" data-target="#addProduct" title="Add new Product">
                       <i className="fas fa-plus"></i>
                     </a>
 
@@ -268,7 +351,8 @@ class Instock extends Component {
         <Cart_modal />
         <ProductDetail_modal />
         <ProductAdd_modal />
-        <ProductEdit_modal/>
+        <ProductEdit_modal />
+        <Payment_modal />
       </div>
     );
   }
@@ -279,7 +363,9 @@ class Pre_order extends Component {
     super();
     this.state = {};
   }
-  componentDidMount() { }
+  componentDidMount() {
+
+  }
 
   render() {
     return (
