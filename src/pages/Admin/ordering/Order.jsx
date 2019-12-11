@@ -140,6 +140,7 @@ class Instock extends Component {
     console.log(pcode)
     api.get(`/api/admin/order/delete/${pcode}`).then(res => {
     })
+    window.location.reload(true);
   }
 
   loadCartItem(event) {
@@ -276,6 +277,7 @@ class Instock extends Component {
             api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
+          window.location.reload(true);
         })
       })
 
@@ -309,9 +311,8 @@ class Instock extends Component {
     var pbuyprice = $('#product-buyprice-add').val()
     var pmsrp = $('#product-msrp-add').val()
 
-    api.get(`api/admin/order/addproduct/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
-
-    })
+    api.get(`api/admin/order/addproduct/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`)
+    window.location.reload(true);
   }
 
   saveEditproduct(event) {
@@ -324,9 +325,8 @@ class Instock extends Component {
     var pquan = $('#product-quan-edit').val()
     var pbuyprice = $('#product-buyprice-edit').val()
     var pmsrp = $('#product-msrp-edit').val()
-    api.get(`api/admin/order/update/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
-
-    })
+    api.get(`api/admin/order/update/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`)
+    window.location.reload(true);
   }
 
   render() {

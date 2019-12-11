@@ -47,7 +47,7 @@ export default class template extends Component {
           '<td class="align-middle">' + orderDate + '</td>' +
           '<td class="align-middle">' + requiredDate + '</td>' +
           '<td class="align-middle">' + shippedDate + '</td>' +
-          '<td class="align-middle">' + '<select id="order-' + res.data[i].orderNumber + '" class="status-selected" id="sel1">' +
+          '<td class="align-middle">' + '<select id="order-' + res.data[i].orderNumber + '" class="status-selected status-detail-selected" id="sel1" name="' + res.data[i].orderNumber + '">' +
           '<option value="Cancelled">Cancelled</option>' +
           '<option value="Disputed">Disputed</option>' +
           '<option value="In Process">In Process</option>' +
@@ -66,20 +66,20 @@ export default class template extends Component {
       }
       $(document).on('change', '.status-selected', this.update)
       $(document).on('click', '.order-detail-click', this.orderDetail)
-      $(document).on('click','#save-status',this.editstatus)
+      $(document).on('click', '#save-status', this.editstatus)
     })
   }
 
-  editstatus(event){
+  editstatus(event) {
     var comment = $('#status-comment-input').val()
     var orderno = $('#order-number-head').text()
     console.log(orderno);
-    if(comment.length != 0){
+    if (comment.length != 0) {
       console.log("not empty");
       api.get(`/api/admin/order/editdetail/${comment}/${orderno}`)
     }
-    
-    
+    window.location.reload(true);
+
   }
 
   changepage(event) {
@@ -108,7 +108,7 @@ export default class template extends Component {
           '<td class="align-middle">' + orderDate + '</td>' +
           '<td class="align-middle">' + requiredDate + '</td>' +
           '<td class="align-middle">' + shippedDate + '</td>' +
-          '<td class="align-middle">' + '<select id="order-' + res.data[i].orderNumber + '" class="status-selected" id="sel1">' +
+          '<td class="align-middle">' + '<select id="order-' + res.data[i].orderNumber + '" class="status-selected status-detail-selected" id="sel1" name ="' + res.data[i].orderNumber + '">' +
           '<option value="Cancelled">Cancelled</option>' +
           '<option value="Disputed">Disputed</option>' +
           '<option value="In Process">In Process</option>' +
@@ -129,11 +129,18 @@ export default class template extends Component {
   }
   update(event) {
     var value = $(this).val()
-    var orderNumber = event.currentTarget.id.split("-")[1]
-    console.log(value);
+    var orderNumber = event.currentTarget.name
+    console.log(event.currentTarget.name);
+    if (value == "Shipped") {
+      api.get(`/api/admin/order/setShippedDate/${orderNumber}`).then(res => {
+
+      })
+    }
+
     api.get(`/api/admin/order/update/${value}/${orderNumber}`).then(res => {
 
     })
+    window.location.reload(true);
   }
 
   orderDetail(event) {
@@ -158,32 +165,15 @@ export default class template extends Component {
           <td class="align-middle">${total}</td>
           </tr>`
         )
+        console.log("status detail : " + res.data[n].status);
 
         $('#order-date-detail').html('orderDate : ' + res.data[n].orderDate.split("T1")[0])
         $('#required-date-detail').html('orderDate : ' + res.data[n].requiredDate.split('T1')[0])
         if (res.data[n].shippedDate != null) $('#shipped-date-detail').html('shippedDate : ' + res.data[n].shippedDate.split("T1")[0])
         else $('#shipped-date-detail').html('shippedDate : -')
         //$('#status-detail').html('status : ' + res.data[n].status)
-        $('#status-detail').empty()
-        $('#status-detail').append( 'status :' + 
-          '<select id="order-detail-' + res.data[n].orderNumber + '" class="status-selected" id="sel1">' +
-          '<option value="Cancelled">Cancelled</option>' +
-          '<option value="Disputed">Disputed</option>' +
-          '<option value="In Process">In Process</option>' +
-          '<option value="On Hold">On hold</option>' +
-          '<option value="Resolved">Resolved</option>' +
-          '<option value="Shipped">Shipped</option>' +
-          '</select>'
-        )
-        if (res.data[n].status == "Cancelled") $(`#order-detail-${res.data[n].orderNumber}`).val('Cancelled')
-        else if (res.data[n].status == "Disputed") $(`#order-detail-${res.data[n].orderNumber}`).val('Disputed')
-        else if (res.data[n].status == "In Process") $(`#order-detail-${res.data[n].orderNumber}`).val('In Process')
-        else if (res.data[n].status == "On Hold") $(`#order-detail-${res.data[n].orderNumber}`).val('On Hold')
-        else if (res.data[n].status == "Resolved") $(`#order-detail-${res.data[n].orderNumber}`).val('Resolved')
-        else $(`#order-detail-${res.data[n].orderNumber}`).val('Shipped')
-        $('#status-comment-input').val(comment)
-        $('#order-number-head').html(res.data[n].orderNumber)
-        $('#customer-number-head').html('Customer nmber : ' + res.data[n].customerNumber)
+
+
         // < p id = "order-date-detail" > orderDate</p >
         //   <p id="required-date-detail">requiredDate</p>
         //   <p id="shipped-date-detail">shippedDate</p>
@@ -191,7 +181,26 @@ export default class template extends Component {
         //   <p id="comment-detail">comment</p>
 
       }
-
+      $('#status-detail').empty()
+      $('#status-detail').append('status :' +
+        '<select id="order-' + res.data[0].orderNumber + '" class="status-selected status-detail-selected-input" id="sel1" name="' + res.data[0].orderNumber + '">' +
+        '<option value="Cancelled">Cancelled</option>' +
+        '<option value="Disputed">Disputed</option>' +
+        '<option value="In Process">In Process</option>' +
+        '<option value="On Hold">On hold</option>' +
+        '<option value="Resolved">Resolved</option>' +
+        '<option value="Shipped">Shipped</option>' +
+        '</select>'
+      )
+      if (res.data[0].status == "Cancelled") $(`.status-detail-selected-input`).val('Cancelled')
+      else if (res.data[0].status == "Disputed") $(`.status-detail-selected-input`).val('Disputed')
+      else if (res.data[0].status == "In Process") $(`.status-detail-selected-input`).val('In Process')
+      else if (res.data[0].status == "On Hold") $(`.status-detail-selected-input`).val('On Hold')
+      else if (res.data[0].status == "Resolved") $(`.status-detail-selected-input`).val('Resolved')
+      else $(`#order-${res.data[0].orderNumber}`).val('Shipped')
+      $('#status-comment-input').val(comment)
+      $('#order-number-head').html(res.data[0].orderNumber)
+      $('#customer-number-head').html('Customer nmber : ' + res.data[0].customerNumber)
     })
 
   }

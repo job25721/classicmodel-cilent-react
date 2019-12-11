@@ -555,86 +555,79 @@ class ProductEdit_modal extends Component {
                   </div>
 
                   <div className="product-info">
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">productCode</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                      <div className="input-group input-update">
                         <input type="text" placeholder="Product Code" id="product-code-edit" />
                       </div>
                     </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">productName</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                       <div className="input-group input-update">
                         <input type="text" placeholder="Product Name" id="product-name-edit" />
                       </div>
-                    </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                      </div>
+                     
+                    
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">productDescription</h2>
                       </div>
-                    </div>
-                    <div className="row mb-2">
-                      <div class="input-group input-update col-sm-12">
+                    
+                    
+                      <div class="input-group input-update2">
                         <textarea class="form-textarea-control mb-2" placeholder="Product Description"
                           id="product-desc-edit" rows="3"></textarea>
                       </div>
-                    </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">productLine</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                      <div className="input-group input-update">
                         <input type="text" placeholder="Product Line" id="product-line-edit" />
                       </div>
                     </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">productScale</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                      <div className="input-group input-update">
                         <input type="text" placeholder="Product Scale" id="product-scale-edit" />
                       </div>
                     </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">productVendor</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                      <div className="input-group input-update">
                         <input type="text" placeholder="Product Vendor" id="product-vendor-edit" />
                       </div>
                     </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">quantityInStock</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                      <div className="input-group input-update">
                         <input type="text" placeholder="Quantity In Stock" id="product-quan-edit" />
                       </div>
                     </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">buyPrice</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                      <div className="input-group input-update">
                         <input type="text" placeholder="Buy Price" id="product-buyprice-edit" />
                       </div>
                     </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">MSRP</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                      <div className="input-group input-update">
                         <input type="text" placeholder="MSRP" id="product-msrp-edit" />
                       </div>
                     </div>
-                    <div className="row mb-2">
-                      <div className="product-detail col-sm-4">
+                    
+                      <div className="product-detail">
                         <h2 className="mb-0 mr-1">Image</h2>
-                      </div>
-                      <div className="input-group input-update col-sm-8">
+                      <div className="input-group input-update">
                         <input type="file" className="custom-file-input" id="validatedCustomFile" required />
                         <input type="text" className="position-absolute" placeholder="Choose File..." id="msrp-input" />
                         <button className="mb-0 position-absolute d-flex justify-content-right" for="validatedCustomFile">Browse</button>
