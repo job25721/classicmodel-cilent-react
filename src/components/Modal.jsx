@@ -784,6 +784,11 @@ class Payment_modal extends Component {
                   </div>
                 </div>
                 <div className="row mb-2">
+                  <div className="product-detail col-sm-8">
+                    <p className="align-middle mb-0">Discount : <span id="discount-value" /> <span id="discount-code">You do not have Discount</span></p>
+                  </div>
+                </div>
+                <div className="row mb-2">
                   <div className="product-detail col-sm-4">
                     <p className="align-middle mb-0">Total point : <span id="total-point" /></p>
                   </div>
