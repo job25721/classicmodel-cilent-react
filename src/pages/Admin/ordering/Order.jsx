@@ -11,9 +11,7 @@ class Instock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      products: [],
-      totalCart: 0
-
+  
     }
     this.addCartItem = this.addCartItem.bind(this);
     this.removeCart = this.removeCart.bind(this);
@@ -25,7 +23,6 @@ class Instock extends Component {
     })
     api.get('/api/admin/product/count').then(res => {
       console.log(res.data[0].count);
-
       if (res.data[0].count > 15) {
         var i, x
         var n = parseInt(res.data[0].count / 15)
@@ -156,7 +153,7 @@ class Instock extends Component {
       api.get('/api/admin/product/getCartItem').then(res => {
         var length = res.data.cartItem.length;
         if (length <= 0) {
-
+            
         } else {
           for (let i = 0; i < length; i++) {
             dom += `<tr>`
@@ -302,7 +299,10 @@ class Instock extends Component {
             api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
-          window.location.reload(true);
+          api.delete('/api/destroyInstockCart').then(res=>{
+            alert(res.data)
+            setTimeout('location.href = "/admin/status"',100)
+          })
         })
       })
 
@@ -417,10 +417,10 @@ class Pre_order extends Component {
     this.state = {};
   }
   componentDidMount() {
-    api.get('/api/admin/product/getCartItem').then(res => {
+    api.get('/api/admin/preorder/getCartItem').then(res => {
       $('#piece-product').html(res.data.total)
     })
-    api.get('/api/admin/product/preorder/count').then(res => {
+    api.get('/api/admin/preorder/count').then(res => {
       console.log(res.data[0].count);
 
       if (res.data[0].count > 15) {
@@ -437,7 +437,7 @@ class Pre_order extends Component {
       }
     })
 
-    api.get(`/api/admin/product/preorder/changepage/0`).then(res => {
+    api.get(`/api/admin/preorder/changepage/0`).then(res => {
       var dom = ""
       var button = ''
       for (let i = 0; i < res.data.length; i++) {
@@ -505,7 +505,7 @@ class Pre_order extends Component {
     current.className += ' fbg-active'
     var init = current.value * 15
     $("instockData").html("")
-    api.get(`/api/admin/product/preorder/changepage/${init}`).then(res => {
+    api.get(`/api/admin/preorder/changepage/${init}`).then(res => {
       var dom = ""
       var button = ''
       for (let i = 0; i < res.data.length; i++) {
@@ -534,7 +534,7 @@ class Pre_order extends Component {
   deleteProduct(event) {
     var pcode = event.currentTarget.id;
     console.log(pcode)
-    api.get(`/api/admin/order/delete/${pcode}`).then(res => {
+    api.get(`/api/admin/preorder/delete/${pcode}`).then(res => {
     })
   }
 
@@ -548,7 +548,7 @@ class Pre_order extends Component {
       res.data.forEach(e => {
         option += `<option value="${e.Code}">${e.Code}</option>`
       })
-      api.get('/api/admin/product/getCartItem').then(res => {
+      api.get('/api/admin/preorder/getCartItem').then(res => {
         var length = res.data.cartItem.length;
         if (length <= 0) {
 
@@ -562,7 +562,7 @@ class Pre_order extends Component {
             dom += `<td>${res.data.cartItem[i].Total}</td>`
             dom += `<td><button id="${res.data.cartItem[i].code}" class="btn btn-link removeCart" style="color:red">Remove</button></td>`
             dom += '</tr>'
-            TotalPrice += res.data.cartItem[i].Total
+            TotalPrice += (res.data.cartItem[i].Total) / 2
           }
 
         }
@@ -587,11 +587,12 @@ class Pre_order extends Component {
 
     $(event.currentTarget.parentElement.parentElement).remove()
     var code = event.currentTarget.id;
-    api.delete(`/api/admin/product/removeCartItem/${code}`).then(res => {
+    api.delete(`/api/admin/preorder/removeCartItem/${code}`).then(res => {
       $('#piece-product').html(res.data.update)
-      this.loadCartItem()
+      //this.loadCartItem()
     })
-
+    
+   
 
 
   }
@@ -617,18 +618,16 @@ class Pre_order extends Component {
 
   addCartItem(event) {
     event.preventDefault();
-    api.post('/api/admin/product/addCart', {
+    api.post('/api/admin/preorder/addCart', {
       quantity: event.currentTarget.parentElement.children[0].value,
       code: event.currentTarget.parentElement.parentElement.children[0].children[0].id
     }).then(res => {
       $('#piece-product').html(res.data)
-
     })
-
   }
 
   buyProduct(event) {
-    api.get('/api/admin/product/getCartItem').then(res => {
+    api.get('/api/admin/preorder/getCartItem').then(res => {
       var price = $('#total-price')[0].innerHTML.split('$')[1]
       var discount = $('#discountvalue')[0].innerHTML.split('-')[1]
       if (res.data.total != 0) {
@@ -658,12 +657,16 @@ class Pre_order extends Component {
       api.get(`/api/admin/order/payment/${amount}/${cno}/${ceque}`)
       api.get(`/api/admin/order/getpoint/${cno}/${point}`)
       api.get(`/api/admin/order/checkout/${reqdate}/${cno}/${orderno}`).then(response => {
-        api.get('/api/admin/product/getCartItem').then(res => {
+        api.get('/api/admin/preorder/getCartItem').then(res => {
           let i = 1
           res.data.cartItem.forEach(cart => {
             console.log(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`);
             api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
+          })
+          api.delete('/api/destroyPreorderCart').then(res=>{
+            alert(res.data)
+            setTimeout('location.href = "/admin/status"',100)
           })
         })
       })

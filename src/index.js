@@ -19,7 +19,7 @@ import {
 import App from './components/reactApp.jsx';
 import { Home , Contributor } from './pages/Index.jsx';
 import Catalog from './pages/Catalog.jsx'
-import Login from './pages/Login.jsx'
+import {Login} from './pages/Login.jsx'
 import Admin from './pages/Admin/Home.jsx'
 import {Instock,Pre_order} from './pages/Admin/ordering/Order'
 import Status from './pages/Admin/Status'

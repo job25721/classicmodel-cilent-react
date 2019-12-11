@@ -207,38 +207,36 @@ export default class template extends Component {
 
   render() {
     return (
-      <div className="sfmono">
-        <div id="wrapper">
-          <Helmet>
-            <title>Status</title>
-          </Helmet>
-          <Sidebar />
-          <div id="content-wrapper" className="d-flex flex-column">
-            <div id="content">
-              <Navbar />
-              <div className="container-fluid">
-                <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 className="h3 mb-0 text-gray-800 sfmono">Order status</h1>
-                </div>
-                <div className="d-flex justify-content-end mb-2" id="pagebutton"></div>
-                <table
-                  className="table text-center table-striped responsive-table "
-                  id="dataTable"
-                  width="100%"
-                >
-                  <thead>
-                    <th>orderNumber</th>
-                    <th>customerNumber</th>
-                    <th>orderDate</th>
-                    <th>requiredDate</th>
-                    <th>shippedDate</th>
-                    <th>status</th>
-                  </thead>
-                  <tbody id="order-data">
-
-                  </tbody>
-                </table>
+      <div id="wrapper">
+        <Helmet>
+          <title>Status</title>
+        </Helmet>
+        <Sidebar />
+        <div id="content-wrapper" className="d-flex flex-column">
+          <div id="content">
+            <Navbar />
+            <div className="container-fluid">
+              <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 className="h3 mb-0 text-gray-800 sfmono">Order status</h1>
               </div>
+              <div className="d-flex justify-content-end mb-2" id="pagebutton"></div>
+              <table
+                className="table text-center table-striped responsive-table "
+                id="dataTable"
+                width="100%"
+              >
+                <thead>
+                  <th>orderNumber</th>
+                  <th>customerNumber</th>
+                  <th>orderDate</th>
+                  <th>requiredDate</th>
+                  <th>shippedDate</th>
+                  <th>status</th>
+                </thead>
+                <tbody id="order-data">
+
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

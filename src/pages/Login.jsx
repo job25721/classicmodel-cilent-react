@@ -4,7 +4,7 @@ import "../style/css/login.css";
 import $ from 'jquery'
 import { Helmet } from 'react-helmet'
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
@@ -87,7 +87,7 @@ export default class Login extends Component {
          <Helmet>
           <title>Login</title>
         </Helmet>
-        <a href="/addUser">
+        <a href="/add">
           <button class="btn btn-success">Add User</button>
         </a>
         <div class="main">
@@ -143,3 +143,7 @@ export default class Login extends Component {
     );
   }
 }
+
+
+
+export {Login}
