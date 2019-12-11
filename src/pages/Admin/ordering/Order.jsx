@@ -390,6 +390,8 @@ class Pre_order extends Component {
   constructor() {
     super();
     this.state = {};
+    this.addCartItem = this.addCartItem.bind(this);
+    this.removeCart = this.removeCart.bind(this)
   }
   componentDidMount() {
     api.get('/api/admin/preorder/getCartItem').then(res => {
@@ -559,17 +561,12 @@ class Pre_order extends Component {
 
   removeCart(event) {
     // alert('clicked')
-
     $(event.currentTarget.parentElement.parentElement).remove()
     var code = event.currentTarget.id;
     api.delete(`/api/admin/preorder/removeCartItem/${code}`).then(res => {
       $('#piece-product').html(res.data.update)
-      //this.loadCartItem()
     })
-    
-   
-
-
+    this.loadCartItem()
   }
 
   editProduct(e) {
@@ -611,7 +608,7 @@ class Pre_order extends Component {
         $("#total-point").html($('#total-point-input').text())
         if (discount == undefined) discount = 0
         $("#payment-amount").html(price - discount);
-        api.get(`/api/admin/order/getorderNo`).then(res => {
+        api.get(`/api/admin/preorderOrder/getorderNo`).then(res => {
           $('#order-no-payment').html(res.data[0].orderNo + 1)
         })
       }
@@ -625,18 +622,17 @@ class Pre_order extends Component {
     var reqdate = $('#require-date').val()
     var orderno = $('#order-no-payment').text()
     var point = $('#total-point-input').text()
-    console.log(reqdate.length);
     if (reqdate.length == 0) reqdate = "null"
     if (cno.length != 0 && ceque.length != 0) {
       console.log(`/api/admin/order/getpoint/${cno}/${point}`);
       api.get(`/api/admin/order/payment/${amount}/${cno}/${ceque}`)
       api.get(`/api/admin/order/getpoint/${cno}/${point}`)
-      api.get(`/api/admin/order/checkout/${reqdate}/${cno}/${orderno}`).then(response => {
+      api.get(`/api/admin/preorderOrder/checkout/${reqdate}/${cno}/${orderno}`).then(response => {
         api.get('/api/admin/preorder/getCartItem').then(res => {
           let i = 1
           res.data.cartItem.forEach(cart => {
-            console.log(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`);
-            api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
+            console.log(`/api/admin/preorderOrder/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`);
+            api.get(`/api/admin/preorderOrder/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
           api.delete('/api/destroyPreorderCart').then(res=>{
