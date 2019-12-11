@@ -142,7 +142,7 @@ class Sidebar extends Component {
               <a className="collapse-item" href="/admin/status/instock">
                 In stock
               </a>
-              <a className="collapse-item" href="/admin/preorder">
+              <a className="collapse-item" href="/admin/status/preorder">
                 Pre-order
               </a>
             </div>

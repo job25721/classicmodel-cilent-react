@@ -21,8 +21,8 @@ import { Home , Contributor } from './pages/Index.jsx';
 import Catalog from './pages/Catalog.jsx'
 import {Login} from './pages/Login.jsx'
 import Admin from './pages/Admin/Home.jsx'
-import {Instock,Pre_order} from './pages/Admin/ordering/Order'
-import Status from './pages/Admin/Status'
+import {Instock,Pre_order} from './pages/Admin/Order'
+import {StatusPreOrder,StatusInStock} from './pages/Admin/Status'
 import Customer from './pages/Admin/Customer.jsx'
 import Employee from './pages/Admin/Employee.jsx'
 import Discount from './pages/Admin/Discount.jsx'
@@ -44,8 +44,8 @@ ReactDOM.render(
       <Route exact path='/admin' component={Admin} />
       <Route exact path='/admin/instock' component={Instock} />
       <Route exact path='/admin/preorder' component={Pre_order} />
-      <Route exact path='/admin/status/instock' component={Status} />
-      <Route exact path='/admin/status/preorder' component={Status} />
+      <Route exact path='/admin/status/instock' component={StatusInStock} />
+      <Route exact path='/admin/status/preorder' component={StatusPreOrder} />
       <Route exact path='/admin/customer' component={Customer} />
       <Route exact path='/admin/employee' component={Employee} />
       <Route exact path='/admin/discount' component={Discount} />

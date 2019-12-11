@@ -1174,3 +1174,11 @@ h3.widget-title-modal {
     outline: 0;
     box-shadow: none;
 }
+
+.btn-cat{
+    border: none;
+    background: #4e73df;
+    padding: 0 30px;
+    font-size: 18px;
+    color:#fff;
+}

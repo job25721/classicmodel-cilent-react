@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Sidebar, InstockNav } from "../../../components/Menubar";
+import { Sidebar, InstockNav } from "../../components/Menubar";
 import { Helmet } from "react-helmet";
 
-import api from "../../../api/api";
+import api from '../../api/api';
 import $ from "jquery";
-import { Cart_modal, ProductDetail_modal, ProductAdd_modal, ProductEdit_modal, Payment_modal } from "../../../components/Modal";
+import { Cart_modal, ProductDetail_modal, ProductAdd_modal, ProductEdit_modal, Payment_modal } from "../../components/Modal";
 import { log } from "util";
 
 class Instock extends Component {
@@ -420,6 +420,8 @@ class Pre_order extends Component {
   constructor() {
     super();
     this.state = {};
+    this.addCartItem = this.addCartItem.bind(this);
+    this.removeCart = this.removeCart.bind(this)
   }
   componentDidMount() {
     api.get('/api/admin/preorder/getCartItem').then(res => {
@@ -539,8 +541,9 @@ class Pre_order extends Component {
   deleteProduct(event) {
     var pcode = event.currentTarget.id;
     console.log(pcode)
-    api.get(`/api/admin/preorder/delete/${pcode}`).then(res => {
+    api.get(`/api/admin/order/delete/${pcode}`).then(res => {
     })
+    window.location.reload(true);
   }
 
   loadCartItem(event) {
@@ -589,17 +592,12 @@ class Pre_order extends Component {
 
   removeCart(event) {
     // alert('clicked')
-
     $(event.currentTarget.parentElement.parentElement).remove()
     var code = event.currentTarget.id;
     api.delete(`/api/admin/preorder/removeCartItem/${code}`).then(res => {
       $('#piece-product').html(res.data.update)
-      //this.loadCartItem()
     })
-
-
-
-
+    this.loadCartItem()
   }
 
   editProduct(e) {
@@ -641,7 +639,7 @@ class Pre_order extends Component {
         $("#total-point").html($('#total-point-input').text())
         if (discount == undefined) discount = 0
         $("#payment-amount").html(price - discount);
-        api.get(`/api/admin/order/getorderNo`).then(res => {
+        api.get(`/api/admin/preorderOrder/getorderNo`).then(res => {
           $('#order-no-payment').html(res.data[0].orderNo + 1)
         })
       }
@@ -655,23 +653,22 @@ class Pre_order extends Component {
     var reqdate = $('#require-date').val()
     var orderno = $('#order-no-payment').text()
     var point = $('#total-point-input').text()
-    console.log(reqdate.length);
     if (reqdate.length == 0) reqdate = "null"
     if (cno.length != 0 && ceque.length != 0) {
       console.log(`/api/admin/order/getpoint/${cno}/${point}`);
       api.get(`/api/admin/order/payment/${amount}/${cno}/${ceque}`)
       api.get(`/api/admin/order/getpoint/${cno}/${point}`)
-      api.get(`/api/admin/order/checkout/${reqdate}/${cno}/${orderno}`).then(response => {
+      api.get(`/api/admin/preorderOrder/checkout/${reqdate}/${cno}/${orderno}`).then(response => {
         api.get('/api/admin/preorder/getCartItem').then(res => {
           let i = 1
           res.data.cartItem.forEach(cart => {
-            console.log(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`);
-            api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
+            console.log(`/api/admin/preorderOrder/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`);
+            api.get(`/api/admin/preorderOrder/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
           api.delete('/api/destroyPreorderCart').then(res => {
             alert(res.data)
-            setTimeout('location.href = "/admin/status"', 100)
+            setTimeout('location.href = "/admin/status/preorder"', 100)
           })
         })
       })
@@ -707,6 +704,8 @@ class Pre_order extends Component {
     api.get(`api/admin/order/addproduct/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
 
     })
+    window.location.reload(true);
+    
   }
 
   saveEditproduct(event) {
@@ -722,6 +721,7 @@ class Pre_order extends Component {
     api.get(`api/admin/order/update/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
 
     })
+    window.location.reload(true);
   }
 
   render() {
@@ -737,7 +737,7 @@ class Pre_order extends Component {
               <InstockNav />
               <div className="container-fluid">
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 className="h3 mb-0 text-gray-800 sfmono">In stock product</h1>
+                  <h1 className="h3 mb-0 text-gray-800 sfmono">Pre order product</h1>
                   <div className="d-flex justify-content-end ">
                     <a class="flat-btn flat-blue align-middle" style={{ margin: "2px 0", color: "#fff" }}
                       data-toggle="modal" data-target="#addProduct" title="Add new Product">
