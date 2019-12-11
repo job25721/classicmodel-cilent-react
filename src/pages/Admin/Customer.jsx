@@ -34,6 +34,7 @@ export default class Customer extends Component {
     this.handlePostalCode = this.handlePostalCode.bind(this);
     this.handleCountry  = this.handleCountry.bind(this);
     this.handlecredit = this.handlecredit.bind(this);
+    this.deleteCustomer = this.deleteCustomer.bind(this);
 
   }
 
@@ -76,37 +77,49 @@ export default class Customer extends Component {
 
   componentDidMount() {
     api.get('/api/admin/customer/fetch').then(res => {
-      if (res.data.length > 15) {
-        var i, x
-        var n = parseInt(res.data.length / 15)
-        n % 15 == 0 ? x = n - 0 : x = n
-        $("#pagebutton").empty()
-        for (i = 0; i <= x; i++) {
-          if (i == 0) $("#pagebutton").append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`)
-          else $("#pagebutton").append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i + 1}</span></button>`)
+      if(res.data.permission === false){
+        
+      } 
+      else{
+        $('.content').show('fade')
+        if (res.data.length > 15) {
+          var i, x
+          var n = parseInt(res.data.length / 15)
+          n % 15 === 0 ? x = n - 0 : x = n
+          $("#pagebutton").empty()
+          for (i = 0; i <= x; i++) {
+            if (i === 0) $("#pagebutton").append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`)
+            else $("#pagebutton").append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i + 1}</span></button>`)
+          }
+          $(document).on('click', '#currentpage', this.changepage)
         }
-        $(document).on('click', '#currentpage', this.changepage)
+        console.log(res);
+        let len = res.data.length;
+        if(len > 15) {
+          len = 15
+        }
+        for (let i = 0; i < res.data.length; i++) {
+          $('#customer-data').append(
+            `<tr>
+            <td class="align-middle"><a id="${res.data[i].customerNumber}" data-toggle="modal" data-target="#customerDetailModal" title="Product detail"
+          class="customer-detail-click quick-view modal-view detail-link" href="#">${res.data[i].customerNumber}<i class="fas fa-search fa-sm responsive-icon-search-status"></i></a></td>
+              <td>${res.data[i].customerName}</td>
+              <td>${res.data[i].contactLastName}  ${res.data[i].contactFirstName}</td>
+              <td>${res.data[i].phone}</td>
+              <td>${res.data[i].salesRepEmployeeNumber}</td>
+              <td>${res.data[i].creditLimit}</td>
+              <td><button class="flat-btn flat-trash" id="delete" title="Delete Customer"  value='${res.data[i].customerNumber}'><i class="fas fa-trash"/></button></<td>
+            </tr>`
+          )
+        }
       }
-      console.log(res);
-      
-      for (let i = 0; i < 15; i++) {
-        $('#customer-data').append(
-          `<tr>
-          <td class="align-middle"><a id="${res.data[i].customerNumber}" data-toggle="modal" data-target="#customerDetailModal" title="Product detail"
-        class="customer-detail-click quick-view modal-view detail-link" href="#">${res.data[i].customerNumber}<i class="fas fa-search fa-sm responsive-icon-search-status"></i></a></td>
-            <td>${res.data[i].customerName}</td>
-            <td>${res.data[i].contactLastName}  ${res.data[n].contactFirstName}</td>
-            <td>${res.data[i].phone}</td>
-            <td>${res.data[i].salesRepEmployeeNumber}</td>
-            <td>${res.data[i].creditLimit}</td>
-          </tr>`
-        )
-      }
+     
 
     })
 
     $(document).on('click','.customer-detail-click',this.customerDetail)
     $(document).on('click','#submit',this.addCustomer)
+    $(document).on('click','#delete',this.deleteCustomer)
   }
   changepage(event) {
     var current = event.currentTarget
@@ -128,11 +141,15 @@ export default class Customer extends Component {
             <td>${res.data[i].phone}</td>
             <td>${res.data[i].salesRepEmployeeNumber}</td>
             <td>${res.data[i].creditLimit}</td>
+            <td><button class="flat-btn flat-trash" id="delete" title="Delete Customer" value='${res.data[i].customerNumber}'><i class="fas fa-trash"/></button></td>
           </tr>`
         )
       }
     })
   }
+
+
+
 
   customerDetail(event){
     var customerNumber = event.currentTarget.id
@@ -156,11 +173,22 @@ export default class Customer extends Component {
       $('#credit-limit-detail').html('Credit limit : ' + customer.creditLimit)
       
     })
-
   }
+
+  deleteCustomer(event) {
+    // event.preventDefault();
+    api.post(`/api/admin/customer/deleteCustomer/${event.currentTarget.value}`).then(res=>{
+      alert(res.data)
+      // eslint-disable-next-line no-implied-eval
+      setTimeout(`location.href = '/admin/customer';`,100);
+    })
+   
+
+}
 
   showAddForm = event => {
     event.preventDefault();
+    // alert('clicked')
     $("#addNew").toggle("fade");
   };
 
@@ -197,177 +225,184 @@ export default class Customer extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Navbar />
+              <div id="msg"></div>
+              <div className="content collapse">
               <div className="container-fluid">
-                <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 className="h3 mb-0 text-gray-800 sfmono">Customer management</h1>
-                  {/* <div className="d-flex justify-content-end ">
-                    <a class="flat-btn flat-blue align-middle" style={{margin:"2px 0",color:"#fff"}}
-                      data-toggle="modal" data-target="" title="Add new Customer">
-                      <i className="fas fa-plus"></i>
-                    </a>
-                  </div> */}    
-                  <div className="d-flex justify-content-end mb-2" id="pagebutton"></div>
-                </div>
 
-                <form onSubmit={this.addDiscount}>
-                <button
-                  onClick={this.showAddForm}
-                  className="flat-btn flat-add"
-                >
-                  Add New
-                  </button>
+<div className="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 className="h3 mb-0 text-gray-800 sfmono">Customer management</h1>    
+  <div className="d-flex justify-content-end mb-2" id="pagebutton"></div>
+</div>
 
-                <div className="row collapse" id="addNew">
-                  <br />
-                <div className="container row">
-                    <input
-                      type="number"
-                      name="code"
-                      id="code"
-                      placeholder="Enter Number"
-                      size="15"
-                      className="form-control w-25 col-sm-2 m-1"
-                      onChange={this.handleCode}
-                      required
-                    />
-                    <input
-                      type="text"
-                      name="customername"
-                      id="customername"
-                      placeholder="Customername"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handleCusName}
-                    />
-                    <input
-                      type="text"
-                      name="contactFirstname"
-                      id="contactFirstname"
-                      placeholder="contactFirstname"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handleConFName}
-                    />
-                    <input
-                      type="text"
-                      name="contactLastname"
-                      id="contactLastname"
-                      placeholder="contactLastname"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handleConLName}
-                    />
-                    <input
-                      type="number"
-                      name="phone"
-                      id="phone"
-                      placeholder="Phone"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handlePhone}
-                    />
-                    <input
-                      type="text"
-                      name="addressline1"
-                      id="addressline1"
-                      placeholder="addressline1"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handleaddressline1}
-                    />
-                    <input
-                      type="text"
-                      name="addressline2"
-                      id="addressline2"
-                      placeholder="addressline2"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handleaddressline2}
-                    />
-                    <input
-                      type="text"
-                      name="city"
-                      id="city"
-                      placeholder="City"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handlecity}
-                    />
-                      <input
-                      type="text"
-                      name="state"
-                      id="state"
-                      placeholder="State"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handlestate}
-                    />
-                      <input
-                      type="text"
-                      name="postalCode"
-                      id="postalCode"
-                      placeholder="PostalCode"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handlePostalCode}
-                    />
-                      <input
-                      type="text"
-                      name="country"
-                      id="country"
-                      placeholder="Couuntry"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handleCountry}
-                    />
-                    <input
-                      type="number"
-                      name="credit"
-                      id="credit"
-                      placeholder="creditlimit"
-                      className="form-control w-25 col-sm-2 m-1"
-                      size="15"
-                      min="1"
-                      onChange={this.handlecredit}
-                    />
-                    
-                    <button
-                      id="submit"
-                      className="btn btn-success m-1 col-sm-1"
-                    >
-                      ADD
-                      </button>
-                  </div>
-                </div>
-                </form>
-                <table
-                  className="table text-center table-striped responsive-table "
-                  id="dataTable"
-                  width="100%"
-                >
-                  <thead>
-                    <th>customerNumber</th>
-                    <th>customerName</th>
-                    <th>contactName</th>
-                    <th>phone</th>
-                    <th>EmployeeNumber</th>
-                    <th>creditLimit</th>
-                  </thead>
-                  <tbody id="customer-data">
+<form onSubmit={this.addCustomer}>
+<button
+  onClick={this.showAddForm}
+  className="btn btn-outline-success">
+  Add New
+  </button>
 
-                  </tbody>
-                </table>
+<div className="row collapse" id="addNew">
+  <br />
+<div className="container row">
+ 
+  <div className="row">
+    <input
+      type="number"
+      name="code"
+      id="code"
+      placeholder="Enter Number"
+      size="15"
+      className="form-control w-25 col-sm-2 m-1"
+      onChange={this.handleCode}
+      required
+    />
+    <input
+      type="text"
+      name="customername"
+      id="customername"
+      placeholder="Customername"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handleCusName}
+    />
+    <input
+      type="text"
+      name="contactFirstname"
+      id="contactFirstname"
+      placeholder="contactFirstname"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handleConFName}
+    />
+    <input
+      type="text"
+      name="contactLastname"
+      id="contactLastname"
+      placeholder="contactLastname"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handleConLName}
+    />
+    <input
+      type="number"
+      name="phone"
+      id="phone"
+      placeholder="Phone"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handlePhone}
+    />
+    <input
+      type="text"
+      name="addressline1"
+      id="addressline1"
+      placeholder="addressline1"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handleaddressline1}
+    />
+    <input
+      type="text"
+      name="addressline2"
+      id="addressline2"
+      placeholder="addressline2"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handleaddressline2}
+    />
+    </div>
+
+    <div className="row">
+    <input
+      type="text"
+      name="city"
+      id="city"
+      placeholder="City"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handlecity}
+    />
+      <input
+      type="text"
+      name="state"
+      id="state"
+      placeholder="State"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handlestate}
+    />
+      <input
+      type="text"
+      name="postalCode"
+      id="postalCode"
+      placeholder="PostalCode"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handlePostalCode}
+    />
+      <input
+      type="text"
+      name="country"
+      id="country"
+      placeholder="Couuntry"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handleCountry}
+    />
+    <input
+      type="number"
+      name="credit"
+      id="credit"
+      placeholder="creditlimit"
+      className="form-control w-25 col-sm-2 m-1"
+      size="15"
+      min="1"
+      onChange={this.handlecredit}
+    />
+    <button
+      id="submit"
+      className="btn btn-success m-1 col-sm-2 m-1"
+    >
+      ADD
+      </button>
+      </div>
+    
+    
+  </div>
+</div>
+</form>
+
+<table
+  className="table text-center table-striped responsive-table "
+  id="dataTable"
+  width="100%"
+>
+  <thead>
+    <th>customerNumber</th>
+    <th>customerName</th>
+    <th>contactName</th>
+    <th>phone</th>
+    <th>EmployeeNumber</th>
+    <th>creditLimit</th>
+    <th></th>
+  </thead>
+  <tbody id="customer-data">
+
+  </tbody>
+</table>
+</div>
               </div>
+             
             </div>
           </div>
         </div>
