@@ -60,7 +60,6 @@ export default class Employee extends Component {
   }
 
   Demote(event){
-    //alert('ss')
     const employeeNumber = event.currentTarget.value
     api.post(`/api/admin/employee/demote/${employeeNumber}`).then(res=>{
       alert(res.data)

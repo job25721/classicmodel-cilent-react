@@ -23,7 +23,6 @@ class Instock extends Component {
     })
     api.get('/api/admin/product/count').then(res => {
       console.log(res.data[0].count);
-
       if (res.data[0].count > 15) {
         var i, x
         var n = parseInt(res.data[0].count / 15)
@@ -265,6 +264,10 @@ class Instock extends Component {
             api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
+          api.delete('/api/destroySession').then(res=>{
+            alert(res.data)
+            setTimeout('location.href = "/admin/status"',100)
+          })
         })
       })
 
@@ -394,10 +397,44 @@ class Pre_order extends Component {
             <div id="content">
               <InstockNav />
               <div className="container-fluid">
-                <h1 className="h3 mb-0 text-gray-800 sfmono">This is order pages</h1>
+                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                  <h1 className="h3 mb-0 text-gray-800 sfmono">In stock product</h1>
+                  <div className="d-flex justify-content-end ">
+                    <a class="flat-btn flat-blue align-middle" style={{ margin: "2px 0", color: "#fff" }}
+                      data-toggle="modal" data-target="#addProduct" title="Add new Product">
+                      <i className="fas fa-plus"></i>
+                    </a>
+
+
+                  </div>
+                </div>
+                <div style={{ fontSize: "40px" }} id="demo"></div>
+                <div className="d-flex justify-content-end mb-2" id="pagebutton"></div>
+                <table
+                  className="table text-center table-striped responsive-table "
+                  id="dataTable"
+                  width="100%"
+                >
+                  <thead>
+                    <tr>
+                      <th>ProductImage</th>
+                      <th className="responsive-table-name">ProductName</th>
+                      <th>ProductScale</th>
+                      <th className="responsive-table-vendor">ProductVendor</th>
+                      <th>BuyPrice</th>
+                      <th></th><th></th><th></th>
+                    </tr>
+                  </thead>
+                  <tbody className="w-100" id="instockData"></tbody>
+                </table>
               </div>
             </div>
           </div>
+          <Cart_modal />
+        <ProductDetail_modal />
+        <ProductAdd_modal />
+        <ProductEdit_modal />
+        <Payment_modal />
         </div>
       </div>
     );
