@@ -44,7 +44,8 @@ ReactDOM.render(
       <Route exact path='/admin' component={Admin} />
       <Route exact path='/admin/instock' component={Instock} />
       <Route exact path='/admin/preorder' component={Pre_order} />
-      <Route exact path='/admin/status' component={Status} />
+      <Route exact path='/admin/status/instock' component={Status} />
+      <Route exact path='/admin/status/preorder' component={Status} />
       <Route exact path='/admin/customer' component={Customer} />
       <Route exact path='/admin/employee' component={Employee} />
       <Route exact path='/admin/discount' component={Discount} />

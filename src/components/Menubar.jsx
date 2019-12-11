@@ -55,6 +55,7 @@ class Sidebar extends Component {
         );
       e.preventDefault();
     });
+    // $('#home-sidebar').removeAttr('href')
   }
   render() {
     return (
@@ -77,7 +78,7 @@ class Sidebar extends Component {
         <hr className="sidebar-divider my-0" />
 
         <li className="nav-item active">
-          <a className="nav-link" href="/admin">
+          <a className="nav-link" href="/admin" id="home-sidebar">
             <i className="fas fa-fw fa-home "></i>
             <span>Home</span>
           </a>
@@ -95,6 +96,7 @@ class Sidebar extends Component {
             data-target="#collapseTwo"
             aria-expanded="true"
             aria-controls="collapseTwo"
+            id="order-sidebar"
           >
             <i className="fas fa-fw fa-shopping-cart"></i>
             <span>Ordering</span>
@@ -106,7 +108,7 @@ class Sidebar extends Component {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <h6 className="collapse-header sfmono">Custom Ordering:</h6>
+              <h6 className="collapse-header sfmono">Ordering:</h6>
               <a className="collapse-item" href="/admin/instock">
                 In stock
               </a>
@@ -117,13 +119,43 @@ class Sidebar extends Component {
           </div>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="/admin/status">
+          <a
+            className="nav-link collapsed"
+            href="#"
+            data-toggle="collapse"
+            data-target="#collapseone"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+            id="status-sidebar"
+          >
+            <i class="fas fa-tasks"></i>
+            <span>Order Status</span>
+          </a>
+          <div
+            id="collapseone"
+            className="collapse"
+            aria-labelledby="headingTwo"
+            data-parent="#accordionSidebar"
+          >
+            <div className="bg-white py-2 collapse-inner rounded">
+              <h6 className="collapse-header sfmono">Order status:</h6>
+              <a className="collapse-item" href="/admin/status/instock">
+                In stock
+              </a>
+              <a className="collapse-item" href="/admin/preorder">
+                Pre-order
+              </a>
+            </div>
+          </div>
+        </li>
+        {/* <li className="nav-item">
+          <a className="nav-link" href="/admin/status" id="status-sidebar">
           <i class="fas fa-tasks"></i>
             <span>Order Status</span>
           </a>
-        </li>
+        </li> */}
         <li className="nav-item">
-          <a className="nav-link" href="/admin/discount">
+          <a className="nav-link" href="/admin/discount" id="discount-sidebar">
             <i className="fas fa-fw fa-tag"></i>
             <span>Discount</span>
           </a>
@@ -139,7 +171,7 @@ class Sidebar extends Component {
 
         <div className="sidebar-heading">Customer</div>
         <li className="nav-item">
-          <a className="nav-link" href="/admin/customer">
+          <a className="nav-link" href="/admin/customer" id="customer-sidebar">
             <i className="fas fa-fw fa-user"></i>
             <span>Customers management</span>
           </a>
@@ -149,7 +181,7 @@ class Sidebar extends Component {
         <div className="sidebar-heading">Employee</div>
 
         <li className="nav-item">
-          <a className="nav-link" href="/admin/employee">
+          <a className="nav-link" href="/admin/employee" id="emply-sidebar">
             <i className="fas fa-fw fa-id-card"></i>
             <span>Employees management</span>
           </a>
