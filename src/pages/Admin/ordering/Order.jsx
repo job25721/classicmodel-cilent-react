@@ -137,6 +137,7 @@ class Instock extends Component {
     console.log(pcode)
     api.get(`/api/admin/order/delete/${pcode}`).then(res => {
     })
+    window.location.reload(true);
   }
 
   loadCartItem(event) {
@@ -254,15 +255,14 @@ class Instock extends Component {
     var reqdate = $('#require-date').val()
     var orderno = $('#order-no-payment').text()
     var point = $('#total-point-input').text()
-    var dcode = $('#dicount-code').text()
-    console.log("dcode "+ dcode );
-    
-    // if(dcode != "You do not have Discount"){
-    //   api.get(`/api/admin/discount/update/${dcode}`)
-    // } 
+    var dcode = $('#discount-code').text()
+    console.log("dcode " + dcode);
     console.log(reqdate.length);
     if (reqdate.length == 0) reqdate = "null"
     if (cno.length != 0 && ceque.length != 0) {
+      if (dcode != "You do not have Discount") {
+        api.get(`/api/admin/discount/update/${dcode}`)
+      }
       console.log(`/api/admin/order/getpoint/${cno}/${point}`);
       api.get(`/api/admin/order/payment/${amount}/${cno}/${ceque}`)
       api.get(`/api/admin/order/getpoint/${cno}/${point}`)
@@ -311,9 +311,8 @@ class Instock extends Component {
     var pbuyprice = $('#product-buyprice-add').val()
     var pmsrp = $('#product-msrp-add').val()
 
-    api.get(`api/admin/order/addproduct/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
-
-    })
+    api.get(`api/admin/order/addproduct/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`)
+    window.location.reload(true);
   }
 
   saveEditproduct(event) {
@@ -326,9 +325,8 @@ class Instock extends Component {
     var pquan = $('#product-quan-edit').val()
     var pbuyprice = $('#product-buyprice-edit').val()
     var pmsrp = $('#product-msrp-edit').val()
-    api.get(`api/admin/order/update/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
-
-    })
+    api.get(`api/admin/order/update/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`)
+    window.location.reload(true);
   }
 
   render() {
@@ -566,7 +564,7 @@ class Pre_order extends Component {
     var code = event.currentTarget.id;
     api.delete(`/api/admin/preorder/removeCartItem/${code}`).then(res => {
       $('#piece-product').html(res.data.update)
-      this.loadCartItem()
+      //this.loadCartItem()
     })
     
    
@@ -600,9 +598,7 @@ class Pre_order extends Component {
       code: event.currentTarget.parentElement.parentElement.children[0].children[0].id
     }).then(res => {
       $('#piece-product').html(res.data)
-
     })
-
   }
 
   buyProduct(event) {
