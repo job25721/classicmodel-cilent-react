@@ -171,6 +171,7 @@ class Instock extends Component {
           }
 
         }
+
         details += `<p>Total Price : <span id="total-price">$${TotalPrice.toFixed(2)}</span><span id="discountvalue" style="color:red"></span></p>
         <p>Total point : <span id="total-point-input">${Math.floor(TotalPrice / 100) * 3}</span></p>`
 
@@ -236,18 +237,42 @@ class Instock extends Component {
     api.get('/api/admin/product/getCartItem').then(res => {
       var price = $('#total-price')[0].innerHTML.split('$')[1]
       var discount = $('#discountvalue')[0].innerHTML.split('-')[1]
-      if (res.data.total != 0) {
-        $('#discount-value').html(discount)
-        $('#discount-code').html()
-        $("#closemodal").click();
-        $("#paymentModal").modal('show');
-        $("#total-point").html($('#total-point-input').text())
-        if (discount == undefined) discount = 0
-        $("#payment-amount").html(price - discount);
-        api.get(`/api/admin/order/getorderNo`).then(res => {
-          $('#order-no-payment').html(res.data[0].orderNo + 1)
-        })
-      }
+      var point = 0
+      var check = true
+      var cart = res.data.cartItem
+      for(let i = 0; i < cart.length;i++) {
+        if (cart[i].Quantity > cart[i].thisquan) {
+          check = false
+          alert(`
+          ${cart[i].Name} out of stock!!! 
+          please decrease ${cart[i].Name} quantity`);
+          i = cart.length
+        }else if (cart[i].Quantity < 1 ){
+          check = false
+          alert(`Quantity can not be negative`);
+          i = cart.length
+        }
+      }  
+      if(check) {
+          if (res.data.total != 0) {
+            $('#discount-value').html(discount)
+            $('#discount-code').html()
+            $("#closemodal").click();
+            $("#paymentModal").modal('show');
+
+            if (discount != undefined) {
+              price = price - discount
+            }
+            if (price < 0) price = 0
+            point = Math.floor(price / 100) * 3
+            $("#total-point").html(point)
+            $("#payment-amount").html(price);
+            api.get(`/api/admin/order/getorderNo`).then(res => {
+              $('#order-no-payment').html(res.data[0].orderNo + 1)
+            })
+
+          }
+        }
     })
   }
 
