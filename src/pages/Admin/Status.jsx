@@ -66,8 +66,22 @@ export default class template extends Component {
       }
       $(document).on('change', '.status-selected', this.update)
       $(document).on('click', '.order-detail-click', this.orderDetail)
+      $(document).on('click','#save-status',this.editstatus)
     })
   }
+
+  editstatus(event){
+    var comment = $('#status-comment-input').val()
+    var orderno = $('#order-number-head').text()
+    console.log(orderno);
+    if(comment.length != 0){
+      console.log("not empty");
+      api.get(`/api/admin/order/editdetail/${comment}/${orderno}`)
+    }
+    
+    
+  }
+
   changepage(event) {
     var current = event.currentTarget
     var pr = document.getElementsByClassName('fbg-active')
@@ -126,12 +140,12 @@ export default class template extends Component {
     var orderNumber = event.currentTarget.id
     console.log(orderNumber);
     var total = 0
-    var comment 
+    var comment
     api.get(`/api/admin/order/detail/${orderNumber}`).then(res => {
       for (let n in res.data) {
         console.log(res.data[n].quantityOrdered);
         comment = res.data[n].comments
-        if(comment == null){
+        if (comment == null) {
           comment = "-"
         }
         total = parseInt(res.data[n].priceEach) * parseInt(res.data[n].quantityOrdered)
@@ -144,19 +158,38 @@ export default class template extends Component {
           <td class="align-middle">${total}</td>
           </tr>`
         )
+
         $('#order-date-detail').html('orderDate : ' + res.data[n].orderDate.split("T1")[0])
         $('#required-date-detail').html('orderDate : ' + res.data[n].requiredDate.split('T1')[0])
-        $('#shipped-date-detail').html('status-detail : ' + res.data[n].shippedDate.split("T1")[0])
-        $('#status-detail').html('status : ' + res.data[n].status)
-        $('#comment-detail').html('comment : ' + comment)
-        $('#order-number-head').html('Order number : ' + res.data[n].orderNumber)
+        if (res.data[n].shippedDate != null) $('#shipped-date-detail').html('shippedDate : ' + res.data[n].shippedDate.split("T1")[0])
+        else $('#shipped-date-detail').html('shippedDate : -')
+        //$('#status-detail').html('status : ' + res.data[n].status)
+        $('#status-detail').empty()
+        $('#status-detail').append( 'status :' + 
+          '<select id="order-detail-' + res.data[n].orderNumber + '" class="status-selected" id="sel1">' +
+          '<option value="Cancelled">Cancelled</option>' +
+          '<option value="Disputed">Disputed</option>' +
+          '<option value="In Process">In Process</option>' +
+          '<option value="On Hold">On hold</option>' +
+          '<option value="Resolved">Resolved</option>' +
+          '<option value="Shipped">Shipped</option>' +
+          '</select>'
+        )
+        if (res.data[n].status == "Cancelled") $(`#order-detail-${res.data[n].orderNumber}`).val('Cancelled')
+        else if (res.data[n].status == "Disputed") $(`#order-detail-${res.data[n].orderNumber}`).val('Disputed')
+        else if (res.data[n].status == "In Process") $(`#order-detail-${res.data[n].orderNumber}`).val('In Process')
+        else if (res.data[n].status == "On Hold") $(`#order-detail-${res.data[n].orderNumber}`).val('On Hold')
+        else if (res.data[n].status == "Resolved") $(`#order-detail-${res.data[n].orderNumber}`).val('Resolved')
+        else $(`#order-detail-${res.data[n].orderNumber}`).val('Shipped')
+        $('#status-comment-input').val(comment)
+        $('#order-number-head').html(res.data[n].orderNumber)
         $('#customer-number-head').html('Customer nmber : ' + res.data[n].customerNumber)
         // < p id = "order-date-detail" > orderDate</p >
-          //   <p id="required-date-detail">requiredDate</p>
-          //   <p id="shipped-date-detail">shippedDate</p>
-          //   <p id="status-detail">status</p>
-          //   <p id="comment-detail">comment</p>
-        
+        //   <p id="required-date-detail">requiredDate</p>
+        //   <p id="shipped-date-detail">shippedDate</p>
+        //   <p id="status-detail">status</p>
+        //   <p id="comment-detail">comment</p>
+
       }
 
     })

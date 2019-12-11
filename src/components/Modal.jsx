@@ -671,7 +671,7 @@ class OrderDetail_modal extends Component {
                   <h1>ทรงพระเจริญ</h1>
                   <img src="/Contribubutor/lift.png" alt="" className="" />
                 </div> */}
-                <h4 className="sfmono" id="order-number-head">Order Number</h4>
+                <h4 className="sfmono">Order Number <span id="order-number-head"></span></h4>
                 <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
                 <div className="modal-product">
 
@@ -696,7 +696,12 @@ class OrderDetail_modal extends Component {
                 <p id="required-date-detail">requiredDate</p>
                 <p id="shipped-date-detail">shippedDate</p>
                 <p id="status-detail">status</p>
-                <p id="comment-detail">comment</p>
+                <p id="comment-detail">comment :</p>
+                <div class="input-group input-update">
+                      <textarea class="form-textarea-control mb-2" placeholder="Product Description"
+                        id="status-comment-input" rows="3"></textarea>
+                    </div>
+                <button class="btn btn-outline-success" id="save-status">Save</button>
               </div>
             </div>
           </div>
