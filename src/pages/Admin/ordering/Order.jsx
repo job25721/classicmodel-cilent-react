@@ -257,15 +257,14 @@ class Instock extends Component {
     var reqdate = $('#require-date').val()
     var orderno = $('#order-no-payment').text()
     var point = $('#total-point-input').text()
-    var dcode = $('#dicount-code').text()
-    console.log("dcode "+ dcode );
-    
-    // if(dcode != "You do not have Discount"){
-    //   api.get(`/api/admin/discount/update/${dcode}`)
-    // } 
+    var dcode = $('#discount-code').text()
+    console.log("dcode " + dcode);
     console.log(reqdate.length);
     if (reqdate.length == 0) reqdate = "null"
     if (cno.length != 0 && ceque.length != 0) {
+      if (dcode != "You do not have Discount") {
+        api.get(`/api/admin/discount/update/${dcode}`)
+      }
       console.log(`/api/admin/order/getpoint/${cno}/${point}`);
       api.get(`/api/admin/order/payment/${amount}/${cno}/${ceque}`)
       api.get(`/api/admin/order/getpoint/${cno}/${point}`)
