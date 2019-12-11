@@ -76,38 +76,11 @@ class Instock extends Component {
     })
     $(document).on('click', '#addproduct', this.addproduct)
     $(document).on('click', '#saveEditproduct', this.saveEditproduct)
-    $(document).on('change','#useddiscount',this.usediscount)
-    $(document).on('click','#accept-payment',this.acceptpayment)
+    $(document).on('change', '#useddiscount', this.usediscount)
+    $(document).on('click', '#accept-payment', this.acceptpayment)
 
   }
 
-  acceptpayment(event){
-    var amount = $('#payment-amount').text()
-    var cno = $('#custumer-no-input').val()
-    var ceque = $('#ceque-input').val()
-    var reqdate = $('#require-date').val()
-    console.log(reqdate);
-    
-    api.get(`/api/admin/order/checkout/${amount}/${cno}/${ceque}/${reqdate}`).then(res=>{
-
-    })
-  }
-
-  usediscount(event){
-     
-    api.get('api/admin/discount/getDiscount').then(res=>{
-    var x = $('#useddiscount option:selected').text();  
-    res.data.forEach(e=>{
-        if(x == e.Code){
-          $('#discountvalue').html(`-${e.Discount}`)
-        }else if(x == "Select Discount"){
-          $('#discountvalue').empty();
-        }
-      })
-    })
-    
-    
-  }
 
   productDetail(event) {
     var productCode = this.id;
@@ -172,15 +145,15 @@ class Instock extends Component {
     var details = ''
     let TotalPrice = 0;
     var option = ''
-    
-    api.get(`/api/admin/discount/getDiscount`).then(res =>{
-      res.data.forEach(e=>{
+
+    api.get(`/api/admin/discount/getDiscount`).then(res => {
+      res.data.forEach(e => {
         option += `<option value="${e.Code}">${e.Code}</option>`
       })
       api.get('/api/admin/product/getCartItem').then(res => {
         var length = res.data.cartItem.length;
         if (length <= 0) {
-  
+
         } else {
           for (let i = 0; i < length; i++) {
             dom += `<tr>`
@@ -193,10 +166,12 @@ class Instock extends Component {
             dom += '</tr>'
             TotalPrice += res.data.cartItem[i].Total
           }
-  
+
         }
-        details += `<p>TotalPrice : <span id="total-price">$${TotalPrice}</span><span id="discountvalue" style="color:red"></span></p>`
-        details += `<p>TotalQuantity : ${res.data.total}</p>`
+        details += `<p>Total Price : <span id="total-price">$${TotalPrice.toFixed(2)}</span><span id="discountvalue" style="color:red"></span></p>
+        <p>Total point : <span id="total-point-input">${Math.floor(TotalPrice/100)*3}</span></p>`
+        
+        details += `<p>Total Quantity : ${res.data.total}</p>`
         details += '<span>Available Discount</span>'
         details += `<select class="form-control w-25" id="useddiscount"><option>Select Discount</option>`
         details += option
@@ -206,7 +181,7 @@ class Instock extends Component {
         $('#details').html(details)
       })
     })
-    
+
   }
 
   removeCart(event) {
@@ -261,11 +236,53 @@ class Instock extends Component {
       if (res.data.total != 0) {
         $("#closemodal").click();
         $("#paymentModal").modal('show');
-        $("#payment-amount").html(price-discount);
-
+        $("#total-point").html($('#total-point-input').text())
+        if (discount == undefined) discount = 0
+        $("#payment-amount").html(price - discount);
+        api.get(`/api/admin/order/getorderNo`).then(res => {
+          $('#order-no-payment').html(res.data[0].orderNo + 1)
+        })
       }
     })
+  }
 
+  acceptpayment(event) {
+    var amount = $('#payment-amount').text()
+    var cno = $('#custumer-no-input').val()
+    var ceque = $('#ceque-input').val()
+    var reqdate = $('#require-date').val()
+    var orderno = $('#order-no-payment').text()
+    console.log(reqdate.length);
+    if (reqdate.length == 0) reqdate = "null"
+    if (cno.length != 0 && ceque.length != 0) {
+      api.get(`/api/admin/order/payment/${amount}/${cno}/${ceque}`)
+      api.get(`/api/admin/order/checkout/${reqdate}/${cno}/${orderno}`).then(response => {
+        api.get('/api/admin/product/getCartItem').then(res => {
+          let i = 1
+          console.log(res.data.cartItem);
+          res.data.cartItem.forEach(cart => {
+            console.log(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`);
+            api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
+            i += 1
+          })
+        })
+      })
+
+    }
+  }
+
+  usediscount(event) {
+
+    api.get('api/admin/discount/getDiscount').then(res => {
+      var x = $('#useddiscount option:selected').text();
+      res.data.forEach(e => {
+        if (x == e.Code) {
+          $('#discountvalue').html(`-${e.Discount}`)
+        } else if (x == "Select Discount") {
+          $('#discountvalue').empty();
+        }
+      })
+    })
   }
 
   addproduct(event) {

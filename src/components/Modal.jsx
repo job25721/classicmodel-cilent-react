@@ -478,36 +478,36 @@ class ProductEdit_modal extends Component {
                     <div className="row mb-2">
                       <div className="product-detail col-sm-4">
                         <h2 className="mb-0 mr-1">quantityInStock</h2>
-                      </div>  
+                      </div>
                       <div className="input-group input-update col-sm-8">
-                          <input type="text" placeholder="Quantity In Stock" id="product-quan-edit" />
-                        </div>
+                        <input type="text" placeholder="Quantity In Stock" id="product-quan-edit" />
+                      </div>
                     </div>
                     <div className="row mb-2">
                       <div className="product-detail col-sm-4">
                         <h2 className="mb-0 mr-1">buyPrice</h2>
-                      </div>  
+                      </div>
                       <div className="input-group input-update col-sm-8">
-                          <input type="text" placeholder="Buy Price" id="product-buyprice-edit" />
-                        </div>
+                        <input type="text" placeholder="Buy Price" id="product-buyprice-edit" />
+                      </div>
                     </div>
                     <div className="row mb-2">
                       <div className="product-detail col-sm-4">
                         <h2 className="mb-0 mr-1">MSRP</h2>
-                      </div>  
+                      </div>
                       <div className="input-group input-update col-sm-8">
-                          <input type="text" placeholder="MSRP" id="product-msrp-edit" />
-                        </div>
+                        <input type="text" placeholder="MSRP" id="product-msrp-edit" />
+                      </div>
                     </div>
                     <div className="row mb-2">
                       <div className="product-detail col-sm-4">
                         <h2 className="mb-0 mr-1">Image</h2>
-                      </div>  
+                      </div>
                       <div className="input-group input-update col-sm-8">
-                          <input type="file" className="custom-file-input" id="validatedCustomFile" required />
-                          <input type="text" className="position-absolute" placeholder="Choose File..." id="msrp-input" />
-                          <button className="mb-0 position-absolute d-flex justify-content-right" for="validatedCustomFile">Browse</button>
-                        </div>
+                        <input type="file" className="custom-file-input" id="validatedCustomFile" required />
+                        <input type="text" className="position-absolute" placeholder="Choose File..." id="msrp-input" />
+                        <button className="mb-0 position-absolute d-flex justify-content-right" for="validatedCustomFile">Browse</button>
+                      </div>
                     </div>
                     <div className="d-flex justify-content-end">
                       <button className="flat-btn flat-save" id="saveEditproduct">Save</button>
@@ -618,6 +618,11 @@ class Payment_modal extends Component {
               </div>
               <div className="modal-body">
                 <div className="row mb-2">
+                  <div className="product-detail col-sm-8">
+                    <p>Order Number : <span id="order-no-payment" /></p>
+                  </div>
+                </div>
+                <div className="row mb-2">
                   <div className="product-detail col-sm-4">
                     Customer Number
                   </div>
@@ -641,6 +646,7 @@ class Payment_modal extends Component {
                     <input type="date" placeholder="yyyy/mm/dd" id="example-datetime-local-input" />
                   </div>
                 </div> */}
+                
                 <div className="row mb-2">
                   <div className="product-detail col-sm-4">
                     <p className="align-middle mb-0">Amount : $<span id="payment-amount" /></p>
@@ -648,18 +654,22 @@ class Payment_modal extends Component {
                 </div>
                 <div className="row mb-2">
                   <div className="product-detail col-sm-4">
+                    <p className="align-middle mb-0">Total point : <span id="total-point" /></p>
+                  </div>
+                </div>
+                <div className="row mb-2">
+                  <div className="product-detail col-sm-4">
                     Required Date
                   </div>
                   <div className="input-group input-update-payment mb-2 col-sm-8">
-                    <input type="date" placeholder="yyyy/mm/dd" id="require-date" />
+                    <input type="date" placeholder="yyyy/mm/dd" data-date-format="YYYY-MM-DD" id="require-date" />
                   </div>
 
                 </div>
                 <div className="row mb-2">
-                  <div className="col-sm-4">
+                  <div className="col-sm-3">
                     <button class="btn btn-outline-success" id="accept-payment">Accept</button>
                   </div>
-
                 </div>
               </div>
             </div>
