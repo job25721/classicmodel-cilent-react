@@ -11,7 +11,7 @@ class Instock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-  
+
     }
     this.addCartItem = this.addCartItem.bind(this);
     this.removeCart = this.removeCart.bind(this);
@@ -153,7 +153,7 @@ class Instock extends Component {
       api.get('/api/admin/product/getCartItem').then(res => {
         var length = res.data.cartItem.length;
         if (length <= 0) {
-            
+
         } else {
           for (let i = 0; i < length; i++) {
             dom += `<tr>`
@@ -237,39 +237,39 @@ class Instock extends Component {
       var point = 0
       var check = true
       var cart = res.data.cartItem
-      for(let i = 0; i < cart.length;i++) {
+      for (let i = 0; i < cart.length; i++) {
         if (cart[i].Quantity > cart[i].thisquan) {
           check = false
           alert(`
           ${cart[i].Name} out of stock!!! 
           please decrease ${cart[i].Name} quantity`);
           i = cart.length
-        }else if (cart[i].Quantity < 1 ){
+        } else if (cart[i].Quantity < 1) {
           check = false
           alert(`Quantity can not be negative`);
           i = cart.length
         }
-      }  
-      if(check) {
-          if (res.data.total != 0) {
-            $('#discount-value').html(discount)
-            $('#discount-code').html()
-            $("#closemodal").click();
-            $("#paymentModal").modal('show');
+      }
+      if (check) {
+        if (res.data.total != 0) {
+          $('#discount-value').html(discount)
+          $('#discount-code').html()
+          $("#closemodal").click();
+          $("#paymentModal").modal('show');
 
-            if (discount != undefined) {
-              price = price - discount
-            }
-            if (price < 0) price = 0
-            point = Math.floor(price / 100) * 3
-            $("#total-point").html(point)
-            $("#payment-amount").html(price);
-            api.get(`/api/admin/order/getorderNo`).then(res => {
-              $('#order-no-payment').html(res.data[0].orderNo + 1)
-            })
-
+          if (discount != undefined) {
+            price = price - discount
           }
+          if (price < 0) price = 0
+          point = Math.floor(price / 100) * 3
+          $("#total-point").html(point)
+          $("#payment-amount").html(price);
+          api.get(`/api/admin/order/getorderNo`).then(res => {
+            $('#order-no-payment').html(res.data[0].orderNo + 1)
+          })
+
         }
+      }
     })
   }
 
@@ -299,9 +299,9 @@ class Instock extends Component {
             api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
-          api.delete('/api/destroyInstockCart').then(res=>{
+          api.delete('/api/destroyInstockCart').then(res => {
             alert(res.data)
-            setTimeout('location.href = "/admin/status"',100)
+            setTimeout('location.href = "/admin/status"', 100)
           })
         })
       })
@@ -316,8 +316,13 @@ class Instock extends Component {
       var x = $('#useddiscount option:selected').text();
       res.data.forEach(e => {
         if (x == e.Code) {
-          $('#discountvalue').html(`-${e.Discount}`)
-          $('#discount-code').html(`${e.Code}`)
+          if (e.TotalAmount < 1) {
+            alert("This code is out of stock")
+          } else {
+            $('#discountvalue').html(`-${e.Discount}`)
+            $('#discount-code').html(`${e.Code}`)
+          }
+
         } else if (x == "Select Discount") {
           $('#discountvalue').empty();
         }
@@ -591,8 +596,8 @@ class Pre_order extends Component {
       $('#piece-product').html(res.data.update)
       //this.loadCartItem()
     })
-    
-   
+
+
 
 
   }
@@ -664,9 +669,9 @@ class Pre_order extends Component {
             api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
-          api.delete('/api/destroyPreorderCart').then(res=>{
+          api.delete('/api/destroyPreorderCart').then(res => {
             alert(res.data)
-            setTimeout('location.href = "/admin/status"',100)
+            setTimeout('location.href = "/admin/status"', 100)
           })
         })
       })

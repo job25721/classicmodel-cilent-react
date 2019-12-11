@@ -40,7 +40,7 @@ export default class Discount extends Component {
 
   componentDidMount() {
     api.get("/api/admin/discount/getDiscount").then(res => {
-      var  id;
+      var id;
       id = 1;
       $('#showDiscount').empty()
       $.each(res.data, function (index, obj) {
@@ -70,8 +70,14 @@ export default class Discount extends Component {
   }
 
   deleteDiscount(event) {
-    var code = $(event.target).children().val()
-    api.delete('/api/admin/discount/deleteDiscount/' + code)
+    var role = $('#empRole').text()
+    if (role != "VP Marketing") {
+      alert("Only VP Marketing Can do this")
+    } else {
+      var code = $(event.target).children().val()
+      api.delete('/api/admin/discount/deleteDiscount/' + code)
+    }
+
   }
 
 
@@ -81,14 +87,18 @@ export default class Discount extends Component {
   };
 
   addDiscount = event => {
-    const discountQuery = {
-      code: this.state.Code,
-      discount: this.state.Value,
-      total: this.state.Used,
-      exp: this.state.Date
+    var role = $('#empRole').text()
+    if (role != "VP Marketing") {
+      alert("Only VP Marketing Can do this")
+    } else {
+      const discountQuery = {
+        code: this.state.Code,
+        discount: this.state.Value,
+        total: this.state.Used,
+        exp: this.state.Date
+      }
+      api.post('/api/admin/discount/addDiscount', { discountQuery })
     }
-    api.post('/api/admin/discount/addDiscount', { discountQuery })
-
 
   }
 
@@ -152,7 +162,7 @@ export default class Discount extends Component {
                       name="exp"
                       id="exp"
                       placeholder="yyyy/mm/dd"
-                      className="form-control w-25 col-sm-2 m-1"
+                      className="form-control w-25 col-sm-4 m-1"
                       onChange={this.handleDate}
                     />
                     <button
@@ -164,7 +174,7 @@ export default class Discount extends Component {
                   </div>
                 </div>
               </form>
-              <br/>
+              <br />
               <table className="table table-border table-striped">
                 <thead>
                   <tr>

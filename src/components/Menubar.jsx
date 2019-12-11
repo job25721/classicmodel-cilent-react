@@ -106,7 +106,7 @@ class Sidebar extends Component {
             data-parent="#accordionSidebar"
           >
             <div className="bg-white py-2 collapse-inner rounded">
-              <h6 className="collapse-header">Custom Ordering:</h6>
+              <h6 className="collapse-header sfmono">Custom Ordering:</h6>
               <a className="collapse-item" href="/admin/instock">
                 In stock
               </a>
@@ -118,7 +118,7 @@ class Sidebar extends Component {
         </li>
         <li className="nav-item">
           <a className="nav-link" href="/admin/status">
-            <i className="fas fa-fw fa-receipt"></i>
+          <i class="fas fa-tasks"></i>
             <span>Order Status</span>
           </a>
         </li>

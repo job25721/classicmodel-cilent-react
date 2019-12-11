@@ -200,7 +200,7 @@ export default class template extends Component {
       else $(`#order-${res.data[0].orderNumber}`).val('Shipped')
       $('#status-comment-input').val(comment)
       $('#order-number-head').html(res.data[0].orderNumber)
-      $('#customer-number-head').html('Customer nmber : ' + res.data[0].customerNumber)
+      $('#customer-number-head').html('Customer number : ' + res.data[0].customerNumber)
     })
 
   }
