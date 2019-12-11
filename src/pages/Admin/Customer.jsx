@@ -78,8 +78,7 @@ export default class Customer extends Component {
   componentDidMount() {
     api.get('/api/admin/customer/fetch').then(res => {
       if(res.data.permission === false){
-        alert('you not have permission')
-        $('#msg').html('<h1 style="color:red;">Access dinied!!</h1>')
+        
       } 
       else{
         $('.content').show('fade')
@@ -245,6 +244,8 @@ export default class Customer extends Component {
 <div className="row collapse" id="addNew">
   <br />
 <div className="container row">
+ 
+  <div className="row">
     <input
       type="number"
       name="code"
@@ -315,6 +316,9 @@ export default class Customer extends Component {
       min="1"
       onChange={this.handleaddressline2}
     />
+    </div>
+
+    <div className="row">
     <input
       type="text"
       name="city"
@@ -365,13 +369,15 @@ export default class Customer extends Component {
       min="1"
       onChange={this.handlecredit}
     />
-    
     <button
       id="submit"
-      className="btn btn-success m-1 col-sm-1"
+      className="btn btn-success m-1 col-sm-2 m-1"
     >
       ADD
       </button>
+      </div>
+    
+    
   </div>
 </div>
 </form>
