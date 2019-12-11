@@ -34,6 +34,7 @@ export default class Customer extends Component {
     this.handlePostalCode = this.handlePostalCode.bind(this);
     this.handleCountry  = this.handleCountry.bind(this);
     this.handlecredit = this.handlecredit.bind(this);
+    this.deleteCustomer = this.deleteCustomer.bind(this);
 
   }
 
@@ -79,10 +80,10 @@ export default class Customer extends Component {
       if (res.data.length > 15) {
         var i, x
         var n = parseInt(res.data.length / 15)
-        n % 15 == 0 ? x = n - 0 : x = n
+        n % 15 === 0 ? x = n - 0 : x = n
         $("#pagebutton").empty()
         for (i = 0; i <= x; i++) {
-          if (i == 0) $("#pagebutton").append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`)
+          if (i === 0) $("#pagebutton").append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i + 1}</span></button>`)
           else $("#pagebutton").append(`<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i + 1}</span></button>`)
         }
         $(document).on('click', '#currentpage', this.changepage)
@@ -99,6 +100,7 @@ export default class Customer extends Component {
             <td>${res.data[i].phone}</td>
             <td>${res.data[i].salesRepEmployeeNumber}</td>
             <td>${res.data[i].creditLimit}</td>
+            <td><button class="flat-btn flat-trash" id="delete" title="Delete Customer"  value='${res.data[i].customerNumber}'><i class="fas fa-trash"/></button></<td>
           </tr>`
         )
       }
@@ -107,6 +109,7 @@ export default class Customer extends Component {
 
     $(document).on('click','.customer-detail-click',this.customerDetail)
     $(document).on('click','#submit',this.addCustomer)
+    $(document).on('click','#delete',this.deleteCustomer)
   }
   changepage(event) {
     var current = event.currentTarget
@@ -128,11 +131,15 @@ export default class Customer extends Component {
             <td>${res.data[i].phone}</td>
             <td>${res.data[i].salesRepEmployeeNumber}</td>
             <td>${res.data[i].creditLimit}</td>
+            <td><button class="flat-btn flat-trash" id="delete" title="Delete Customer" value='${res.data[i].customerNumber}'><i class="fas fa-trash"/></button></td>
           </tr>`
         )
       }
     })
   }
+
+
+
 
   customerDetail(event){
     var customerNumber = event.currentTarget.id
@@ -156,18 +163,22 @@ export default class Customer extends Component {
       $('#credit-limit-detail').html('Credit limit : ' + customer.creditLimit)
       
     })
-
-    // <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
-    //             <h5 className="sfmono" id="customer-name-head">customName</h5><br/>
-    //             <p id="contact-name-detail">contactName</p>
-    //             <p id="phone-detail">phone</p>
-    //             <p id="address-detail">address</p>
-    //             <p id="sale-rep-detail">salesRepEmplyeeNumber</p>
-    //             <p id="credit-limit-detail">creditLimit</p>
   }
+
+  deleteCustomer(event) {
+    
+    // event.preventDefault();
+    api.post(`/api/admin/customer/deleteCustomer/${event.currentTarget.value}`).then(res=>{
+      alert(res.data)
+      setTimeout(`location.href = '/admin/customer';`,100);
+    })
+   
+
+}
 
   showAddForm = event => {
     event.preventDefault();
+    // alert('clicked')
     $("#addNew").toggle("fade");
   };
 
@@ -206,21 +217,14 @@ export default class Customer extends Component {
               <Navbar />
               <div className="container-fluid">
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 className="h3 mb-0 text-gray-800 sfmono">Customer management</h1>
-                  {/* <div className="d-flex justify-content-end ">
-                    <a class="flat-btn flat-blue align-middle" style={{margin:"2px 0",color:"#fff"}}
-                      data-toggle="modal" data-target="" title="Add new Customer">
-                      <i className="fas fa-plus"></i>
-                    </a>
-                  </div> */}    
+                  <h1 className="h3 mb-0 text-gray-800 sfmono">Customer management</h1>    
                   <div className="d-flex justify-content-end mb-2" id="pagebutton"></div>
                 </div>
 
-                <form onSubmit={this.addDiscount}>
+                <form onSubmit={this.addCustomer}>
                 <button
                   onClick={this.showAddForm}
-                  className="flat-btn flat-add"
-                >
+                  className="btn btn-outline-success">
                   Add New
                   </button>
 
@@ -357,6 +361,7 @@ export default class Customer extends Component {
                   </div>
                 </div>
                 </form>
+
                 <table
                   className="table text-center table-striped responsive-table "
                   id="dataTable"
@@ -369,6 +374,7 @@ export default class Customer extends Component {
                     <th>phone</th>
                     <th>EmployeeNumber</th>
                     <th>creditLimit</th>
+                    <th></th>
                   </thead>
                   <tbody id="customer-data">
 
