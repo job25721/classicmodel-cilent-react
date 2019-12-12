@@ -36,37 +36,40 @@ class Instock extends Component {
         $(document).on('click', '#currentpage', this.changepage)
       }
     })
-
-    api.get(`/api/admin/product/changepage/0`).then(res => {
-      if(res.data.permission === false){
-        alert('You not have permission')
-        setTimeout('location.href="/admin"',0)
+    api.get('/api/admin/employee/saleTilteCheck').then(res=>{
+      if(res.data.permission === true){
+        api.get(`/api/admin/product/changepage/0`).then(res => {
+          var dom = ""
+          var button = ''
+          for (let i = 0; i < res.data.length; i++) {
+          button = ''
+          button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
+          button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
+          button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-edit align-middle edit-product" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
+          button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-trash deleteproduct"><i class="fas fa-trash"/></button></td>`;
+          dom += `<tr>`;
+          dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
+            data-target="#productModal" title="Product detail"
+            class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${res.data[i].imgSrc}"> 
+            <i class="fas fa-search fa-sm responsive-icon-search"></i></a></td>`;
+          dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
+          dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
+          dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
+          dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
+          dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
+          dom += button;
+          dom += `</tr>`;
+        }
+        $("#instockData").html(dom);
+        
+        
+      })
       }else{
-        var dom = ""
-      var button = ''
-      for (let i = 0; i < res.data.length; i++) {
-        button = ''
-        button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
-        button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-        button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-edit align-middle edit-product" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
-        button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-trash deleteproduct"><i class="fas fa-trash"/></button></td>`;
-        dom += `<tr>`;
-        dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
-          data-target="#productModal" title="Product detail"
-          class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${res.data[i].imgSrc}"> 
-          <i class="fas fa-search fa-sm responsive-icon-search"></i></a></td>`;
-        dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
-        dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
-        dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
-        dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
-        dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
-        dom += button;
-        dom += `</tr>`;
+        alert("You don't have permission")
+        setTimeout('location.href="/admin"',100)
       }
-      $("#instockData").html(dom);
-      }
-      
     })
+   
 
 
     $(document).on("click", ".product-click", this.productDetail);
@@ -449,37 +452,43 @@ class Pre_order extends Component {
         $(document).on('click', '#currentpage', this.changepage)
       }
     })
-
-    api.get(`/api/admin/preorder/changepage/0`).then(res => {
-      if(res.data.permission === false){
-        alert('You not have permission')
-        setTimeout('location.href="/admin"',0)
-      }else{
-        var dom = ""
-        var button = ''
-        for (let i = 0; i < res.data.length; i++) {
-        button = ''
-        button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
-        button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
-        button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-edit align-middle edit-product" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
-        button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-trash deleteproduct"><i class="fas fa-trash"/></button></td>`;
-        dom += `<tr>`;
-        dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
-          data-target="#productModal" title="Product detail"
-          class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${res.data[i].imgSrc}"> 
-          <i class="fas fa-search fa-sm responsive-icon-search"></i></a></td>`;
-        dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
-        dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
-        dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
-        dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
-        dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
-        dom += button;
-        dom += `</tr>`;
-      }
-      $("#instockData").html(dom);
-      }
+    api.get('/api/admin/employee/saleTilteCheck').then(res=>{
+      if(res.data.permission === true){
+        api.get(`/api/admin/preorder/changepage/0`).then(res => {
       
+      
+          var dom = ""
+          var button = ''
+          for (let i = 0; i < res.data.length; i++) {
+          button = ''
+          button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
+          button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
+          button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-edit align-middle edit-product" data-toggle="modal" data-target="#editProduct" title="Add new Product"><i class="fas fa-edit"></i></button></td>`
+          button += `<td class="align-middle"><button id="${res.data[i].productCode}" class="flat-btn flat-trash deleteproduct"><i class="fas fa-trash"/></button></td>`;
+          dom += `<tr>`;
+          dom += `<td class="align-middle"><a id="${res.data[i].productCode}" data-toggle="modal"
+            data-target="#productModal" title="Product detail"
+            class="product-click quick-view modal-view detail-link" href="#"><img class="responsive-img" src="/img/${res.data[i].imgSrc}"> 
+            <i class="fas fa-search fa-sm responsive-icon-search"></i></a></td>`;
+          dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
+          dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
+          dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
+          dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
+          dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
+          dom += button;
+          dom += `</tr>`;
+        }
+        $("#instockData").html(dom);
+        
+        
+      })
+      }else{
+           
+        alert("You don't have permission")
+        setTimeout('location.href="/admin"',100)
+      }
     })
+   
 
 
     $(document).on("click", ".product-click", this.productDetail);

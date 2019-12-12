@@ -12,92 +12,100 @@ class StatusInStock extends Component {
     this.state = {};
   }
   componentDidMount() {
-    api.get(`/api/admin/order/fetch`).then(res => {
+    api.get('/api/admin/employee/saleTilteCheck').then(res=>{
+      if(res.data.permission === true){
+        api.get(`/api/admin/order/fetch`).then(res => {
       
 
-      if (res.data.length > 15) {
-        var i, x;
-        var n = parseInt(res.data.length / 15);
-        n % 15 == 0 ? (x = n - 0) : (x = n);
-        $("#pagebutton").empty();
-        for (i = 0; i <= x; i++) {
-          if (i == 0)
-            $("#pagebutton").append(
-              `<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i +
-                1}</span></button>`
+          if (res.data.length > 15) {
+            var i, x;
+            var n = parseInt(res.data.length / 15);
+            n % 15 == 0 ? (x = n - 0) : (x = n);
+            $("#pagebutton").empty();
+            for (i = 0; i <= x; i++) {
+              if (i == 0)
+                $("#pagebutton").append(
+                  `<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i +
+                    1}</span></button>`
+                );
+              else
+                $("#pagebutton").append(
+                  `<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i +
+                    1}</span></button>`
+                );
+            }
+            $(document).on("click", "#currentpage", this.changepage);
+          }
+          $("#order-data").empty();
+          var i;
+    
+          for (i = 0; i < 15; i++) {
+            var shippedDate, requiredDate, orderDate;
+            if (res.data[i].shippedDate != null)
+              shippedDate = res.data[i].shippedDate.split("T1")[0];
+            else shippedDate = "-";
+            if (res.data[i].requiredDate != null)
+              requiredDate = res.data[i].requiredDate.split("T1")[0];
+            else requiredDate = "-";
+            if (res.data[i].orderDate != null)
+              orderDate = res.data[i].orderDate.split("T1")[0];
+            else orderDate = "-";
+            $("#order-data").append(
+              "<tr>" +
+                `<td class="align-middle"><a id="${res.data[i].orderNumber}" data-toggle="modal" data-target="#orderDatilModal" title="Product detail"` +
+                'class="order-detail-click quick-view modal-view detail-link" href="#">' +
+                res.data[i].orderNumber +
+                '<i class="fas fa-search fa-sm responsive-icon-search-status"></i></td>' +
+                '<td class="align-middle">' +
+                res.data[i].customerNumber +
+                "</td>" +
+                '<td class="align-middle">' +
+                orderDate +
+                "</td>" +
+                '<td class="align-middle">' +
+                requiredDate +
+                "</td>" +
+                '<td class="align-middle">' +
+                shippedDate +
+                "</td>" +
+                '<td class="align-middle">' +
+                '<select id="order-' +
+                res.data[i].orderNumber +
+                '" class="status-selected status-detail-selected" id="sel1" name="' +
+                res.data[i].orderNumber +
+                '">' +
+                '<option value="Cancelled">Cancelled</option>' +
+                '<option value="Disputed">Disputed</option>' +
+                '<option value="In Process">In Process</option>' +
+                '<option value="On Hold">On hold</option>' +
+                '<option value="Resolved">Resolved</option>' +
+                '<option value="Shipped">Shipped</option>' +
+                "</select>" +
+                "</td>" +
+                "</tr>"
             );
-          else
-            $("#pagebutton").append(
-              `<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i +
-                1}</span></button>`
-            );
-        }
-        $(document).on("click", "#currentpage", this.changepage);
+            if (res.data[i].status == "Cancelled")
+              $(`#order-${res.data[i].orderNumber}`).val("Cancelled");
+            else if (res.data[i].status == "Disputed")
+              $(`#order-${res.data[i].orderNumber}`).val("Disputed");
+            else if (res.data[i].status == "In Process")
+              $(`#order-${res.data[i].orderNumber}`).val("In Process");
+            else if (res.data[i].status == "On Hold")
+              $(`#order-${res.data[i].orderNumber}`).val("On Hold");
+            else if (res.data[i].status == "Resolved")
+              $(`#order-${res.data[i].orderNumber}`).val("Resolved");
+            else $(`#order-${res.data[i].orderNumber}`).val("Shipped");
+          }
+          $(document).on("change", ".status-selected", this.update);
+          $(document).on("click", ".order-detail-click", this.orderDetail);
+          $(document).on("click", "#save-status", this.editstatus);
+        });
+      }else{
+        alert('You not have permission')
+        setTimeout('location.href="/admin"',0)
       }
-      $("#order-data").empty();
-      var i;
-
-      for (i = 0; i < 15; i++) {
-        var shippedDate, requiredDate, orderDate;
-        if (res.data[i].shippedDate != null)
-          shippedDate = res.data[i].shippedDate.split("T1")[0];
-        else shippedDate = "-";
-        if (res.data[i].requiredDate != null)
-          requiredDate = res.data[i].requiredDate.split("T1")[0];
-        else requiredDate = "-";
-        if (res.data[i].orderDate != null)
-          orderDate = res.data[i].orderDate.split("T1")[0];
-        else orderDate = "-";
-        $("#order-data").append(
-          "<tr>" +
-            `<td class="align-middle"><a id="${res.data[i].orderNumber}" data-toggle="modal" data-target="#orderDatilModal" title="Product detail"` +
-            'class="order-detail-click quick-view modal-view detail-link" href="#">' +
-            res.data[i].orderNumber +
-            '<i class="fas fa-search fa-sm responsive-icon-search-status"></i></td>' +
-            '<td class="align-middle">' +
-            res.data[i].customerNumber +
-            "</td>" +
-            '<td class="align-middle">' +
-            orderDate +
-            "</td>" +
-            '<td class="align-middle">' +
-            requiredDate +
-            "</td>" +
-            '<td class="align-middle">' +
-            shippedDate +
-            "</td>" +
-            '<td class="align-middle">' +
-            '<select id="order-' +
-            res.data[i].orderNumber +
-            '" class="status-selected status-detail-selected" id="sel1" name="' +
-            res.data[i].orderNumber +
-            '">' +
-            '<option value="Cancelled">Cancelled</option>' +
-            '<option value="Disputed">Disputed</option>' +
-            '<option value="In Process">In Process</option>' +
-            '<option value="On Hold">On hold</option>' +
-            '<option value="Resolved">Resolved</option>' +
-            '<option value="Shipped">Shipped</option>' +
-            "</select>" +
-            "</td>" +
-            "</tr>"
-        );
-        if (res.data[i].status == "Cancelled")
-          $(`#order-${res.data[i].orderNumber}`).val("Cancelled");
-        else if (res.data[i].status == "Disputed")
-          $(`#order-${res.data[i].orderNumber}`).val("Disputed");
-        else if (res.data[i].status == "In Process")
-          $(`#order-${res.data[i].orderNumber}`).val("In Process");
-        else if (res.data[i].status == "On Hold")
-          $(`#order-${res.data[i].orderNumber}`).val("On Hold");
-        else if (res.data[i].status == "Resolved")
-          $(`#order-${res.data[i].orderNumber}`).val("Resolved");
-        else $(`#order-${res.data[i].orderNumber}`).val("Shipped");
-      }
-      $(document).on("change", ".status-selected", this.update);
-      $(document).on("click", ".order-detail-click", this.orderDetail);
-      $(document).on("click", "#save-status", this.editstatus);
-    });
+    })
+   
   }
 
   editstatus(event) {
@@ -320,153 +328,161 @@ class StatusPreOrder extends Component {
     this.state = {};
   }
   componentDidMount() {
-    api.get(`/api/admin/preorder/fetch`).then(res => {
-      console.log(res);
-
-      if (res.data.length > 15) {
-        var i, x;
-        var n = parseInt(res.data.length / 15);
-        n % 15 == 0 ? (x = n - 0) : (x = n);
-        $("#pagebutton").empty();
-        for (i = 0; i <= x; i++) {
-          if (i == 0)
-            $("#pagebutton").append(
-              `<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i +
-                1}</span></button>`
-            );
-          else
-            $("#pagebutton").append(
-              `<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i +
-                1}</span></button>`
-            );
-        }
-        $(document).on("click", "#currentpage", this.changepage);
-      }
-      $("#order-data").empty();
-      var i;
-      if (res.data.length > 15) {
-        for (i = 0; i < 15; i++) {
-          console.log(res.data[i].shippedDate);
-
-          var shippedDate, requiredDate, orderDate;
-          if (res.data[i].shippedDate != null || res.data[i].shippedDate != undefined ) shippedDate = res.data[i].shippedDate.split("T1")[0]
-          else shippedDate = "-";
-          if (res.data[i].requiredDate != null)
-            requiredDate = res.data[i].requiredDate.split("T1")[0];
-          else requiredDate = "-";
-          if (res.data[i].orderDate != null)
-            orderDate = res.data[i].orderDate.split("T1")[0];
-          else orderDate = "-";
-          $("#order-data").append(
-            "<tr>" +
-              `<td class="align-middle"><a id="${res.data[i].orderNumber}" data-toggle="modal" data-target="#orderDatilModal" title="Product detail"` +
-              'class="order-detail-click quick-view modal-view detail-link" href="#">' +
-              res.data[i].orderNumber +
-              '<i class="fas fa-search fa-sm responsive-icon-search-status"></i></td>' +
-              '<td class="align-middle">' +
-              res.data[i].customerNumber +
-              "</td>" +
-              '<td class="align-middle">' +
-              orderDate +
-              "</td>" +
-              '<td class="align-middle">' +
-              requiredDate +
-              "</td>" +
-              '<td class="align-middle">' +
-              shippedDate +
-              "</td>" +
-              '<td class="align-middle">' +
-              '<select id="order-' +
-              res.data[i].orderNumber +
-              '" class="status-selected status-detail-selected" id="sel1" name="' +
-              res.data[i].orderNumber +
-              '">' +
-              '<option value="Cancelled">Cancelled</option>' +
-              '<option value="Disputed">Disputed</option>' +
-              '<option value="In Process">In Process</option>' +
-              '<option value="On Hold">On hold</option>' +
-              '<option value="Resolved">Resolved</option>' +
-              '<option value="Shipped">Shipped</option>' +
-              "</select>" +
-              "</td>" +
-              "</tr>"
-          );
-          if (res.data[i].status == "Cancelled")
-            $(`#order-${res.data[i].orderNumber}`).val("Cancelled");
-          else if (res.data[i].status == "Disputed")
-            $(`#order-${res.data[i].orderNumber}`).val("Disputed");
-          else if (res.data[i].status == "In Process")
-            $(`#order-${res.data[i].orderNumber}`).val("In Process");
-          else if (res.data[i].status == "On Hold")
-            $(`#order-${res.data[i].orderNumber}`).val("On Hold");
-          else if (res.data[i].status == "Resolved")
-            $(`#order-${res.data[i].orderNumber}`).val("Resolved");
-          else $(`#order-${res.data[i].orderNumber}`).val("Shipped");
-        }
+    api.get('/api/admin/employee/saleTilteCheck').then(res=>{
+      if(res.data.permission === true){
+        api.get(`/api/admin/preorder/fetch`).then(res => {
+          console.log(res);
+    
+          if (res.data.length > 15) {
+            var i, x;
+            var n = parseInt(res.data.length / 15);
+            n % 15 == 0 ? (x = n - 0) : (x = n);
+            $("#pagebutton").empty();
+            for (i = 0; i <= x; i++) {
+              if (i == 0)
+                $("#pagebutton").append(
+                  `<button id="currentpage" class="flat-btn-gray mx-1 set-active fbg-active " value="${i}"><span>${i +
+                    1}</span></button>`
+                );
+              else
+                $("#pagebutton").append(
+                  `<button id="currentpage" class="flat-btn-gray mx-1 set-active" value="${i}"><span>${i +
+                    1}</span></button>`
+                );
+            }
+            $(document).on("click", "#currentpage", this.changepage);
+          }
+          $("#order-data").empty();
+          var i;
+          if (res.data.length > 15) {
+            for (i = 0; i < 15; i++) {
+              console.log(res.data[i].shippedDate);
+    
+              var shippedDate, requiredDate, orderDate;
+              if (res.data[i].shippedDate != null || res.data[i].shippedDate != undefined ) shippedDate = res.data[i].shippedDate.split("T1")[0]
+              else shippedDate = "-";
+              if (res.data[i].requiredDate != null)
+                requiredDate = res.data[i].requiredDate.split("T1")[0];
+              else requiredDate = "-";
+              if (res.data[i].orderDate != null)
+                orderDate = res.data[i].orderDate.split("T1")[0];
+              else orderDate = "-";
+              $("#order-data").append(
+                "<tr>" +
+                  `<td class="align-middle"><a id="${res.data[i].orderNumber}" data-toggle="modal" data-target="#orderDatilModal" title="Product detail"` +
+                  'class="order-detail-click quick-view modal-view detail-link" href="#">' +
+                  res.data[i].orderNumber +
+                  '<i class="fas fa-search fa-sm responsive-icon-search-status"></i></td>' +
+                  '<td class="align-middle">' +
+                  res.data[i].customerNumber +
+                  "</td>" +
+                  '<td class="align-middle">' +
+                  orderDate +
+                  "</td>" +
+                  '<td class="align-middle">' +
+                  requiredDate +
+                  "</td>" +
+                  '<td class="align-middle">' +
+                  shippedDate +
+                  "</td>" +
+                  '<td class="align-middle">' +
+                  '<select id="order-' +
+                  res.data[i].orderNumber +
+                  '" class="status-selected status-detail-selected" id="sel1" name="' +
+                  res.data[i].orderNumber +
+                  '">' +
+                  '<option value="Cancelled">Cancelled</option>' +
+                  '<option value="Disputed">Disputed</option>' +
+                  '<option value="In Process">In Process</option>' +
+                  '<option value="On Hold">On hold</option>' +
+                  '<option value="Resolved">Resolved</option>' +
+                  '<option value="Shipped">Shipped</option>' +
+                  "</select>" +
+                  "</td>" +
+                  "</tr>"
+              );
+              if (res.data[i].status == "Cancelled")
+                $(`#order-${res.data[i].orderNumber}`).val("Cancelled");
+              else if (res.data[i].status == "Disputed")
+                $(`#order-${res.data[i].orderNumber}`).val("Disputed");
+              else if (res.data[i].status == "In Process")
+                $(`#order-${res.data[i].orderNumber}`).val("In Process");
+              else if (res.data[i].status == "On Hold")
+                $(`#order-${res.data[i].orderNumber}`).val("On Hold");
+              else if (res.data[i].status == "Resolved")
+                $(`#order-${res.data[i].orderNumber}`).val("Resolved");
+              else $(`#order-${res.data[i].orderNumber}`).val("Shipped");
+            }
+          }else{
+            for(let i = 0 ; i < res.data.length;i++){
+              var shippedDate, requiredDate, orderDate;
+              if (res.data[i].shippedDate != null || res.data[i].shippedDate != undefined ) shippedDate = res.data[i].shippedDate.split("T1")[0]
+              else shippedDate = "-";
+              if (res.data[i].requiredDate != null)
+                requiredDate = res.data[i].requiredDate.split("T1")[0];
+              else requiredDate = "-";
+              if (res.data[i].orderDate != null)
+                orderDate = res.data[i].orderDate.split("T1")[0];
+              else orderDate = "-";
+              $("#order-data").append(
+                "<tr>" +
+                  `<td class="align-middle"><a id="${res.data[i].orderNumber}" data-toggle="modal" data-target="#orderDatilModal" title="Product detail"` +
+                  'class="order-detail-click quick-view modal-view detail-link" href="#">' +
+                  res.data[i].orderNumber +
+                  '<i class="fas fa-search fa-sm responsive-icon-search-status"></i></td>' +
+                  '<td class="align-middle">' +
+                  res.data[i].customerNumber +
+                  "</td>" +
+                  '<td class="align-middle">' +
+                  orderDate +
+                  "</td>" +
+                  '<td class="align-middle">' +
+                  requiredDate +
+                  "</td>" +
+                  '<td class="align-middle">' +
+                  shippedDate +
+                  "</td>" +
+                  '<td class="align-middle">' +
+                  '<select id="order-' +
+                  res.data[i].orderNumber +
+                  '" class="status-selected status-detail-selected" id="sel1" name="' +
+                  res.data[i].orderNumber +
+                  '">' +
+                  '<option value="Cancelled">Cancelled</option>' +
+                  '<option value="Disputed">Disputed</option>' +
+                  '<option value="In Process">In Process</option>' +
+                  '<option value="On Hold">On hold</option>' +
+                  '<option value="Resolved">Resolved</option>' +
+                  '<option value="Shipped">Shipped</option>' +
+                  "</select>" +
+                  "</td>" +
+                  "</tr>"
+              );
+              if (res.data[i].status == "Cancelled")
+                $(`#order-${res.data[i].orderNumber}`).val("Cancelled");
+              else if (res.data[i].status == "Disputed")
+                $(`#order-${res.data[i].orderNumber}`).val("Disputed");
+              else if (res.data[i].status == "In Process")
+                $(`#order-${res.data[i].orderNumber}`).val("In Process");
+              else if (res.data[i].status == "On Hold")
+                $(`#order-${res.data[i].orderNumber}`).val("On Hold");
+              else if (res.data[i].status == "Resolved")
+                $(`#order-${res.data[i].orderNumber}`).val("Resolved");
+              else $(`#order-${res.data[i].orderNumber}`).val("Shipped");
+              
+            }
+          }
+    
+          $(document).on("change", ".status-selected", this.update);
+          $(document).on("click", ".order-detail-click", this.orderDetail);
+          $(document).on("click", "#save-status", this.editstatus);
+        });
       }else{
-        for(let i = 0 ; i < res.data.length;i++){
-          var shippedDate, requiredDate, orderDate;
-          if (res.data[i].shippedDate != null || res.data[i].shippedDate != undefined ) shippedDate = res.data[i].shippedDate.split("T1")[0]
-          else shippedDate = "-";
-          if (res.data[i].requiredDate != null)
-            requiredDate = res.data[i].requiredDate.split("T1")[0];
-          else requiredDate = "-";
-          if (res.data[i].orderDate != null)
-            orderDate = res.data[i].orderDate.split("T1")[0];
-          else orderDate = "-";
-          $("#order-data").append(
-            "<tr>" +
-              `<td class="align-middle"><a id="${res.data[i].orderNumber}" data-toggle="modal" data-target="#orderDatilModal" title="Product detail"` +
-              'class="order-detail-click quick-view modal-view detail-link" href="#">' +
-              res.data[i].orderNumber +
-              '<i class="fas fa-search fa-sm responsive-icon-search-status"></i></td>' +
-              '<td class="align-middle">' +
-              res.data[i].customerNumber +
-              "</td>" +
-              '<td class="align-middle">' +
-              orderDate +
-              "</td>" +
-              '<td class="align-middle">' +
-              requiredDate +
-              "</td>" +
-              '<td class="align-middle">' +
-              shippedDate +
-              "</td>" +
-              '<td class="align-middle">' +
-              '<select id="order-' +
-              res.data[i].orderNumber +
-              '" class="status-selected status-detail-selected" id="sel1" name="' +
-              res.data[i].orderNumber +
-              '">' +
-              '<option value="Cancelled">Cancelled</option>' +
-              '<option value="Disputed">Disputed</option>' +
-              '<option value="In Process">In Process</option>' +
-              '<option value="On Hold">On hold</option>' +
-              '<option value="Resolved">Resolved</option>' +
-              '<option value="Shipped">Shipped</option>' +
-              "</select>" +
-              "</td>" +
-              "</tr>"
-          );
-          if (res.data[i].status == "Cancelled")
-            $(`#order-${res.data[i].orderNumber}`).val("Cancelled");
-          else if (res.data[i].status == "Disputed")
-            $(`#order-${res.data[i].orderNumber}`).val("Disputed");
-          else if (res.data[i].status == "In Process")
-            $(`#order-${res.data[i].orderNumber}`).val("In Process");
-          else if (res.data[i].status == "On Hold")
-            $(`#order-${res.data[i].orderNumber}`).val("On Hold");
-          else if (res.data[i].status == "Resolved")
-            $(`#order-${res.data[i].orderNumber}`).val("Resolved");
-          else $(`#order-${res.data[i].orderNumber}`).val("Shipped");
-          
-        }
+        alert("You don't have permission")
+        setTimeout('location.href="/admin"',100)
       }
-
-      $(document).on("change", ".status-selected", this.update);
-      $(document).on("click", ".order-detail-click", this.orderDetail);
-      $(document).on("click", "#save-status", this.editstatus);
-    });
+    })
+   
   }
 
   editstatus(event) {
