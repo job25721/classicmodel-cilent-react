@@ -4,7 +4,7 @@ import api from "../api/api";
 
 class Sidebar extends Component {
   componentDidMount() {
-    $("#sidebarToggle, #sidebarToggleTop").on("click", function (e) {
+    $("#sidebarToggle, #sidebarToggleTop").on("click", function(e) {
       $("body").toggleClass("sidebar-toggled");
       $(".sidebar").toggleClass("toggled");
       if ($(".sidebar").hasClass("toggled")) {
@@ -13,14 +13,14 @@ class Sidebar extends Component {
     });
 
     // Close any open menu accordions when window is resized below 768px
-    $(window).resize(function () {
+    $(window).resize(function() {
       if ($(window).width() < 768) {
         $(".sidebar .collapse").collapse("hide");
       }
     });
 
     // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
-    $("body.fixed-nav .sidebar").on("mousewheel DOMMouseScroll wheel", function (
+    $("body.fixed-nav .sidebar").on("mousewheel DOMMouseScroll wheel", function(
       e
     ) {
       if ($(window).width() > 768) {
@@ -32,7 +32,7 @@ class Sidebar extends Component {
     });
 
     // Scroll to top button appear
-    $(document).on("scroll", function () {
+    $(document).on("scroll", function() {
       var scrollDistance = $(this).scrollTop();
       if (scrollDistance > 100) {
         $(".scroll-to-top").fadeIn();
@@ -42,7 +42,7 @@ class Sidebar extends Component {
     });
 
     // Smooth scrolling using jQuery easing
-    $(document).on("click", "a.scroll-to-top", function (e) {
+    $(document).on("click", "a.scroll-to-top", function(e) {
       var $anchor = $(this);
       $("html, body")
         .stop()
@@ -210,10 +210,7 @@ class Navbar extends Component {
   }
 
   logout(event) {
-    api.get('/api/logout').then(
-      setTimeout("location.href = '/login';", 100)
-    )
-
+    api.get("/api/logout").then(setTimeout("location.href = '/login';", 100));
   }
 
   componentDidMount() {
@@ -221,10 +218,10 @@ class Navbar extends Component {
     api.get("/api/user").then(res => {
       console.log(res.data);
 
-      if (res.data != '') {
+      if (res.data != "") {
         this.setState({ name: res.data[0].firstName });
         this.setState({ lastName: res.data[0].lastName });
-        this.setState({ job: res.data[0].jobTitle })
+        this.setState({ job: res.data[0].jobTitle });
       }
     });
   }
@@ -237,7 +234,6 @@ class Navbar extends Component {
         >
           <i className="fa fa-bars"></i>
         </button>
-
 
         <ul className="navbar-nav ml-auto">
           <div className="topbar-divider d-none d-sm-block"></div>
@@ -278,7 +274,11 @@ class Navbar extends Component {
                 Profile
               </a>
               <div className="dropdown-divider"></div>
-              <a className="dropdown-item" style={{ cursor: "pointer" }} onClick={this.logout}>
+              <a
+                className="dropdown-item"
+                style={{ cursor: "pointer" }}
+                onClick={this.logout}
+              >
                 <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout
               </a>
@@ -302,10 +302,7 @@ class InstockNav extends Component {
   }
 
   logout(event) {
-    api.get('/api/logout').then(
-      setTimeout("location.href = '/login';", 100)
-    )
-
+    api.get("/api/logout").then(setTimeout("location.href = '/login';", 100));
   }
 
   componentDidMount() {
@@ -313,15 +310,14 @@ class InstockNav extends Component {
     api.get("/api/user").then(res => {
       console.log(res.data);
 
-      if (res.data != '') {
+      if (res.data != "") {
         this.setState({ name: res.data[0].firstName });
         this.setState({ lastName: res.data[0].lastName });
-        this.setState({ job: res.data[0].jobTitle })
+        this.setState({ job: res.data[0].jobTitle });
       }
     });
   }
   render() {
-
     return (
       <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
         <button
@@ -330,13 +326,23 @@ class InstockNav extends Component {
         >
           <i className="fa fa-bars"></i>
         </button>
-        <div className="d-flex align-items-center justify-content-end align-right h-100" style={{color: "#4e73df"}}>
-          <a id="cartIcon" data-toggle="modal" data-target="#cartModal" title="Product detail"
-            className="quick-view modal-view detail-link" href="#">
+        <div
+          className="d-flex align-items-center justify-content-end align-right h-100"
+          style={{ color: "#4e73df" }}
+        >
+          <a
+            id="cartIcon"
+            data-toggle="modal"
+            data-target="#cartModal"
+            title="Product detail"
+            className="quick-view modal-view detail-link"
+            href="#"
+          >
             <i className="fas fa-shopping-cart"></i>
-            <span className="dot align-middle"><span id="piece-product"></span></span>
+            <span className="dot align-middle">
+              <span id="piece-product"></span>
+            </span>
           </a>
-
         </div>
 
         <ul className="navbar-nav ml-auto">
@@ -378,7 +384,11 @@ class InstockNav extends Component {
                 Profile
               </a>
               <div className="dropdown-divider"></div>
-              <a className="dropdown-item" style={{ cursor: "pointer" }} onClick={this.logout}>
+              <a
+                className="dropdown-item"
+                style={{ cursor: "pointer" }}
+                onClick={this.logout}
+              >
                 <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 Logout
               </a>
@@ -406,14 +416,8 @@ class Carousel extends Component {
               data-slide-to="0"
               className="active"
             ></li>
-            <li
-              data-target="#carouselExampleIndicators"
-              data-slide-to="1"
-            ></li>
-            <li
-              data-target="#carouselExampleIndicators"
-              data-slide-to="2"
-            ></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
           </ol>
           <div className="carousel-inner" role="listbox">
             <div className="carousel-item active">
@@ -423,22 +427,43 @@ class Carousel extends Component {
                 style={{ width: "100%" }}
                 alt="First slide"
               />
+              <div className="carousel-caption caption-1">
+                <h1 style={{ color: "#133306" }}>INSTOCK CATALOG</h1>
+                <h3 style={{ color: "#133306" }}>GO TO PREORDER</h3>
+                <a href="/preorder" className="btn-cat-1">
+                  Browse Now
+                </a>
+              </div>
             </div>
-            <div className="carousel-item">
+            <div className="carousel-item ">
               <img
                 className="d-block img-fluid"
                 src="/img/test02.jpg"
                 style={{ width: "100%" }}
                 alt="Second slide"
               />
+              <div className="carousel-caption caption-2">
+                <h1 style={{ color: "#FF6666" }}>INSTOCK CATALOG</h1>
+                <h3 style={{ color: "#FF6666" }}>BACK TO INSTOCK</h3>
+                <a href="/preorder" className="btn-cat-2">
+                  Browse Now
+                </a>
+              </div>
             </div>
             <div className="carousel-item">
               <img
                 className="d-block img-fluid"
-                src="/img/test03.jpg"
+                src="/img/test05.jpg"
                 style={{ width: "100%" }}
                 alt="Third slide"
               />
+              <div className="carousel-caption caption-3">
+                <h1 style={{ color: "#FFCC33" }}>INSTOCK CATALOG</h1>
+                <h3 style={{ color: "#FFCC33" }}>BACK TO INSTOCK</h3>
+                <a href="/preorder" className="btn-cat-3">
+                  Browse Now
+                </a>
+              </div>
             </div>
           </div>
           <a
@@ -467,8 +492,103 @@ class Carousel extends Component {
           </a>
         </div>
       </div>
+    );
+  }
+}
 
-    )
+class Carousel_Pre extends Component {
+  render() {
+    return (
+      <div className="container-fluid m-0 p-0">
+        <div
+          id="carouselExampleIndicators"
+          className="carousel slide"
+          style={{ width: "100%" }}
+          data-ride="carousel"
+        >
+          <ol className="carousel-indicators">
+            <li
+              data-target="#carouselExampleIndicators"
+              data-slide-to="0"
+              className="active"
+            ></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+          </ol>
+          <div className="carousel-inner" role="listbox">
+            <div className="carousel-item active">
+              <img
+                className="d-block img-fluid"
+                src="/img/test01.jpg"
+                style={{ width: "100%" }}
+                alt="First slide"
+              />
+              <div className="carousel-caption caption-1">
+                <h1 style={{ color: "#133306" }}>PREORDER CATALOG</h1>
+                <h3 style={{ color: "#133306" }}>BACK TO INSTOCK</h3>
+                <a href="/catalog" className="btn-cat-1">
+                  Browse Now
+                </a>
+              </div>
+            </div>
+            <div className="carousel-item ">
+              <img
+                className="d-block img-fluid"
+                src="/img/test02.jpg"
+                style={{ width: "100%" }}
+                alt="Second slide"
+              />
+              <div className="carousel-caption caption-2">
+                <h1 style={{ color: "#FF6666" }}>PREORDER CATALOG</h1>
+                <h3 style={{ color: "#FF6666" }}>BACK TO INSTOCK</h3>
+                <a href="/catalog" className="btn-cat-2">
+                  Browse Now
+                </a>
+              </div>
+            </div>
+            <div className="carousel-item">
+              <img
+                className="d-block img-fluid"
+                src="/img/test05.jpg"
+                style={{ width: "100%" }}
+                alt="Third slide"
+              />
+              <div className="carousel-caption caption-3">
+                <h1 style={{ color: "#FFCC33" }}>PREORDER CATALOG</h1>
+                <h3 style={{ color: "#FFCC33" }}>BACK TO INSTOCK</h3>
+                <a href="/catalog" className="btn-cat-3">
+                  Browse Now
+                </a>
+              </div>
+            </div>
+          </div>
+          <a
+            className="carousel-control-prev"
+            href="#carouselExampleIndicators"
+            role="button"
+            data-slide="prev"
+          >
+            <span
+              className="carousel-control-prev-icon"
+              aria-hidden="true"
+            ></span>
+            <span className="sr-only">Previous</span>
+          </a>
+          <a
+            className="carousel-control-next"
+            href="#carouselExampleIndicators"
+            role="button"
+            data-slide="next"
+          >
+            <span
+              className="carousel-control-next-icon"
+              aria-hidden="true"
+            ></span>
+            <span className="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+    );
   }
 }
 
@@ -477,9 +597,7 @@ class ProductFilter extends Component {
     return (
       <div className="col-xl-3 col-lg-4 col-md-5">
         <div className="sidebar-filter mt-0">
-          <div className="top-filter-head sfmono">
-            Product Filters
-                      </div>
+          <div className="top-filter-head sfmono">Product Filters</div>
           <form action="/catalog" method="GET">
             <div className="common-filter">
               <div className="head">Scale</div>
@@ -495,8 +613,7 @@ class ProductFilter extends Component {
           <div className="mx-5 my-2"></div>
         </div>
       </div>
-
-    )
+    );
   }
 }
 
@@ -529,8 +646,7 @@ class CatalogNav extends Component {
           </div>
         </div>
       </nav>
-
-    )
+    );
   }
 }
 
@@ -548,4 +664,13 @@ class Footer extends Component {
   }
 }
 
-export { Sidebar, Navbar, InstockNav, CatalogNav, Carousel, ProductFilter, Footer };
+export {
+  Sidebar,
+  Navbar,
+  InstockNav,
+  CatalogNav,
+  Carousel,
+  ProductFilter,
+  Footer,
+  Carousel_Pre
+};
