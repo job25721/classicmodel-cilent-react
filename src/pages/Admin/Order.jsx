@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 
 import api from '../../api/api';
 import $ from "jquery";
-import { Cart_modal, ProductDetail_modal, ProductAdd_modal, ProductEdit_modal, Payment_modal } from "../../../components/Modal";
+import { Cart_modal, ProductDetail_modal, ProductAdd_modal, ProductEdit_modal, Payment_modal } from "../../components/Modal";
 
 
 class Instock extends Component {
