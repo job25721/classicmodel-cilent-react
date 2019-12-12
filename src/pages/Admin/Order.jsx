@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Sidebar, InstockNav } from "../../../components/Menubar";
+import { Sidebar, InstockNav } from "../../components/Menubar";
 import { Helmet } from "react-helmet";
 
-import api from "../../../api/api";
+import api from '../../api/api';
 import $ from "jquery";
 import { Cart_modal, ProductDetail_modal, ProductAdd_modal, ProductEdit_modal, Payment_modal } from "../../../components/Modal";
 
@@ -11,7 +11,7 @@ class Instock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-  
+
     }
     this.addCartItem = this.addCartItem.bind(this);
     this.removeCart = this.removeCart.bind(this);
@@ -159,7 +159,7 @@ class Instock extends Component {
       api.get('/api/admin/product/getCartItem').then(res => {
         var length = res.data.cartItem.length;
         if (length <= 0) {
-            
+
         } else {
           for (let i = 0; i < length; i++) {
             dom += `<tr>`
@@ -174,6 +174,7 @@ class Instock extends Component {
           }
 
         }
+
         details += `<p>Total Price : <span id="total-price">$${TotalPrice.toFixed(2)}</span><span id="discountvalue" style="color:red"></span></p>
         <p>Total point : <span id="total-point-input">${Math.floor(TotalPrice / 100) * 3}</span></p>`
 
@@ -239,17 +240,41 @@ class Instock extends Component {
     api.get('/api/admin/product/getCartItem').then(res => {
       var price = $('#total-price')[0].innerHTML.split('$')[1]
       var discount = $('#discountvalue')[0].innerHTML.split('-')[1]
-      if (res.data.total != 0) {
-        $('#discount-value').html(discount)
-        $('#discount-code').html()
-        $("#closemodal").click();
-        $("#paymentModal").modal('show');
-        $("#total-point").html($('#total-point-input').text())
-        if (discount == undefined) discount = 0
-        $("#payment-amount").html(price - discount);
-        api.get(`/api/admin/order/getorderNo`).then(res => {
-          $('#order-no-payment').html(res.data[0].orderNo + 1)
-        })
+      var point = 0
+      var check = true
+      var cart = res.data.cartItem
+      for (let i = 0; i < cart.length; i++) {
+        if (cart[i].Quantity > cart[i].thisquan) {
+          check = false
+          alert(`
+          ${cart[i].Name} out of stock!!! 
+          please decrease ${cart[i].Name} quantity`);
+          i = cart.length
+        } else if (cart[i].Quantity < 1) {
+          check = false
+          alert(`Quantity can not be negative`);
+          i = cart.length
+        }
+      }
+      if (check) {
+        if (res.data.total != 0) {
+          $('#discount-value').html(discount)
+          $('#discount-code').html()
+          $("#closemodal").click();
+          $("#paymentModal").modal('show');
+
+          if (discount != undefined) {
+            price = price - discount
+          }
+          if (price < 0) price = 0
+          point = Math.floor(price / 100) * 3
+          $("#total-point").html(point)
+          $("#payment-amount").html(price);
+          api.get(`/api/admin/order/getorderNo`).then(res => {
+            $('#order-no-payment').html(res.data[0].orderNo + 1)
+          })
+
+        }
       }
     })
   }
@@ -280,9 +305,9 @@ class Instock extends Component {
             api.get(`/api/admin/order/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
-          api.delete('/api/destroyInstockCart').then(res=>{
+          api.delete('/api/destroyInstockCart').then(res => {
             alert(res.data)
-            setTimeout('location.href = "/admin/status"',100)
+            setTimeout('location.href = "/admin/status"', 100)
           })
         })
       })
@@ -297,8 +322,13 @@ class Instock extends Component {
       var x = $('#useddiscount option:selected').text();
       res.data.forEach(e => {
         if (x == e.Code) {
-          $('#discountvalue').html(`-${e.Discount}`)
-          $('#discount-code').html(`${e.Code}`)
+          if (e.TotalAmount < 1) {
+            alert("This code is out of stock")
+          } else {
+            $('#discountvalue').html(`-${e.Discount}`)
+            $('#discount-code').html(`${e.Code}`)
+          }
+
         } else if (x == "Select Discount") {
           $('#discountvalue').empty();
         }
@@ -523,8 +553,9 @@ class Pre_order extends Component {
   deleteProduct(event) {
     var pcode = event.currentTarget.id;
     console.log(pcode)
-    api.get(`/api/admin/preorder/delete/${pcode}`).then(res => {
+    api.get(`/api/admin/order/delete/${pcode}`).then(res => {
     })
+    window.location.reload(true);
   }
 
   loadCartItem(event) {
@@ -647,9 +678,9 @@ class Pre_order extends Component {
             api.get(`/api/admin/preorderOrder/detail/insert/${orderno}/${cart.code}/${cart.Quantity}/${cart.Price}/${i}`)
             i += 1
           })
-          api.delete('/api/destroyPreorderCart').then(res=>{
+          api.delete('/api/destroyPreorderCart').then(res => {
             alert(res.data)
-            setTimeout('location.href = "/admin/status"',100)
+            setTimeout('location.href = "/admin/status/preorder"', 100)
           })
         })
       })
@@ -685,6 +716,8 @@ class Pre_order extends Component {
     api.get(`api/admin/order/addproduct/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
 
     })
+    window.location.reload(true);
+    
   }
 
   saveEditproduct(event) {
@@ -700,6 +733,7 @@ class Pre_order extends Component {
     api.get(`api/admin/order/update/${pcode}/${pname}/${pdesc}/${pline}/${pscale}/${pvendor}/${pquan}/${pbuyprice}/${pmsrp}`).then(res => {
 
     })
+    window.location.reload(true);
   }
 
   render() {
@@ -715,7 +749,7 @@ class Pre_order extends Component {
               <InstockNav />
               <div className="container-fluid">
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 className="h3 mb-0 text-gray-800 sfmono">In stock product</h1>
+                  <h1 className="h3 mb-0 text-gray-800 sfmono">Pre order product</h1>
                   <div className="d-flex justify-content-end ">
                     <a class="flat-btn flat-blue align-middle" style={{ margin: "2px 0", color: "#fff" }}
                       data-toggle="modal" data-target="#addProduct" title="Add new Product">
