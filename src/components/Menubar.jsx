@@ -181,18 +181,17 @@ class Navbar extends Component {
     api.get('/api/logout').then(
       setTimeout("location.href = '/login';", 100)
     )
-
   }
 
   componentDidMount() {
     //fetchDetals
     api.get("/api/user").then(res => {
-      console.log(res.data);
-
-      if (res.data != '') {
+      if(res.data.length > 0){
         this.setState({ name: res.data[0].firstName });
         this.setState({ lastName: res.data[0].lastName });
         this.setState({ job: res.data[0].jobTitle })
+      }else{
+        setTimeout('location.href="/404"',0)
       }
     });
   }
@@ -273,18 +272,17 @@ class InstockNav extends Component {
     api.get('/api/logout').then(
       setTimeout("location.href = '/login';", 100)
     )
-
   }
 
   componentDidMount() {
     //fetchDetals
     api.get("/api/user").then(res => {
-      console.log(res.data);
-
-      if (res.data != '') {
+      if(res.data.length > 0){
         this.setState({ name: res.data[0].firstName });
         this.setState({ lastName: res.data[0].lastName });
         this.setState({ job: res.data[0].jobTitle })
+      }else{
+        setTimeout('location.href="/404"',0)
       }
     });
   }

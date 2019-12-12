@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-
+import api from '../api/api';
+import $ from 'jquery'
 class Cart_modal extends Component {
   render() {
     return (
@@ -603,6 +604,19 @@ class CustomerDetail_modal extends Component {
 }
 
 class Payment_modal extends Component {
+
+  componentDidMount(){
+    api.get('/api/admin/customer/fetch').then(res=>{
+      let len = res.data.length
+      if(len > 0){
+        res.data.forEach(each=>{
+          $('#custumer-no-input').append(`<option>${each.customerNumber}</option>`)
+        })
+      }
+      
+    })
+  }
+
   render() {
     return (
       <div id="quickview-wrapper">
@@ -624,8 +638,11 @@ class Payment_modal extends Component {
                   <div className="product-detail col-sm-4">
                     Customer Number
                   </div>
-                  <div className="input-group input-update-payment mb-2 col-sm-8">
-                    <input type="text" placeholder="Customer Number" id="custumer-no-input" />
+                  <div className="input-group input-update-payment mb-2 col-sm-8" id="customerNO">
+                      <select className="status-selected-payment" id="custumer-no-input">
+                        <option value="" selected disabled hidden>Choose customer here</option>
+                      </select>
+                    {/* <input type="text" placeholder="Customer Number" id="custumer-no-input" /> */}
                   </div>
                 </div>
                 <div className="row mb-2">

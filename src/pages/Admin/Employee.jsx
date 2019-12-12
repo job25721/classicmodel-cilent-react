@@ -16,8 +16,13 @@ export default class Employee extends Component {
 
   componentDidMount() {
     api.get('/api/user').then(res=>{
-      this.setState({SuperviseRole : res.data[0].Role})
-      this.loadEmployees()
+      if(res.data.length > 0){
+        this.setState({SuperviseRole : res.data[0].Role})
+        this.loadEmployees()
+      }else{
+        alert('please login first')
+        setTimeout('location.href="/login"',100)
+      }
     })
     $(document).on('click', '#promote', this.Promote)
     $(document).on('click', '#demote', this.Demote)
@@ -25,13 +30,16 @@ export default class Employee extends Component {
   }
 
   loadEmployees(event){
-    
     api.get("/api/admin/employee/employeeData").then(res => {
-      var append = "";
-      let count = 0;
-      let superviseRole = this.state.SuperviseRole;
+     if(res.data.permission === false){
+        alert("You don't have permission")
+        setTimeout('location.href="/admin"',100)
+      }else{
+        var append = "";
+        let count = 0;
+        let superviseRole = this.state.SuperviseRole;
       
-      $.each(res.data, function(index, each) {
+        $.each(res.data, function(index, each) {
         // console.log(this);
         
         if(superviseRole > each.Role){
@@ -67,6 +75,8 @@ export default class Employee extends Component {
           '<p class="btn btn-success">Found :' + count + "</p>"
         );
       }
+      }
+      
     });
   }
   

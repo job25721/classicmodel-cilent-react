@@ -33,7 +33,6 @@ class App extends Component {
         else if(res.data.exist === false && res.data.can === true ) alert('added !!')
     }).catch(err =>{
       console.log(err);
-      
     });
   };
 

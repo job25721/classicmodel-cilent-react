@@ -101,7 +101,7 @@ class LoginControl extends React.Component {
           <Route exact path="/admin/customer" component={Customer} />
           <Route exact path="/admin/employee" component={Employee} />
           <Route exact path="/admin/discount" component={Discount} />
-    
+          <Route exact path="/404" component={FailedPage} />
           {/* another pages */}
           <Route exact path="/app" component={App} />
         </Switch>

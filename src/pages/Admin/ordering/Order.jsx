@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import api from "../../../api/api";
 import $ from "jquery";
 import { Cart_modal, ProductDetail_modal, ProductAdd_modal, ProductEdit_modal, Payment_modal } from "../../../components/Modal";
-import { log } from "util";
+
 
 class Instock extends Component {
   constructor(props) {
@@ -38,7 +38,11 @@ class Instock extends Component {
     })
 
     api.get(`/api/admin/product/changepage/0`).then(res => {
-      var dom = ""
+      if(res.data.permission === false){
+        alert('You not have permission')
+        setTimeout('location.href="/admin"',0)
+      }else{
+        var dom = ""
       var button = ''
       for (let i = 0; i < res.data.length; i++) {
         button = ''
@@ -60,6 +64,8 @@ class Instock extends Component {
         dom += `</tr>`;
       }
       $("#instockData").html(dom);
+      }
+      
     })
 
 
@@ -415,9 +421,13 @@ class Pre_order extends Component {
     })
 
     api.get(`/api/admin/preorder/changepage/0`).then(res => {
-      var dom = ""
-      var button = ''
-      for (let i = 0; i < res.data.length; i++) {
+      if(res.data.permission === false){
+        alert('You not have permission')
+        setTimeout('location.href="/admin"',0)
+      }else{
+        var dom = ""
+        var button = ''
+        for (let i = 0; i < res.data.length; i++) {
         button = ''
         button += '<td class="align-middle"><input type="text" class="product-quantity input-add-cart align-middle" name="quantity" value="1" size="2" style="margin:2px 0;">'
         button += `<button id="addCart" class="flat-btn flat-blue"><i class="fas fa-shopping-cart fa-sm"></i></button></td>`;
@@ -437,6 +447,8 @@ class Pre_order extends Component {
         dom += `</tr>`;
       }
       $("#instockData").html(dom);
+      }
+      
     })
 
 

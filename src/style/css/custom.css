@@ -1174,3 +1174,19 @@ h3.widget-title-modal {
     outline: 0;
     box-shadow: none;
 }
+
+.status-selected-payment {
+    display: block;
+    width: 100%;
+    border: 1px solid #eee;
+    font-size: 14px;
+    color: #999999;
+    height: 32px;
+    padding-left: 15px;
+    padding-right: 15px
+}
+
+.status-selected-payment:focus {
+    outline: 0;
+    box-shadow: none;
+}
