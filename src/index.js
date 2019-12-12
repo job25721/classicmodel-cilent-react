@@ -18,7 +18,7 @@ import {
 
 import App from './components/reactApp.jsx';
 import { Home , Contributor } from './pages/Index.jsx';
-import Catalog from './pages/Catalog.jsx'
+import {Catalog,PreOrderCat} from './pages/Catalog.jsx'
 import {Login} from './pages/Login.jsx'
 import Admin from './pages/Admin/Home.jsx'
 import {Instock,Pre_order} from './pages/Admin/Order'
@@ -40,6 +40,7 @@ ReactDOM.render(
       <Route exact path='/' component={Home} />
       <Route exact path='/contributor' component={Contributor} />
       <Route exact path='/catalog' component={Catalog} />
+      <Route exact path='/preorder' component={PreOrderCat} />
       <Route exact path='/login' component={Login} />
       <Route exact path='/admin' component={Admin} />
       <Route exact path='/admin/instock' component={Instock} />
