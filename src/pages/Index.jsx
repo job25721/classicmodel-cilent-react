@@ -79,7 +79,7 @@ class Home extends Component {
           <p className="center index-text">
             - Department of Computer Engineering, Chiang Mai University -
           </p>
-          <div className="text-center"><a href="#" id="link">ผู้จัดทำเว็บไซต์</a></div>
+          {/* <div className="text-center"><a href="#" id="link">ผู้จัดทำเว็บไซต์</a></div>
 
         <div className="container">
             <div id="quiz" className="text-center collapse">
@@ -95,7 +95,7 @@ class Home extends Component {
                 style={{width: "125px",marginLeft:"auto" , marginRight:"auto"}}>
                 Incorrect !
             </div>
-        </div>
+        </div> */}
         </div>
         
         

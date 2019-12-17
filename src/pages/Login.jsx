@@ -87,9 +87,6 @@ class Login extends Component {
          <Helmet>
           <title>Login</title>
         </Helmet>
-        <a href="/add">
-          <button class="btn btn-success">Add User</button>
-        </a>
         <div class="main">
           <p class="h4 text-center mb-4 mt-5">Sign in</p>
           <form onSubmit={this.login}>

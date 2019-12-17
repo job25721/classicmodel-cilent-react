@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 
-import { Navbar,Sidebar, Footer  } from "../../components/Menubar";
-
+import { Navbar,Sidebar  } from "../../components/Menubar";
+import $ from 'jquery'
 
 export default class Home extends Component {
 
+  componentDidMount(){
+    console.log($("#empName-fname").val());
+    
+    $("#empName-welcome").html($("#empName").text())
+  }
 
    render() {
     return (
@@ -16,8 +21,8 @@ export default class Home extends Component {
               <Navbar />
               <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 class="h3 mb-0 text-gray-800">
-                    Welcome Back
+                  <h1 class="h3 mb-0 text-gray-800 sfmono">
+                    Welcome Back <span id="empName-welcome"></span>
                   </h1>
                 </div>
                 <div class="row">
@@ -197,7 +202,6 @@ export default class Home extends Component {
             </div>
           </div>
         </div>
-        <Footer />
       </React-DocumentFragment>
     );
   }

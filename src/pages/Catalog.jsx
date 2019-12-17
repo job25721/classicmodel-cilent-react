@@ -419,7 +419,8 @@ class PreOrderCat extends Component {
       if (res.data.row > 18) {
         var i, x;
         var n = parseInt(res.data.row / 18);
-        n % 18 == 1 ? (x = n - 1) : (x = n);
+        console.log("n" + n);
+        n % 18 == 0 ? (x = n - 1) : (x = n);
         $("#pagebutton").empty();
         for (i = 0; i <= x; i++) {
           if (i == 0)
@@ -508,7 +509,7 @@ class PreOrderCat extends Component {
     var search = $("#myInput").val();
     if (search.length == 0) search = "All";
 
-    api.get(`catalog/product/${scale}/${vendor}/${search}`).then(res => {
+    api.get(`catalog/product/preorder/${scale}/${vendor}/${search}`).then(res => {
       $("#number-row").html("Found " + res.data.row + " products ");
       $("#pagebutton").empty();
       var row = 18;
@@ -566,7 +567,7 @@ class PreOrderCat extends Component {
     var init = current.value * 15;
     var i;
     $("instockData").html("");
-    api.get(`catalog/test/${scale}/${vendor}/undefined/${init}`).then(res => {
+    api.get(`catalog/preorder/test/${scale}/${vendor}/undefined/${init}`).then(res => {
       $("#product-row").empty();
       for (var i = 0; i < res.data.row; i++) {
         $("#product-row").append(
@@ -597,7 +598,7 @@ class PreOrderCat extends Component {
     var search = $("#myInput").val();
     if (search.length == 0) search = "All";
 
-    api.get(`catalog/product/${scale}/${vendor}/${search}`).then(res => {
+    api.get(`catalog/product/preorder/${scale}/${vendor}/${search}`).then(res => {
       $("#number-row").html("Found " + res.data.row + " products ");
       $("#pagebutton").empty();
       var row = 18;

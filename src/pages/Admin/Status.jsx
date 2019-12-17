@@ -217,7 +217,6 @@ class StatusInStock extends Component {
           parseInt(res.data[n].quantityOrdered);
         $("#order-detail").append(
           `<tr>
-          <td class="align-middle">img</td>
           <td class="align-middle">${res.data[n].orderNumber}</td>
           <td class="align-middle">${res.data[n].priceEach}</td>
           <td class="align-middle">${res.data[n].quantityOrdered}</td>
@@ -596,7 +595,6 @@ class StatusPreOrder extends Component {
           parseInt(res.data[n].quantityOrdered);
         $("#order-detail").append(
           `<tr>
-          <td class="align-middle">img</td>
           <td class="align-middle">${res.data[n].orderNumber}</td>
           <td class="align-middle">${res.data[n].priceEach}</td>
           <td class="align-middle">${res.data[n].quantityOrdered}</td>

@@ -5,8 +5,8 @@ class Cart_modal extends Component {
   render() {
     return (
       <div id="quickview-wrapper">
-        <div className="modal fade" id="cartModal" tabindex="-1" role="dialog">
-          <div className="modal-dialog modal__container" role="document">
+        <div className="modal fade" id="cartModal" tabindex="-1" role="dialog" >
+          <div className="modal-dialog modal__container" role="document" >
             <div className="modal-content">
               <div className="modal-header modal__header">
                 <h4 className="sfmono">Cart Item</h4>
@@ -523,7 +523,7 @@ class OrderDetail_modal extends Component {
     return (
       <div id="quickview-wrapper">
         <div className="modal fade" id="orderDatilModal" tabindex="-1" role="dialog">
-          <div className="modal-dialog modal__container" role="document">
+          <div className="modal-dialog modal__container" role="document" id="responsive-payment">
             <div className="modal-content">
               <div className="modal-header modal__header">
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
@@ -542,7 +542,7 @@ class OrderDetail_modal extends Component {
 
                     <thead>
                       <tr>
-                        <th>Image</th>
+                        {/* <th>Image</th> */}
                         <th>orderNumber</th>
                         <th>Price</th>
                         <th>Quantity</th>
@@ -579,7 +579,7 @@ class CustomerDetail_modal extends Component {
     return (
       <div id="quickview-wrapper">
         <div className="modal fade" id="customerDetailModal" tabindex="-1" role="dialog">
-          <div className="modal-dialog modal__container" role="document">
+          <div className="modal-dialog modal__container" role="document" id="responsive-payment">
             <div className="modal-content">
               <div className="modal-header modal__header">
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
@@ -587,7 +587,8 @@ class CustomerDetail_modal extends Component {
               </div>
               <div className="modal-body">
                 <h5 className="sfmono" id="customer-number-head">customerNumber :</h5>
-                <h5 className="sfmono" id="customer-name-head">customName</h5><br />
+                <h5 className="sfmono" id="customer-name-head">customName</h5>
+                <h5 className="sfmono" id="total-point-detail"></h5><br />
                 <p id="contact-name-detail" className="mb-1">contactName</p>
                 <p id="phone-detail" className="mb-1">phone</p>
                 <p id="address-detail" className="mb-1">address</p>

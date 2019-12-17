@@ -310,7 +310,7 @@ class Instock extends Component {
           })
           api.delete('/api/destroyInstockCart').then(res => {
             alert(res.data)
-            setTimeout('location.href = "/admin/status"', 100)
+            setTimeout('location.href = "/admin/status/instock"', 100)
           })
         })
       })
@@ -326,7 +326,7 @@ class Instock extends Component {
       res.data.forEach(e => {
         if (x == e.Code) {
           if (e.TotalAmount < 1) {
-            alert("This code is out of stock")
+            alert("โค้ดหมดละครับ อิอิ")
           } else {
             $('#discountvalue').html(`-${e.Discount}`)
             $('#discount-code').html(`${e.Code}`)
@@ -437,7 +437,7 @@ class Pre_order extends Component {
       $('#piece-product').html(res.data.total)
     })
     api.get('/api/admin/preorder/count').then(res => {
-      console.log(res.data[0].count);
+      console.log("preorder count " + res.data[0].count);
 
       if (res.data[0].count > 15) {
         var i, x
@@ -473,7 +473,6 @@ class Pre_order extends Component {
           dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
           dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
           dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
-          dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
           dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
           dom += button;
           dom += `</tr>`;
@@ -550,7 +549,6 @@ class Pre_order extends Component {
         dom += `<td class="align-middle responsive-table-name">${res.data[i].productName}</td>`;
         dom += `<td class="align-middle">${res.data[i].productScale}</td>`;
         dom += `<td class="align-middle responsive-table-vendor">${res.data[i].productVendor}</td>`;
-        dom += `<td class="align-middle">${res.data[i].quantityInStock}</td>`;
         dom += `<td class="align-middle">${res.data[i].buyPrice}</td>`;
         dom += button;
         dom += `</tr>`;
@@ -781,7 +779,6 @@ class Pre_order extends Component {
                       <th className="responsive-table-name">ProductName</th>
                       <th>ProductScale</th>
                       <th className="responsive-table-vendor">ProductVendor</th>
-                      <th>QuantityInStock</th>
                       <th>BuyPrice</th>
                       <th></th><th></th><th></th>
                     </tr>

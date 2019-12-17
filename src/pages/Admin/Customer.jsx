@@ -184,6 +184,7 @@ export default class Customer extends Component {
       $('#phone-detail').html('Phone : ' + customer.phone)
       $('#address-detail').html('Address : ' + address)
       $('#credit-limit-detail').html('Credit limit : ' + customer.creditLimit)
+      $('#total-point-detail').html('Total point : ' + customer.totalPoint)
       
     })
   }
